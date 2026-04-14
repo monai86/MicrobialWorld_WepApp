@@ -500,6 +500,10 @@
       from { opacity: 0; transform: translateY(12px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes mobileSheetIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
@@ -614,10 +618,6 @@
       .cases-grid {
         grid-template-columns: 1fr !important;
         gap: 16px !important;
-      }
-        flex: none !important;
-        height: auto !important;
-        overflow-y: visible !important;
       }
 
       /* Result Cards Responsive */
@@ -2546,6 +2546,14 @@
       const [q, setQ] = useState('');
       const [sel, setSel] = useState(null);
       const [tab, setTab] = useState('clinical');
+      const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+      useEffect(() => {
+        const onResize = () => setIsMobile(window.innerWidth <= 768);
+        window.addEventListener('resize', onResize);
+        onResize();
+        return () => window.removeEventListener('resize', onResize);
+      }, []);
 
       const filtered = useMemo(() => LIBRARY_CLEAN.filter(b => {
         const mg = grp === 'all' || b.group === grp;
@@ -2559,7 +2567,7 @@
       const canonicalBiochem = useMemo(() => getCanonicalBiochemRows(selBug), [selBug]);
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 56px)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: isMobile ? 'auto' : 'calc(100vh - 56px)', minHeight: isMobile ? 'calc(100vh - 120px)' : undefined }}>
           {/* Toolbar */}
           <div style={{ background: '#0d1526', borderBottom: '1px solid #1e3055', padding: '10px 16px', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', flexShrink: 0 }}>
             <div style={{ position: 'relative', flex: '0 0 200px' }}>
@@ -2577,9 +2585,9 @@
             <span style={{ marginLeft: 'auto', fontSize: 11, color: '#64748b' }}>{filtered.length} organisms</span>
           </div>
           {/* Body */}
-          <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', flex: 1, overflow: isMobile ? 'visible' : 'hidden', minHeight: 0 }}>
             {/* List */}
-            <div style={{ width: sel ? '35%' : '100%', overflowY: 'auto', padding: '8px 12px', transition: 'width .2s', borderRight: sel ? '1px solid #1e3055' : 'none' }}>
+            <div style={{ width: isMobile ? '100%' : (sel ? '35%' : '100%'), maxHeight: isMobile && selBug ? '40vh' : 'none', overflowY: 'auto', padding: '8px 12px', transition: 'width .2s', borderRight: !isMobile && sel ? '1px solid #1e3055' : 'none', borderBottom: isMobile && selBug ? '1px solid #1e3055' : 'none' }}>
               {filtered.map(b => {
                 const g = GROUPS.find(x => x.id === b.group);
                 const isSel = sel === b.id;
@@ -2609,31 +2617,43 @@
             </div>
             {/* Detail */}
             {selBug && (
-              <div style={{ flex: 1, overflowY: 'auto', background: '#080e1a' }} className="fade-in">
-                <div style={{ background: `linear-gradient(135deg,${selGrp?.color}15,#0d1526)`, borderBottom: '1px solid #1e3055', padding: '14px 18px', position: 'sticky', top: 0, zIndex: 10 }}>
+              <div style={isMobile ? {
+                position: 'fixed',
+                inset: 0,
+                zIndex: 60,
+                background: '#080e1a',
+                overflowY: 'auto',
+                animation: 'mobileSheetIn .22s ease-out'
+              } : {
+                flex: 1,
+                overflowY: 'auto',
+                background: '#080e1a',
+                minWidth: 0
+              }} className="fade-in">
+                <div style={{ background: `linear-gradient(135deg,${selGrp?.color}15,#0d1526)`, borderBottom: '1px solid #1e3055', padding: isMobile ? '10px 12px' : '14px 18px', position: isMobile ? 'static' : 'sticky', top: 0, zIndex: 10 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
-                      <div style={{ fontSize: 16, fontWeight: 800, fontStyle: 'italic', color: selGrp?.color }}>{selBug.name}</div>
-                      {selBug.thai && <div style={{ fontSize: 11, color: '#94a3b8', marginTop: 2 }}>{selBug.thai}</div>}
+                      <div style={{ fontSize: isMobile ? 14 : 16, fontWeight: 800, fontStyle: 'italic', color: selGrp?.color }}>{selBug.name}</div>
+                      {selBug.thai && <div style={{ fontSize: isMobile ? 10 : 11, color: '#94a3b8', marginTop: 2 }}>{selBug.thai}</div>}
                       <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
                         <span style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 10, padding: '2px 8px', fontSize: 10, color: '#94a3b8' }}>Gram {selBug.gram} · {selBug.morph}</span>
                         {selBug.importance && <span style={{ background: `${IMP_COLOR[selBug.importance]}15`, color: IMP_COLOR[selBug.importance], borderRadius: 10, padding: '2px 8px', fontSize: 10 }}>● {IMP_LABEL[selBug.importance]}</span>}
                       </div>
                     </div>
-                    <button onClick={() => setSel(null)} style={{ background: '#132040', border: '1px solid #1e3055', color: '#94a3b8', borderRadius: 6, padding: '4px 10px', fontSize: 12, cursor: 'pointer' }}>✕</button>
+                    <button onClick={() => setSel(null)} style={{ background: '#132040', border: '1px solid #1e3055', color: '#94a3b8', borderRadius: 6, padding: isMobile ? '6px 12px' : '4px 10px', fontSize: isMobile ? 13 : 12, cursor: 'pointer', fontWeight: isMobile ? 600 : 500 }}>{isMobile ? '← กลับ' : '✕'}</button>
                   </div>
-                  <div style={{ display: 'flex', gap: 4, marginTop: 10 }}>
+                  <div style={{ display: 'flex', gap: 4, marginTop: 10, flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
                     {['clinical', 'colony', 'biochem', 'notes'].map(t => (
                       <button key={t} onClick={() => setTab(t)} style={{
                         background: tab === t ? `${selGrp?.color}20` : 'transparent',
                         border: `1px solid ${tab === t ? selGrp?.color : '#1e3055'}`,
                         color: tab === t ? selGrp?.color : '#64748b',
-                        borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer'
+                        borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer', flex: isMobile ? '1 1 calc(50% - 4px)' : '0 0 auto'
                       }}>{t === 'clinical' ? '🏥 Clinical' : t === 'colony' ? '🍽 Colony/Stain' : t === 'biochem' ? '⚗️ Biochemical' : '📝 Notes'}</button>
                     ))}
                   </div>
                 </div>
-                <div style={{ padding: 16 }}>
+                <div style={{ padding: isMobile ? 10 : 16 }}>
                   {tab === 'clinical' && selBug.clinical && (
                     <div className="fade-in">
                       <InfoCard title="🌍 Natural Habitat" color={selGrp?.color}><p style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.7, marginTop: 6 }}>{selBug.clinical.habitat}</p></InfoCard>
@@ -2673,7 +2693,8 @@
                   {tab === 'biochem' && (
                     <div className="fade-in">
                       <InfoCard title="⚗️ Key Biochemical Tests" color={selGrp?.color}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11, marginTop: 8 }}>
+                        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                        <table style={{ width: '100%', minWidth: isMobile ? 520 : '100%', borderCollapse: 'collapse', fontSize: 11, marginTop: 8 }}>
                           <thead><tr style={{ borderBottom: '1px solid #1e3055' }}>
                             {['Test', 'Result', 'Note'].map(h => <th key={h} style={{ textAlign: 'left', padding: '6px 8px', color: '#64748b', fontWeight: 500 }}>{h}</th>)}
                           </tr></thead>
@@ -2689,6 +2710,7 @@
                             ))}
                           </tbody>
                         </table>
+                        </div>
                       </InfoCard>
                     </div>
                   )}

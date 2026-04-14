@@ -1,11 +1,12 @@
 // Copy this file to firebase-config.js and fill with your real Firebase project config.
 // This file is loaded only in browser context.
 window.MICROBACT_FIREBASE_CONFIG = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
-  measurementId: "YOUR_MEASUREMENT_ID"
+  apiKey: "AIzaSyClVCg0EoCxF2qhJKJxN2tz_ctKRg_fpGw",
+  authDomain: "microbialworld-3ab5d.firebaseapp.com",
+  projectId: "microbialworld-3ab5d",
+  storageBucket: "microbialworld-3ab5d.firebasestorage.app",
+  messagingSenderId: "756709081394",
+  appId: "1:756709081394:web:a5c304b151429fbe49d72b",
+  measurementId: "G-3VD4ZKXGPJ"
 };
+

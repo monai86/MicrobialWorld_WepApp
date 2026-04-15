@@ -4185,17 +4185,36 @@
 
             {/* STEP 2 */}
             {step === 2 && suite && (
-              <TestImportanceView 
-                suite={suite} 
-                dbGroup={dbGroup}
-                answers={answers} 
-                setAnswers={setAnswers}
-                caseName={caseName}
-                setCaseName={setCaseName}
-                onBack={() => setStep(1)}
-                onAnalyze={runAnalysis}
-                onSave={saveCase}
-              />
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>⚗️ Step 2 — {suite.name}</h2>
+                <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>กรอกผลการทดสอบให้มากที่สุดเท่าที่มี (ข้ามได้ถ้ายังไม่ได้ทำ)</p>
+                <div style={{ marginBottom: 20 }}>
+                  <label style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginBottom: 6, fontWeight: 500 }}>📋 ชื่อ Case (สำหรับบันทึก)</label>
+                  <input value={caseName} onChange={e => setCaseName(e.target.value)} placeholder="เช่น Case 001 — ผู้ป่วย UTI" className="input-field" style={{ fontSize: 13 }} />
+                </div>
+                <div style={{ display: 'grid', gap: 8 }}>
+                  {suite.tests.map((test, idx) => (
+                    <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
+                      <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
+                          className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>
+                        {test.options.map(opt => (
+                          <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
+                            className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
+                  <button onClick={() => setStep(1)} className="btn-action secondary">← ย้อนกลับ</button>
+                  <button onClick={runAnalysis} className="btn-action primary" style={{ flex: 1 }}>
+                    🔍 วิเคราะห์ผล (Identify Organism)
+                  </button>
+                  <button onClick={saveCase} className="btn-action save">💾 บันทึก</button>
+                </div>
+              </div>
             )}
 
             {/* STEP 3 */}
@@ -4233,7 +4252,7 @@
                   })}
                 </div>
                 <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-                  <button onClick={() => setStep(3)} className="btn-action secondary">← แก้ไขผล</button>
+                  <button onClick={() => setStep(2)} className="btn-action secondary">← แก้ไขผล</button>
                   <button onClick={saveCase} className="btn-action save" style={{ flex: 1 }}>💾 บันทึก Case นี้</button>
                   <button onClick={reset} className="btn-action primary" style={{ flex: 0 }}>🔄 Case ใหม่</button>
                 </div>

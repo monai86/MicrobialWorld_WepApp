@@ -1363,9 +1363,9 @@
         clinical: { habitat: 'Throat/skin normal flora (low); epidemic spread', diseases: ['Pharyngitis (strep throat)', 'Impetigo, Cellulitis, Erysipelas', 'Necrotizing fasciitis', 'Scarlet fever', 'Rheumatic fever (post-streptococcal)', 'Glomerulonephritis'], transmission: 'Respiratory droplets; direct contact', factors: 'M protein, Streptolysin O/S, Pyrogenic exotoxins, Hyaluronidase' },
         colony: { BAP: 'Small 0.5–1mm, large clear β-hemolysis (Streptolysin S)' },
         gramStain: 'GPC chains; non-motile',
-        biochem: [{ t: 'Catalase', r: '−', n: 'KEY: all Strep' }, { t: 'Hemolysis', r: 'β', n: 'Large clear zone' }, { t: 'Bacitracin', r: 'S', n: 'KEY vs GBS (R)' }, { t: 'Optochin', r: 'R', n: 'vs S. pneumoniae (S)' }, { t: 'PYR', r: '+', n: 'KEY vs other Strep' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile Esculin', r: '−', n: '' }, { t: '6.5% NaCl', r: '−', n: '' }, { t: 'Growth 45°C', r: '−', n: '' }, { t: 'Quellung', r: '−', n: '' }, { t: 'Sorbitol', r: '?', n: '' }, { t: 'Arabinose', r: '?', n: '' }],
+        biochem: [{ t: 'Catalase', r: '−', n: 'KEY: all Strep' }, { t: 'Hemolysis', r: 'β', n: 'Large clear zone' }, { t: 'Bacitracin', r: 'S', n: 'KEY: Group A Strep เท่านั้น' }, { t: 'PPR test', r: '−', n: 'KEY: Group B เท่านั้นที่เป็น +' }, { t: 'CAMP test', r: '−', n: 'KEY: vs S. agalactiae (+)' }, { t: 'Optochin', r: 'R', n: 'vs S. pneumoniae (S)' }, { t: 'Bile Esculin', r: '−', n: '' }, { t: '6.5% NaCl', r: '−', n: '' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '−', n: '' }],
         media: ['Blood agar (BAP)'], condition: '37°C, 5% CO₂, 18–24h',
-        notes: 'Bacitracin S + PYR+ = definitive ID. ต้องรักษาด้วย penicillin เต็ม course ป้องกัน rheumatic fever'
+        notes: 'Bacitracin S + PPR− = Group A Strep (GAS). ต้องรักษาด้วย penicillin เต็ม course ป้องกัน rheumatic fever'
       },
 
       {
@@ -1374,9 +1374,9 @@
         clinical: { habitat: 'GI/vaginal flora (20–30% women)', diseases: ['Neonatal meningitis/sepsis (early onset)', 'Maternal postpartum infection', 'Adult bacteremia (diabetic, elderly)'], transmission: 'Vertical (mother to baby)' },
         colony: { BAP: 'Small, narrow β-hemolysis' },
         gramStain: 'GPC chains',
-        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'β', n: 'Narrow zone' }, { t: 'Bacitracin', r: 'R', n: 'KEY vs GAS (S)' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'PYR', r: '−', n: '' }, { t: 'CAMP test', r: '+', n: 'KEY for GBS' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Hippurate', r: '+', n: 'KEY vs other Strep' }, { t: 'Bile Esculin', r: '−', n: '' }, { t: '6.5% NaCl', r: '−', n: '' }, { t: 'Growth 45°C', r: '−', n: '' }, { t: 'Quellung', r: '−', n: '' }, { t: 'Sorbitol', r: '?', n: '' }, { t: 'Arabinose', r: '?', n: '' }],
-        media: ['Blood agar', 'Granada medium'], condition: '37°C, CO₂',
-        notes: 'CAMP test + Hippurate+ = GBS. Screen ทุก pregnant ที่ 35–37 weeks'
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'β', n: 'Narrow zone' }, { t: 'Bacitracin', r: 'R', n: 'KEY: vs GAS (S)' }, { t: 'PPR test', r: '+', n: 'KEY: ONLY Group B produces orange pigment on PPR!' }, { t: 'CAMP test', r: '+', n: 'KEY: arrowhead enhanced hemolysis' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bile Esculin', r: '−', n: '' }, { t: '6.5% NaCl', r: '−', n: '' }, { t: 'Hippurate', r: '+', n: 'KEY: vs other Strep (−)' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '−', n: '' }],
+        media: ['Blood agar', 'PPR agar (Granada medium)'], condition: '37°C, CO₂',
+        notes: 'Bacitracin R + PPR+ + CAMP+ = Group B Strep (GBS). Screen ทุก pregnant ที่ 35–37 weeks'
       },
 
       {
@@ -1385,9 +1385,9 @@
         clinical: { habitat: 'Nasopharynx normal flora', diseases: ['Lobar pneumonia (most common CAP)', 'Meningitis (leading cause in adults)', 'Otitis media (children)', 'Sinusitis'], transmission: 'Respiratory droplets; endogenous', factors: 'Polysaccharide capsule (91 serotypes), Pneumolysin, IgA protease' },
         colony: { BAP: 'α-hemolysis (green); "draughtsman/checker" colony (central depression); 37°C CO₂' },
         gramStain: 'GP lancet-shaped diplococci; non-motile; thick capsule',
-        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'α', n: 'Green around colony' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'Optochin', r: 'S', n: 'KEY vs viridans Strep (R)' }, { t: 'PYR', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Bile solubility', r: '+', n: 'KEY: dissolves in ox bile' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile Esculin', r: '−', n: '' }, { t: '6.5% NaCl', r: '−', n: '' }, { t: 'Growth 45°C', r: '−', n: '' }, { t: 'Quellung', r: '+', n: 'Capsule swelling' }, { t: 'Sorbitol', r: '?', n: '' }, { t: 'Arabinose', r: '?', n: '' }],
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'α', n: 'Green zone (partial)' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Optochin', r: 'S', n: 'KEY: vs Viridans Strep (R)' }, { t: 'Bile Esculin', r: '−', n: '' }, { t: '6.5% NaCl', r: '−', n: '' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile solubility', r: '+', n: 'KEY: dissolves in ox bile/deoxycholate' }, { t: 'Growth 45°C', r: '−', n: '' }],
         media: ['Blood agar', 'Chocolate agar'], condition: '37°C, 5% CO₂',
-        notes: 'Optochin S + Bile soluble = definitive. Draughtsman colony characteristic. Vaccine preventable (PCV13, PPSV23)'
+        notes: 'Optochin S + Bile soluble = definitive ID. Draughtsman colony. Vaccine preventable (PCV13, PPSV23)'
       },
 
       {
@@ -1396,9 +1396,9 @@
         clinical: { habitat: 'GI tract normal flora', diseases: ['UTI (most common nosocomial)', 'Endocarditis', 'Bacteremia', 'Wound infection'], transmission: 'Endogenous; fecal-oral; hospital', factors: 'Cytolysin; Aggregation substance; intrinsic resistance' },
         colony: { BAP: 'Small, γ or α-hemolysis, grey-white' },
         gramStain: 'GPC pairs/short chains',
-        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'PYR', r: '+', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Hippurate', r: '+', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY' }, { t: '6.5% NaCl', r: '+', n: 'KEY vs Strep (−)' }, { t: 'Growth 45°C', r: '+', n: '' }, { t: 'Quellung', r: '−', n: '' }, { t: 'Sorbitol', r: '+', n: 'KEY vs E. faecium (−)' }, { t: 'Arabinose', r: '−', n: 'KEY vs E. faecium (+)' }],
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: '6.5% NaCl', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: 'Hippurate', r: '+', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '+', n: '' }],
         media: ['Blood agar', 'Bile Esculin agar'], condition: '37°C aerobic/anaerobic',
-        notes: '6.5% NaCl + Bile Esculin + = Enterococcus. VRE (vancomycin-resistant) เป็น major nosocomial concern'
+        notes: 'Bile Esculin + 6.5% NaCl + = Enterococcus. VRE (vancomycin-resistant) เป็น major nosocomial concern'
       },
 
       // ENTEROBACTERALES
@@ -1573,17 +1573,14 @@
           { id: 'catalase', label: 'Catalase', options: ['+', '−'] },
           { id: 'hemolysis', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'] },
           { id: 'bacitracin', label: 'Bacitracin', options: ['S (sensitive)', 'R (resistant)'] },
-          { id: 'pyr', label: 'PYR test', options: ['+', '−'] },
+          { id: 'ppr', label: 'PPR test', options: ['+', '−'] },
           { id: 'camp', label: 'CAMP test', options: ['+', '−'] },
           { id: 'optochin', label: 'Optochin', options: ['S (sensitive)', 'R (resistant)'] },
-          { id: 'bile_solubility', label: 'Bile Solubility', options: ['+', '−'] },
-          { id: 'hippurate', label: 'Hippurate hydrolysis', options: ['+', '−'] },
           { id: 'bile_esculin', label: 'Bile Esculin', options: ['+', '−'] },
           { id: 'nacl_6', label: '6.5% NaCl', options: ['+', '−'] },
+          { id: 'hippurate', label: 'Hippurate hydrolysis', options: ['+', '−'] },
+          { id: 'bile_solubility', label: 'Bile Solubility', options: ['+', '−'] },
           { id: 'growth_45', label: 'Growth 45°C', options: ['+', '−'] },
-          { id: 'quellung', label: 'Quellung', options: ['+', '−'] },
-          { id: 'sorbitol_chain', label: 'Sorbitol', options: ['+', '−', '?'] },
-          { id: 'arabinose_chain', label: 'Arabinose', options: ['+', '−', '?'] },
         ]
       },
       enterobacterales: {
@@ -1792,13 +1789,13 @@
       // GPC CHAIN
       {
         id: 'enterococcus_faecium', group: 'gpc_chain', name: 'Enterococcus faecium', thai: 'เอนเทอโรค็อกคัส ฟีเชียม', gram: '+', morph: 'Cocci in pairs/short chains',
-        importance: 'high', tags: ['6.5%NaCl+', 'Bile Esculin+', 'PYR+', 'VRE risk', 'Sorbitol−'],
+        importance: 'high', tags: ['6.5%NaCl+', 'Bile Esculin+', 'VRE risk', 'α-Enterococcus'],
         clinical: { habitat: 'GI tract normal flora', diseases: ['UTI (nosocomial)', 'Bacteremia', 'Endocarditis'], transmission: 'Endogenous; healthcare settings', factors: 'High rate of VRE (Vancomycin-Resistant Enterococcus) compared to E. faecalis' },
         colony: { BAP: 'Small, γ or α-hemolysis, grey-white' },
         gramStain: 'GPC pairs/short chains',
-        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'PYR', r: '+', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Growth 45°C', r: '+', n: '' }, { t: 'Quellung', r: '−', n: '' }, { t: 'Sorbitol', r: '−', n: 'KEY vs E. faecalis (+)' }, { t: 'Arabinose', r: '+', n: 'KEY vs E. faecalis (−)' }],
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: '6.5% NaCl', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '+', n: '' }],
         media: ['Blood agar', 'Bile Esculin agar'], condition: '37°C aerobic/anaerobic',
-        notes: 'Sorbitol− and Arabinose+ ช่วยแยกออกจาก E. faecalis; มีอัตราการดื้อยา VRE ที่สูงมาก'
+        notes: 'Bile Esculin + 6.5% NaCl + = Enterococcus; E. faecium มีอัตราการดื้อยา VRE ที่สูงมาก'
       },
 
       // GPB
@@ -2491,7 +2488,7 @@
       sorbitol: ['sorbitol'],
       hemolysis: ['hemolysis'],
       bacitracin: ['bacitracin'],
-      pyr: ['pyr', 'pyr test'],
+      ppr: ['ppr', 'ppr test', 'proteose peptone rice', 'ppr agar'],
       camp: ['camp', 'camp test'],
       optochin: ['optochin'],
       bile_solubility: ['bile solubility', 'bile soluble'],
@@ -2499,9 +2496,6 @@
       bile_esculin: ['bile esculin', 'bile esculin hydrolysis'],
       nacl_6: ['6.5 nacl', '6.5% nacl', '6.5% nacl growth'],
       growth_45: ['growth 45', 'growth 45c', 'growth 45°c', 'growth 45c'],
-      quellung: ['quellung', 'quellung reaction', 'capsule swelling'],
-      sorbitol_chain: ['sorbitol'],
-      arabinose_chain: ['arabinose'],
       tsi_v: ['tsi'],
       oxidase_v: ['oxidase'],
       indole_v: ['indole'],
@@ -2628,7 +2622,7 @@
     // PROBABILITY ENGINE
     // ══════════════════════════════════════
     // KEY DISCRIMINATING TESTS - mismatch gives heavy penalty
-    const KEY_TESTS = ['bacitracin', 'pyr', 'camp', 'optochin', 'bile solubility', 'bile esculin', '6.5% nacl', '6.5 nacl', 'coagulase', 'oxidase', 'catalase', 'hemolysis', 'hippurate', 'novobiocin', 'quellung'];
+    const KEY_TESTS = ['bacitracin', 'ppr', 'camp', 'optochin', 'bile solubility', 'bile esculin', '6.5% nacl', '6.5 nacl', 'coagulase', 'oxidase', 'catalase', 'hemolysis', 'hippurate', 'novobiocin'];
 
     function normalizeSR(val) {
       // Extract only the first letter S or R for sensitive/resistant tests

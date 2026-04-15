@@ -1138,7 +1138,7 @@
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
           <Header page={page} setPage={setPage} user={user} loginWithGoogle={loginWithGoogle} logout={logout} exitGuest={() => setIsGuest(false)} />
           <main style={{ flex: 1, overflow: 'hidden' }}>
-            {page === 'specimen' && <SpecimenPage />}
+            {page === 'specimen' && <SpecimenPage setPage={setPage} />}
             {page === 'workflow' && <WorkflowPage initData={wfData} setWfData={setWfData} showPrompt={showPrompt} showAlert={showAlert} user={user} isGuest={isGuest} />}
             {page === 'cases' && <CasesPage onLoad={(d) => { setWfData(d); setPage('workflow'); }} showPrompt={showPrompt} user={user} isGuest={isGuest} />}
             {page === 'library' && <LibraryPage />}
@@ -1241,7 +1241,7 @@
     // ══════════════════════════════════════
     // PAGE: SPECIMEN GUIDE
     // ══════════════════════════════════════
-    function SpecimenPage() {
+    function SpecimenPage({ setPage }) {
       const [sel, setSel] = useState('blood');
       const spec = SPECIMEN_GUIDE.find(s => s.id === sel);
       return (
@@ -3612,25 +3612,25 @@
         return () => window.removeEventListener('resize', onResize);
       }, []);
 
+      // Check for preselection from Specimen page
+      useEffect(() => {
+        const preselectId = sessionStorage.getItem('libraryPreselect');
+        if (preselectId) {
+          const bug = LIBRARY_CLEAN.find(b => b.id === preselectId);
+          if (bug) {
+            setSel(preselectId);
+            setGrp(bug.group); // Auto-filter to the correct group
+            // Clear after selection
+            sessionStorage.removeItem('libraryPreselect');
+          }
+        }
+      }, []);
+
       const filtered = useMemo(() => LIBRARY_CLEAN.filter(b => {
         const mg = grp === 'all' || b.group === grp;
         const mq = !q || b.name.toLowerCase().includes(q.toLowerCase()) || (b.thai || '').includes(q) || (b.tags || []).some(t => t.toLowerCase().includes(q.toLowerCase()));
         return mg && mq;
       }).sort((a, b) => a.name.localeCompare(b.name)), [grp, q]);
-
-      // Helper to find and select organism from specimen page
-      const handleSelectOrganism = (organismName) => {
-        // Try to find matching organism in library
-        const match = LIBRARY_CLEAN.find(b => 
-          b.name.toLowerCase().includes(organismName.toLowerCase()) ||
-          (b.thai && b.thai.includes(organismName))
-        );
-        if (match) {
-          setPage('library');
-          // Store selected organism ID in session storage for library to pick up
-          sessionStorage.setItem('preselectOrganism', match.id);
-        }
-      };
 
       const selBug = LIBRARY_CLEAN.find(b => b.id === sel);
 

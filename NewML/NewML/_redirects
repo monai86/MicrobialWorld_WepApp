@@ -1,6 +1,0 @@
-# Cloudflare Pages Redirects
-# Redirect root to MicroBactElite.html
-/ /MicroBactElite.html 302
-
-# SPA Fallback - redirect all routes to MicroBactElite.html
-/* /MicroBactElite.html 200

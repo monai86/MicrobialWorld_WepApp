@@ -2627,6 +2627,68 @@
     // ══════════════════════════════════════
     // PROBABILITY ENGINE
     // ══════════════════════════════════════
+    // KEY DISCRIMINATING TESTS - mismatch gives heavy penalty
+    const KEY_TESTS = ['bacitracin', 'pyr', 'camp', 'optochin', 'bile solubility', 'bile esculin', '6.5% nacl', '6.5 nacl', 'coagulase', 'oxidase', 'catalase', 'hemolysis', 'hippurate', 'novobiocin', 'quellung'];
+
+    function normalizeSR(val) {
+      // Extract only the first letter S or R for sensitive/resistant tests
+      const v = String(val).toLowerCase().trim();
+      if (v.startsWith('s')) return 's';
+      if (v.startsWith('r')) return 'r';
+      return v;
+    }
+
+    function isSRTest(testName) {
+      const n = testName.toLowerCase();
+      return n.includes('bacitracin') || n.includes('optochin') || n.includes('novobiocin');
+    }
+
+    function testMatch(dbResult, userAnswer) {
+      const normR = dbResult.replace(/−/g, '-').toLowerCase().trim();
+      const normAns = String(userAnswer).replace(/−/g, '-').toLowerCase().trim();
+
+      if (normR === normAns) return true;
+
+      const isV = normR === 'v' || normR.includes('+/-') || normR.includes('-/+') || normR.includes('v)') || normR === 'γ/α' || normR === 'α/γ';
+      if (isV) return null; // variable - partial match
+
+      // For +/- tests: exact symbol match only
+      const rSign = normR.replace(/[^+\-]/g, '').charAt(0);
+      const aSign = normAns.replace(/[^+\-]/g, '').charAt(0);
+      if (rSign && aSign && rSign !== '/' && aSign !== '/') {
+        return rSign === aSign;
+      }
+
+      // For S/R (sensitive/resistant) tests: first letter only
+      const rSR = normalizeSR(normR);
+      const aSR = normalizeSR(normAns);
+      if ((rSR === 's' || rSR === 'r') && (aSR === 's' || aSR === 'r')) {
+        return rSR === aSR;
+      }
+
+      // Hemolysis: α β γ matching - handle UI format 'β (complete)', 'α (partial/green)', 'γ (none)'
+      const hemTypes = ['β', 'α', 'γ', 'beta', 'alpha', 'gamma'];
+      const rHasHem = hemTypes.some(h => normR.includes(h));
+      const aHasHem = hemTypes.some(h => normAns.includes(h));
+      if (rHasHem || aHasHem) {
+        const toHem = v => {
+          if (v.includes('β') || v.includes('beta') || v.includes('complete')) return 'β';
+          if (v.includes('α') || v.includes('alpha') || v.includes('partial') || v.includes('green')) return 'α';
+          if (v.includes('γ') || v.includes('gamma') || v.includes('none')) return 'γ';
+          return v;
+        };
+        const rHem = toHem(normR);
+        const aHem = toHem(normAns);
+        if ((rHem === 'β' || rHem === 'α' || rHem === 'γ') && (aHem === 'β' || aHem === 'α' || aHem === 'γ')) {
+          return rHem === aHem;
+        }
+        // partial match for variable hemolysis like 'γ/α'
+        if (normR.includes('/')) return normR.includes(aHem);
+      }
+
+      return false;
+    }
+
     function calcProbability(group, answers) {
       const candidates = LIBRARY_CLEAN.filter(b => b.group === group);
       return candidates.map(bug => {
@@ -2637,7 +2699,6 @@
           const ans = answers[ansKey];
           if (!ans) return;
 
-          total += 3;
           const cleanAnsKey = ansKey.replace(/[^a-z0-9]/g, '');
           
           const testDef = tests.find(b => {
@@ -2645,30 +2706,26 @@
             return bk === cleanAnsKey || cleanAnsKey.includes(bk) || bk.includes(cleanAnsKey);
           });
 
+          const isKey = KEY_TESTS.some(k => cleanAnsKey.includes(k.replace(/[^a-z0-9]/g, '')) || k.replace(/[^a-z0-9]/g, '').includes(cleanAnsKey));
+          const weight = isKey ? 5 : 3;
+
           if (!testDef) {
-            // ถ้า Database ของเชื้อตัวนี้ไม่ได้ระบุการทดสอบนี้ไว้ 
-            // ถือว่าเชื้อนี้มักจะให้ผลเป็น Negative โดยธรรมชาติ หรือไม่ applicable
+            total += weight;
+            // ไม่มีใน database ของเชื้อนี้
             if (String(ans).includes('-') || String(ans).includes('−')) {
-               score += 1; // อนุโลมให้ 1 คะแนนถ้าตอบลบ
+               score += 1;
             }
-            return; // ได้ 0 จากเต็ม 3 ทำให้ % ลดลง (หมดปัญหา 100% ปลอม)
+            return;
           }
 
+          total += weight;
           const { r } = testDef;
-          const normR = r.replace(/−/g, '-').toLowerCase();
-          const normAns = String(ans).replace(/−/g, '-').toLowerCase();
+          const isV = r.replace(/−/g, '-').toLowerCase() === 'v' || r.includes('+/-') || r.includes('-/+');
+          const matchResult = testMatch(r, ans);
 
-          const isV = normR === 'v' || normR.includes('+/-') || normR.includes('-/+');
-          const strR = normR.replace(/[^a-z0-9+\-]/g, '');
-          const strAns = normAns.replace(/[^a-z0-9+\-]/g, '');
-
-          let match = false;
-          if (normR === normAns) match = true;
-          else if (strAns.length > 0 && normR.includes(strAns)) match = true;
-          else if (strR.length > 0 && normAns.includes(strR)) match = true;
-
-          if (match) score += 3;
-          else if (isV) score += 1;
+          if (matchResult === true) score += weight;
+          else if (matchResult === null || isV) score += Math.floor(weight / 3); // partial for variable
+          // false = 0 points (mismatch)
         });
 
         const pct = total > 0 ? Math.round((score / total) * 100) : 0;

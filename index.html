@@ -1710,6 +1710,16 @@
           { id: 'nitrate_neiss', label: 'Nitrate reduction', options: ['+', '−'] },
           { id: 'dnase_neiss', label: 'DNase', options: ['+', '−'] },
           { id: 'growth_nu', label: 'Growth on Nutrient agar', options: ['+', '−'] },
+          // Tests for Pasteurella (JSON: coccobacilli branch)
+          { id: 'tsi_gnc', label: 'TSI', options: ['A/A', 'K/A', 'K/K', 'K/N'] },
+          { id: 'motile_gnc', label: 'Motility', options: ['+', '−'] },
+          { id: 'indole_gnc', label: 'Indole', options: ['+', '−'] },
+          { id: 'urease_gnc', label: 'Urease', options: ['+', '−'] },
+          { id: 'mannitol_gnc', label: 'Mannitol', options: ['+', '−'] },
+          // Tests for Haemophilus (JSON: pleomorphic branch - XV factor)
+          { id: 'factor_x', label: 'X factor (Hemin) required', options: ['+', '−'] },
+          { id: 'factor_v', label: 'V factor (NAD) required', options: ['+', '−'] },
+          { id: 'satellitism', label: 'Satellitism (growth near S.aureus)', options: ['+', '−'] },
         ]
       },
       gpb: {
@@ -2622,6 +2632,15 @@
       raffinose_ent: ['raffinose'],
       ad_ent: ['ad', 'adc', 'arginine', 'arginine dihydrolase'],
       motile_ent: ['motile', 'motility'],
+      // GNC suite aliases
+      tsi_gnc: ['tsi'],
+      motile_gnc: ['motile', 'motility'],
+      indole_gnc: ['indole'],
+      urease_gnc: ['urease'],
+      mannitol_gnc: ['mannitol'],
+      factor_x: ['x factor', 'factor x', 'hemin', 'x required'],
+      factor_v: ['v factor', 'factor v', 'nad', 'v required'],
+      satellitism: ['satellitism', 'staph streak', 'satellite', 'xv test'],
     };
 
     function isTestMatchByAlias(rowName, suiteTest) {

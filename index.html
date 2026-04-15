@@ -1329,7 +1329,7 @@
         clinical: { habitat: 'Skin/nose normal flora; hospital environment', diseases: ['Skin infections (cellulitis, abscess, impetigo)', 'Bacteremia / sepsis', 'Endocarditis', 'Osteomyelitis', 'Food poisoning (toxin)', 'Toxic shock syndrome'], transmission: 'Contact; droplet; fomites', factors: 'Coagulase, Protein A, PVL toxin, TSST-1, Enterotoxins' },
         colony: { BAP: 'Golden-yellow, β-hemolysis (large clear zone)', MAC: 'Pink-orange (LF)', MSA: 'Yellow (mannitol fermenter)' },
         gramStain: 'GPC in clusters (grapes); 0.8–1µm',
-        biochem: [{ t: 'Catalase', r: '+', n: 'KEY vs Strep (−)' }, { t: 'Coagulase', r: '+', n: 'KEY vs CoNS (−)' }, { t: 'Oxidase', r: '−', n: '' }, { t: 'Hemolysis', r: 'β', n: 'Large clear zone' }, { t: 'Novobiocin', r: 'S', n: 'vs S. saprophyticus (R)' }, { t: 'MSA', r: 'Yellow', n: 'Mannitol ferment' }, { t: 'DNase', r: '+', n: 'vs CoNS' }, { t: 'Urease', r: '+', n: '' }],
+        biochem: [{ t: 'Catalase', r: '+', n: 'KEY vs Strep (−)' }, { t: 'Hemolysis', r: 'β', n: 'Large clear zone' }, { t: 'Glucose O/F', r: '+/+', n: 'KEY: Staphylococcus fermentative' }, { t: 'Coagulase', r: '+', n: 'KEY vs CoNS (−)' }, { t: 'Novobiocin', r: 'S', n: 'vs S. saprophyticus (R)' }, { t: 'MSA', r: 'Yellow', n: 'Mannitol ferment' }, { t: 'DNase', r: '+', n: 'vs CoNS' }, { t: 'Urease', r: '+', n: '' }, { t: 'Oxidase', r: '−', n: '' }],
         media: ['Blood agar (BAP)', 'MacConkey (MCA)', 'MSA'], condition: '37°C, 18–24h, aerobic',
         notes: 'Coagulase+ = แยกทันทีจาก CoNS. Golden colony + β-hemolysis characteristic. MRSA ดื้อต่อ methicillin (mecA gene)'
       },
@@ -1340,7 +1340,7 @@
         clinical: { habitat: 'Skin normal flora', diseases: ['Catheter-related bacteremia', 'Prosthetic valve endocarditis', 'Shunt infection (CSF)'], transmission: 'Endogenous; contamination during procedure', factors: 'Biofilm formation; Slime layer' },
         colony: { BAP: 'White, γ-hemolysis; 1–2mm', MAC: 'No/poor growth' },
         gramStain: 'GPC in clusters; non-motile',
-        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Coagulase', r: '−', n: 'KEY vs S. aureus' }, { t: 'Oxidase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ', n: 'No hemolysis' }, { t: 'Novobiocin', r: 'S', n: 'KEY vs S. saprophyticus (R)' }, { t: 'MSA', r: '−/Red', n: 'No mannitol' }, { t: 'DNase', r: '−', n: '' }, { t: 'Urease', r: '−', n: '' }],
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'γ', n: 'No hemolysis' }, { t: 'Glucose O/F', r: '+/+', n: 'KEY: Staphylococcus fermentative' }, { t: 'Coagulase', r: '−', n: 'KEY vs S. aureus' }, { t: 'Novobiocin', r: 'S', n: 'KEY vs S. saprophyticus (R)' }, { t: 'MSA', r: '−/Red', n: 'No mannitol' }, { t: 'DNase', r: '−', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Oxidase', r: '−', n: '' }],
         media: ['Blood agar (BAP)'], condition: '37°C aerobic',
         notes: 'CoNS ที่สำคัญที่สุด. Novobiocin S แยกจาก S. saprophyticus. Biofilm ทำให้ดื้อ antibiotic'
       },
@@ -1351,7 +1351,7 @@
         clinical: { habitat: 'Skin; GU tract; environment', diseases: ['UTI in young sexually active women (2nd most common)'], transmission: 'Ascending infection; sexual activity', factors: 'Urease; adhesins' },
         colony: { BAP: 'White, γ-hemolysis; 1–2mm' },
         gramStain: 'GPC clusters',
-        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Coagulase', r: '−', n: '' }, { t: 'Oxidase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Novobiocin', r: 'R', n: 'KEY: unique CoNS' }, { t: 'MSA', r: '−', n: '' }, { t: 'DNase', r: '−', n: '' }, { t: 'Urease', r: '+', n: '' }],
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Glucose O/F', r: '+/+', n: 'KEY: Staphylococcus fermentative' }, { t: 'Coagulase', r: '−', n: '' }, { t: 'Novobiocin', r: 'R', n: 'KEY: unique CoNS vs others (S)' }, { t: 'MSA', r: '−', n: '' }, { t: 'DNase', r: '−', n: '' }, { t: 'Urease', r: '+', n: '' }, { t: 'Oxidase', r: '−', n: '' }],
         media: ['Blood agar', 'CLED'], condition: '37°C aerobic',
         notes: 'Novobiocin R เป็น KEY characteristic ของ S. saprophyticus'
       },
@@ -1553,17 +1553,18 @@
     // ══════════════════════════════════════
     const SUITES = {
       gpc_cluster: {
-        name: 'GPC Cluster Suite (Staphylococcus)',
+        name: 'GPC Cluster Suite (Staphylococcus / Micrococcus)',
         trigger: 'GPC in clusters + Catalase +',
         tests: [
           { id: 'catalase_cluster', label: 'Catalase', options: ['+', '−'] },
-          { id: 'oxidase_cluster', label: 'Oxidase', options: ['+', '−'] },
           { id: 'hemolysis_cluster', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'] },
+          { id: 'glucose_of', label: 'Glucose O/F', options: ['+/+ (fermentative)', '+/− (oxidative)', '−/− (non-reactive)'] },
           { id: 'coagulase', label: 'Coagulase', options: ['+', '−'] },
-          { id: 'dnase', label: 'DNase', options: ['+', '−'] },
-          { id: 'msa', label: 'MSA (Mannitol)', options: ['Yellow (Mannitol+)', 'Red (Mannitol−)', 'No growth'] },
           { id: 'novobiocin', label: 'Novobiocin', options: ['S (sensitive)', 'R (resistant)'] },
+          { id: 'msa', label: 'MSA (Mannitol)', options: ['Yellow (Mannitol+)', 'Red (Mannitol−)', 'No growth'] },
+          { id: 'dnase', label: 'DNase', options: ['+', '−'] },
           { id: 'urease_cluster', label: 'Urease', options: ['+', '−'] },
+          { id: 'oxidase_cluster', label: 'Oxidase', options: ['+', '−'] },
         ]
       },
       gpc_chain: {
@@ -1588,23 +1589,23 @@
         trigger: 'GNB + Oxidase − + MAC LF/NLF',
         tests: [
           { id: 'oxidase_ent', label: 'Oxidase', options: ['+', '−'] },
-          { id: 'tsi', label: 'TSI', options: ['A/A (gas+)', 'A/A (gas−)', 'A/AG H₂S', 'K/A', 'K/K', 'K/N', 'K/AG', 'K/AG H₂S', 'K/A H₂S'] },
-          { id: 'h2s', label: 'H₂S (TSI)', options: ['+', '−'] },
-          { id: 'indole', label: 'Indole', options: ['+', '−'] },
-          { id: 'mr', label: 'MR (Methyl Red)', options: ['+', '−'] },
-          { id: 'vp', label: 'VP (Voges-Proskauer)', options: ['+', '−'] },
-          { id: 'citrate', label: 'Citrate (Simmons)', options: ['+', '−'] },
-          { id: 'urease', label: 'Urease', options: ['++ (rapid)', '+', '−', 'slow'] },
+          { id: 'tsi', label: 'TSI', options: ['A/A (gas+)', 'A/A (gas−)', 'K/A', 'K/A H₂S', 'K/AG H₂S', 'K/K', 'K/N'] },
           { id: 'motility', label: 'Motility', options: ['+', '−'] },
-          { id: 'ldc', label: 'LDC (Lysine)', options: ['+', '−'] },
-          { id: 'odc', label: 'ODC (Ornithine)', options: ['+', '−'] },
-          { id: 'pdc', label: 'PDC (Phenylalanine)', options: ['+', '−'] },
+          { id: 'indole', label: 'Indole (IMViC)', options: ['+', '−'] },
+          { id: 'mr', label: 'MR (IMViC)', options: ['+', '−'] },
+          { id: 'vp', label: 'VP (IMViC)', options: ['+', '−'] },
+          { id: 'citrate', label: 'Citrate (IMViC)', options: ['+', '−'] },
+          { id: 'ldc', label: 'LDC (Lysine decarboxylase)', options: ['+', '−'] },
+          { id: 'odc', label: 'ODC (Ornithine decarboxylase)', options: ['+', '−'] },
+          { id: 'pdc', label: 'PDC (Phenylalanine deaminase)', options: ['+', '−'] },
           { id: 'gas_glucose', label: 'Gas from Glucose', options: ['+', '−'] },
+          { id: 'h2s', label: 'H₂S (TSI)', options: ['+', '−'] },
           { id: 'malonate', label: 'Malonate', options: ['+', '−'] },
+          { id: 'urease', label: 'Urease', options: ['++ (rapid)', '+', '−'] },
           { id: 'mannitol', label: 'Mannitol', options: ['+', '−'] },
+          { id: 'sorbitol', label: 'Sorbitol', options: ['+', '−'] },
           { id: 'arabinose', label: 'Arabinose', options: ['+', '−'] },
           { id: 'adonitol', label: 'Adonitol', options: ['+', '−'] },
-          { id: 'sorbitol', label: 'Sorbitol', options: ['+', '−'] },
         ]
       },
       vibrio: {
@@ -1639,28 +1640,29 @@
       },
       nfb: {
         name: 'NFB Suite (Non-Fermenting GNB)',
-        trigger: 'GNB + Oxidase +/− + TSI K/N (ไม่ ferment ภายใน 2 วัน)',
+        trigger: 'GNB + Oxidase +/− + TSI K/N หรือ K/K (ไม่ ferment ภายใน 2 วัน)',
         tests: [
+          { id: 'oxidase_nfb', label: 'Oxidase', options: ['+', '−', '+ (weak)'] },
           { id: 'tsi_nfb', label: 'TSI', options: ['K/N', 'K/K', 'K/A', 'A/A'] },
           { id: 'motile_nfb', label: 'Motile', options: ['+', '−'] },
           { id: 'indole_nfb', label: 'Indole', options: ['+', '−'] },
-          { id: 'king_p', label: 'King P (Pyocyanin)', options: ['+', '−'] },
-          { id: 'king_f', label: 'King F (Fluorescein UV)', options: ['+', '−'] },
-          { id: 'urease_nfb', label: 'Urease', options: ['+', '−'] },
+          { id: 'glucose_of_nfb', label: 'Glucose O/F', options: ['O (oxidative)', 'F (fermentative)', '−/− (non-reactive)'] },
           { id: 'nitrate_nfb', label: 'Nitrate reduction', options: ['+', '−'] },
           { id: 'n2_gas', label: 'N₂ gas from NO₃', options: ['+', '−'] },
           { id: 'growth42', label: 'Growth on 42°C', options: ['+', '−'] },
-          { id: 'esculin_nfb', label: 'Esculin', options: ['+', '−'] },
+          { id: 'urease_nfb', label: 'Urease', options: ['+', '−'] },
+          { id: 'sucrose_nfb', label: 'Sucrose', options: ['+', '−'] },
+          { id: 'maltose_nfb', label: 'Maltose', options: ['+', '−'] },
+          { id: 'mannitol_nfb', label: 'Mannitol', options: ['+', '−'] },
+          { id: 'king_p', label: 'King P (Pyocyanin)', options: ['+', '−'] },
+          { id: 'king_f', label: 'King F (Fluorescein UV)', options: ['+', '−'] },
           { id: 'dnase_nfb', label: 'DNase', options: ['+', '−'] },
           { id: 'gelatin_nfb', label: 'Gelatin', options: ['+', '−'] },
           { id: 'starch_nfb', label: 'Starch', options: ['+', '−'] },
+          { id: 'esculin_nfb', label: 'Esculin', options: ['+', '−'] },
+          { id: 'h2s_nfb', label: 'H₂S in TSI', options: ['+', '−'] },
+          { id: 'arabinose_nfb', label: 'Arabinose', options: ['+', '−'] },
           { id: 'nacl_65_nfb', label: '6.5% NaCl', options: ['+', '−'] },
-          { id: 'glucose_of_nfb', label: 'Glucose O/F', options: ['O (oxidative)', 'F (fermentative)', '−/−', '+/+'] },
-          { id: 'xylose_nfb', label: 'Xylose', options: ['+', '−'] },
-          { id: 'mannitol_nfb', label: 'Mannitol', options: ['+', '−'] },
-          { id: 'lactose_nfb', label: 'Lactose', options: ['+', '−'] },
-          { id: 'maltose_nfb', label: 'Maltose', options: ['+', '−'] },
-          { id: 'sucrose_nfb', label: 'Sucrose', options: ['+', '−'] },
         ]
       },
       gn_coccobacilli: {
@@ -2463,18 +2465,20 @@
     const TEST_ALIASES = {
       catalase: ['catalase'],
       catalase_cluster: ['catalase'],
-      catalase_gpb: ['catalase'],
-      oxidase_cluster: ['oxidase'],
-      oxidase_neiss: ['oxidase'],
-      hemolysis_cluster: ['hemolysis'],
+      coagulase: ['coagulase'],
+      dnase: ['dnase'],
+      msa: ['msa', 'msa mannitol', 'mannitol salt agar'],
+      novobiocin: ['novobiocin'],
       urease_cluster: ['urease'],
-      oxidase_ent: ['oxidase'],
-      tsi: ['tsi'],
+      oxidase_cluster: ['oxidase'],
+      hemolysis_cluster: ['hemolysis'],
+      glucose_of: ['glucose o/f', 'glucose of'],
       h2s: ['h2s', 'h2s tsi', 'h2s in tsi'],
       indole: ['indole'],
       mr: ['mr', 'methyl red'],
       vp: ['vp', 'voges proskauer'],
       citrate: ['citrate', 'simmons'],
+      nacl_6_5: ['6.5 nacl', '6.5% nacl'],
       urease: ['urease'],
       motility: ['motility', 'motile'],
       ldc: ['ldc', 'ld', 'lysine'],
@@ -2520,6 +2524,7 @@
       tcbs: ['tcbs', 'tcbs colony'],
       string_test: ['string test'],
       esculin_v: ['esculin'],
+      oxidase_nfb: ['oxidase'],
       tsi_nfb: ['tsi'],
       motile_nfb: ['motile', 'motility'],
       indole_nfb: ['indole'],
@@ -2527,7 +2532,7 @@
       king_f: ['king f', 'fluorescein'],
       urease_nfb: ['urease'],
       nitrate_nfb: ['nitrate', 'nitrate reduction'],
-      n2_gas: ['n2 gas', 'n2'],
+      n2_gas: ['n2 gas', 'n2 gas from no3'],
       growth42: ['growth 42', 'growth on 42c', '42c'],
       esculin_nfb: ['esculin'],
       dnase_nfb: ['dnase'],
@@ -2535,6 +2540,8 @@
       starch_nfb: ['starch', 'starch hydrolysis'],
       nacl_65_nfb: ['6.5 nacl', '6.5% nacl'],
       glucose_of_nfb: ['glucose o/f', 'glucose of'],
+      h2s_nfb: ['h2s', 'h2s in tsi'],
+      arabinose_nfb: ['arabinose'],
       xylose_nfb: ['xylose'],
       mannitol_nfb: ['mannitol', 'manitol'],
       lactose_nfb: ['lactose'],
@@ -2621,6 +2628,8 @@
     // ══════════════════════════════════════
     // PROBABILITY ENGINE
     // ══════════════════════════════════════
+    // HARD EXCLUSION: if mismatch → organism is virtually eliminated
+    const HARD_EXCLUSION_TESTS = ['hemolysis', 'coagulase', 'oxidase', 'catalase'];
     // KEY DISCRIMINATING TESTS - mismatch gives heavy penalty
     const KEY_TESTS = ['bacitracin', 'ppr', 'camp', 'optochin', 'bile solubility', 'bile esculin', '6.5% nacl', '6.5 nacl', 'coagulase', 'oxidase', 'catalase', 'hemolysis', 'hippurate', 'novobiocin'];
 
@@ -2698,6 +2707,7 @@
         const keyTestsForBug = getKeyTestsForBug(bug);
         let score = 0, total = 0;
         let keyMatchCount = 0, keyMismatchCount = 0, keyTestedCount = 0;
+        let hardExcluded = false; // organism is virtually eliminated
 
         answerEntries.forEach(([ansKey, ans]) => {
           const cleanAnsKey = ansKey.replace(/[^a-z0-9]/g, '');
@@ -2707,7 +2717,13 @@
             return bk === cleanAnsKey || cleanAnsKey.includes(bk) || bk.includes(cleanAnsKey);
           });
 
-          // Check if this answered test is a KEY test for this bug
+          // Check if this is a HARD EXCLUSION test (hemolysis, coagulase, oxidase, catalase)
+          const isHardExclusion = HARD_EXCLUSION_TESTS.some(k => {
+            const kk = k.replace(/[^a-z0-9]/g, '');
+            return cleanAnsKey === kk || cleanAnsKey.includes(kk) || kk.includes(cleanAnsKey);
+          });
+
+          // Check if this answered test is a KEY test for this bug (from n: 'KEY...' in biochem)
           const isKeyForThisBug = keyTestsForBug.some(kt => {
             const kk = kt.t.toLowerCase().replace(/[^a-z0-9]/g, '');
             return kk === cleanAnsKey || cleanAnsKey.includes(kk) || kk.includes(cleanAnsKey);
@@ -2719,8 +2735,7 @@
             return cleanAnsKey.includes(kk) || kk.includes(cleanAnsKey);
           });
 
-          const isKey = isKeyForThisBug || isGlobalKey;
-          const weight = isKeyForThisBug ? 8 : isGlobalKey ? 5 : 3;
+          const weight = isHardExclusion ? 15 : isKeyForThisBug ? 8 : isGlobalKey ? 5 : 3;
 
           if (!testDef) {
             total += weight;
@@ -2735,34 +2750,43 @@
           const isV = r.replace(/−/g, '-').toLowerCase() === 'v' || r.includes('+/-') || r.includes('-/+');
           const matchResult = testMatch(r, ans);
 
-          if (isKey) keyTestedCount++;
+          if (isKeyForThisBug || isGlobalKey) keyTestedCount++;
 
           if (matchResult === true) {
             score += weight;
-            if (isKey) keyMatchCount++;
+            if (isKeyForThisBug || isGlobalKey) keyMatchCount++;
           } else if (matchResult === null || isV) {
             score += Math.floor(weight / 3);
           } else {
-            // Mismatch
-            if (isKeyForThisBug) {
-              // KEY test mismatch for this bug = strong penalty (subtract score)
+            // MISMATCH
+            if (isHardExclusion) {
+              // Hard exclusion mismatch: organism is eliminated
+              score -= weight * 3;
+              hardExcluded = true;
+            } else if (isKeyForThisBug) {
               score -= weight * 2;
               keyMismatchCount++;
+            } else if (isGlobalKey) {
+              score -= weight;
+              keyMismatchCount++;
             }
+            // else: normal test mismatch = 0 points only
           }
         });
 
-        // Bonus: if ALL key tests for this bug were answered and ALL matched → confident ID
-        const bugKeyTestedAll = keyTestsForBug.length > 0 &&
+        // Confident ID bonus: all key tests matched and no hard exclusion
+        const bugKeyTestedAll = !hardExcluded &&
+          keyTestsForBug.length > 0 &&
           keyTestedCount >= Math.min(keyTestsForBug.length, answerEntries.length) &&
           keyMismatchCount === 0 &&
           keyMatchCount >= Math.min(2, keyTestsForBug.length);
 
         let rawPct = total > 0 ? (score / total) * 100 : 0;
-        if (bugKeyTestedAll) rawPct = Math.max(rawPct, 85); // confident: floor at 85%
+        if (bugKeyTestedAll) rawPct = Math.max(rawPct, 85);
+        if (hardExcluded) rawPct = Math.min(rawPct, 5); // hard cap at 5% if excluded
 
         const pct = Math.min(99, Math.max(0, Math.round(rawPct)));
-        return { ...bug, pct, _keyMatch: keyMatchCount, _keyMismatch: keyMismatchCount };
+        return { ...bug, pct, _keyMatch: keyMatchCount, _keyMismatch: keyMismatchCount, _excluded: hardExcluded };
       }).sort((a, b) => b.pct - a.pct);
     }
 

@@ -2715,10 +2715,14 @@
 
         answerEntries.forEach(([ansKey, ans]) => {
           const cleanAnsKey = ansKey.replace(/[^a-z0-9]/g, '');
+          // Resolve aliases: e.g. sorbitol_ent → ['sorbitol'] → 'sorbitol'
+          const aliasTargets = (TEST_ALIASES[ansKey] || []).map(a => a.toLowerCase().replace(/[^a-z0-9]/g, ''));
 
           const testDef = tests.find(b => {
             const bk = b.t.toLowerCase().replace(/[^a-z0-9]/g, '');
-            return bk === cleanAnsKey || cleanAnsKey.includes(bk) || bk.includes(cleanAnsKey);
+            if (bk === cleanAnsKey || cleanAnsKey.includes(bk) || bk.includes(cleanAnsKey)) return true;
+            // Also check via alias targets
+            return aliasTargets.some(at => bk === at || at.includes(bk) || bk.includes(at));
           });
 
           // Check if this is a HARD EXCLUSION test (hemolysis, coagulase, oxidase, catalase)

@@ -1356,6 +1356,17 @@
         notes: 'Novobiocin R เป็น KEY characteristic ของ S. saprophyticus'
       },
 
+      {
+        id: 's_lugdunensis', group: 'gpc_cluster', name: 'Staphylococcus lugdunensis', thai: 'สแตฟิโลค็อกคัส ลักดูเนนซิส', gram: '+', morph: 'Cocci in clusters',
+        importance: 'moderate', tags: ['OD+', 'PYR+', 'Slide coagulase+/Tube−', 'CoNS aggressive', 'Endocarditis'],
+        clinical: { habitat: 'Skin normal flora (perineal/inguinal area)', diseases: ['Endocarditis (aggressive — resembles S. aureus!)', 'Skin & soft tissue infections (abscess, cellulitis)', 'Bacteremia/sepsis', 'Osteomyelitis', 'UTI', 'Prosthetic joint infection'], transmission: 'Endogenous; skin flora; healthcare', factors: 'SdrF/SdrG adhesins; biofilm; lugdunin (bacteriocin); bound coagulase' },
+        colony: { BAP: 'Medium 1–4mm; β-hemolysis (prominent after 48h); wrinkled opaque white; sweet hay-like odor', MSA: 'Pink/Red — Mannitol−' },
+        gramStain: 'GPC in clusters; 0.8–1µm; non-motile',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'β', n: 'Prominent β-hemolysis (like S. aureus)' }, { t: 'Glucose O/F', r: '+/+', n: 'Fermentative (Staphylococcus)' }, { t: 'Coagulase', r: 'Slide+/Tube−', n: 'KEY! Bound coagulase only — tube test NEGATIVE' }, { t: 'Novobiocin', r: 'S', n: 'Sensitive (vs S. saprophyticus R)' }, { t: 'MSA', r: '−/Red', n: 'Mannitol−' }, { t: 'Trehalose', r: '+', n: '' }, { t: 'OD (Ornithine decarboxylase)', r: '+', n: 'KEY! Unique among CoNS — most are OD−' }, { t: 'PPR (PYR test)', r: '+', n: 'KEY! Unique among CoNS' }, { t: 'DNase', r: '−', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Oxidase', r: '−', n: '' }],
+        media: ['Blood agar (BAP)', 'MSA'], condition: '35–37°C aerobic; 48h for full hemolysis',
+        notes: 'CoNS ที่ aggressive ที่สุด — ทำ endocarditis รุนแรงเหมือน S. aureus. KEY: OD+ และ PYR+ ไม่เหมือน CoNS อื่น. Slide coagulase อาจ positive แต่ tube test NEGATIVE — ระวังสับสนกับ S. aureus. Susceptible ต่อยาส่วนใหญ่ (ต่างจาก S. aureus)'
+      },
+
       // GPC CHAIN
       {
         id: 's_pyogenes', group: 'gpc_chain', name: 'Streptococcus pyogenes', thai: 'สเตรปโตค็อกคัส ไพโอจีนส์', gram: '+', morph: 'Cocci in chains',
@@ -2606,6 +2617,7 @@
       oxidase_neiss: ['oxidase'],
       trehalose: ['trehalose'],
       od_cluster: ['od', 'odc', 'ornithine', 'ornithine decarboxylase'],
+      ppr_cluster: ['ppr', 'pyr', 'pyr test', 'pyrrolidonyl'],
       mannitol_ent: ['mannitol'],
       raffinose_ent: ['raffinose'],
       ad_ent: ['ad', 'adc', 'arginine', 'arginine dihydrolase'],

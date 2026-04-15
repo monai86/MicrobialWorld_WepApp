@@ -3801,399 +3801,327 @@
     }
 
     // ══════════════════════════════════════
-    // DECISION TREE COMPONENT
+    // GUIDED TEST VIEW COMPONENT
     // ══════════════════════════════════════
-    function DecisionTreeView({ suite, answers, setAnswers, gramSel, results }) {
-      const [expandedNodes, setExpandedNodes] = useState(new Set());
+    function GuidedTestView({ suite, answers, setAnswers, gramSel, onComplete }) {
+      const [currentTestIndex, setCurrentTestIndex] = useState(0);
       
-      // Build tree structure from suite and library
-      const treeData = useMemo(() => {
-        if (!suite || !gramSel) return null;
+      // Get answered and unanswered tests
+      const testStatus = useMemo(() => {
+        if (!suite) return { answered: [], unanswered: [], current: null };
         
-        const candidates = LIBRARY_CLEAN.filter(b => {
-          const groupMap = { gpc_cluster: 'gpc_cluster', gpc_chain: 'gpc_chain', gpc_diplo: 'gpc_chain', gpb: 'gpb', gnb_oxi_neg: 'enterobacterales', gnb_oxi_pos_tcbs: 'vibrio', gnb_oxi_pos_nfb: 'nfb', gn_diplo: 'gn_coccobacilli' };
-          return b.group === groupMap[gramSel];
+        const answered = [];
+        const unanswered = [];
+        
+        suite.tests.forEach((test, idx) => {
+          if (answers[test.id]) {
+            answered.push({ ...test, index: idx });
+          } else {
+            unanswered.push({ ...test, index: idx });
+          }
         });
         
-        // Group candidates by their key test results
-        const nodes = [];
-        const firstTest = suite.tests[0];
-        
-        if (firstTest) {
-          const testOptions = firstTest.options;
-          testOptions.forEach(opt => {
-            const matchingOrgs = candidates.filter(bug => {
-              const testRow = bug.biochem?.find(b => 
-                b.t.toLowerCase().includes(firstTest.label.toLowerCase()) ||
-                firstTest.label.toLowerCase().includes(b.t.toLowerCase())
-              );
-              if (!testRow) return false;
-              return testMatch(testRow.r, opt);
-            });
-            
-            if (matchingOrgs.length > 0) {
-              nodes.push({
-                test: firstTest,
-                result: opt,
-                organisms: matchingOrgs,
-                children: []
-              });
-            }
-          });
+        return { answered, unanswered, current: unanswered[0] || null };
+      }, [suite, answers]);
+      
+      const handleAnswer = (testId, value) => {
+        setAnswers(prev => ({ ...prev, [testId]: value }));
+        // Move to next unanswered test
+        const nextIndex = testStatus.unanswered.findIndex(t => t.id !== testId);
+        if (nextIndex >= 0) {
+          setCurrentTestIndex(testStatus.unanswered[nextIndex]?.index || 0);
         }
-        
-        return { root: suite.name, tests: suite.tests, branches: nodes };
-      }, [suite, gramSel]);
-      
-      const toggleNode = (nodeId) => {
-        setExpandedNodes(prev => {
-          const newSet = new Set(prev);
-          if (newSet.has(nodeId)) newSet.delete(nodeId);
-          else newSet.add(nodeId);
-          return newSet;
-        });
       };
       
-      const handleTestClick = (testId, result) => {
-        setAnswers(prev => ({ ...prev, [testId]: result }));
+      const handleSkip = () => {
+        // Skip current and go to next
+        const nextUnanswered = testStatus.unanswered.slice(1);
+        if (nextUnanswered.length > 0) {
+          setCurrentTestIndex(nextUnanswered[0].index);
+        }
       };
       
-      if (!treeData) return <div style={{ color: '#64748b', textAlign: 'center', padding: 40 }}>เลือก Gram Stain เพื่อเริ่มต้น</div>;
+      if (!suite) return <div style={{ color: '#64748b', textAlign: 'center', padding: 40 }}>ไม่พบชุดทดสอบ</div>;
       
-      const answeredCount = Object.values(answers).filter(v => v).length;
-      const totalTests = treeData.tests.length;
+      const progress = Math.round((testStatus.answered.length / suite.tests.length) * 100);
       
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* Progress Header */}
-          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: '14px 18px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ fontSize: 13, color: '#94a3b8' }}>ความคืบหน้า</span>
-              <span style={{ fontSize: 13, color: '#6366f1', fontWeight: 600 }}>{answeredCount}/{totalTests} tests</span>
+          {/* Progress */}
+          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+              <span style={{ fontSize: 12, color: '#94a3b8' }}>ความคืบหน้า</span>
+              <span style={{ fontSize: 12, color: '#6366f1', fontWeight: 600 }}>{testStatus.answered.length}/{suite.tests.length} tests ({progress}%)</span>
             </div>
-            <div style={{ height: 6, background: '#0d1526', borderRadius: 3, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${(answeredCount/totalTests)*100}%`, background: 'linear-gradient(90deg,#6366f1,#8b5cf6)', transition: 'width 0.3s', borderRadius: 3 }} />
-            </div>
-          </div>
-          
-          {/* Tree Visualization */}
-          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: '18px 20px' }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>🌳</span> Decision Tree: {treeData.root}
-            </div>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-              {treeData.tests.map((test, idx) => {
-                const isAnswered = answers[test.id];
-                const isExpanded = expandedNodes.has(test.id);
-                
-                return (
-                  <div key={test.id} style={{ 
-                    border: `1px solid ${isAnswered ? '#22c55e40' : '#1e3055'}`, 
-                    borderRadius: 10,
-                    background: isAnswered ? 'rgba(34,197,94,0.08)' : '#0d1526',
-                    overflow: 'hidden'
-                  }}>
-                    {/* Test Header */}
-                    <div 
-                      onClick={() => toggleNode(test.id)}
-                      style={{
-                        padding: '12px 16px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <span style={{ 
-                          width: 26, 
-                          height: 26, 
-                          borderRadius: '50%', 
-                          background: isAnswered ? '#22c55e' : '#6366f1',
-                          color: '#fff',
-                          fontSize: 12,
-                          fontWeight: 700,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        }}>
-                          {isAnswered ? '✓' : idx + 1}
-                        </span>
-                        <span style={{ fontSize: 13, fontWeight: 600, color: isAnswered ? '#86efac' : '#e2e8f0' }}>
-                          {test.label}
-                        </span>
-                        {isAnswered && (
-                          <span style={{ 
-                            background: '#22c55e20', 
-                            color: '#4ade80', 
-                            border: '1px solid #22c55e40',
-                            borderRadius: 6,
-                            padding: '2px 8px',
-                            fontSize: 11,
-                            fontWeight: 600
-                          }}>
-                            {answers[test.id]}
-                          </span>
-                        )}
-                      </div>
-                      <span style={{ color: '#64748b', fontSize: 16, transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▼</span>
-                    </div>
-                    
-                    {/* Options */}
-                    {(isExpanded || !isAnswered) && (
-                      <div style={{ padding: '0 16px 16px', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                        <button
-                          onClick={() => handleTestClick(test.id, undefined)}
-                          style={{
-                            padding: '8px 14px',
-                            borderRadius: 8,
-                            border: `1px solid ${!isAnswered ? '#6366f1' : '#1e3055'}`,
-                            background: !isAnswered ? '#6366f120' : 'transparent',
-                            color: !isAnswered ? '#6366f1' : '#64748b',
-                            fontSize: 12,
-                            cursor: 'pointer'
-                          }}
-                        >
-                          — ยังไม่ทำ
-                        </button>
-                        {test.options.map(opt => {
-                          const isSelected = answers[test.id] === opt;
-                          return (
-                            <button
-                              key={opt}
-                              onClick={() => handleTestClick(test.id, opt)}
-                              style={{
-                                padding: '8px 14px',
-                                borderRadius: 8,
-                                border: `1px solid ${isSelected ? '#22c55e' : '#1e3055'}`,
-                                background: isSelected ? '#22c55e20' : '#132040',
-                                color: isSelected ? '#4ade80' : '#94a3b8',
-                                fontSize: 12,
-                                fontWeight: isSelected ? 600 : 400,
-                                cursor: 'pointer',
-                                transition: 'all 0.15s'
-                              }}
-                            >
-                              {opt}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            <div style={{ height: 6, background: '#0d1526', borderRadius: 3 }}>
+              <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg,#6366f1,#8b5cf6)', borderRadius: 3, transition: 'width 0.3s' }} />
             </div>
           </div>
           
-          {/* Quick Stats */}
-          {results && results.length > 0 && (
-            <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: '14px 18px' }}>
-              <div style={{ fontSize: 12, color: '#64748b', marginBottom: 8 }}>ผลลัพธ์ที่เป็นไปได้ (Top 3)</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {results.slice(0, 3).map((bug, i) => (
-                  <div key={bug.id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ fontSize: 12, color: i === 0 ? '#fbbf24' : '#64748b', fontWeight: i === 0 ? 700 : 400 }}>#{i+1}</span>
-                    <span style={{ flex: 1, fontSize: 13, color: '#e2e8f0', fontStyle: 'italic' }}>{bug.name}</span>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: bug.pct >= 70 ? '#4ade80' : bug.pct >= 40 ? '#fbbf24' : '#f87171' }}>{bug.pct}%</span>
+          {/* Current Test Card */}
+          {testStatus.current && (
+            <div style={{ background: '#132040', border: '2px solid #6366f1', borderRadius: 16, padding: 24 }}>
+              <div style={{ textAlign: 'center', marginBottom: 20 }}>
+                <div style={{ fontSize: 12, color: '#6366f1', marginBottom: 8 }}>TEST {testStatus.answered.length + 1} จาก {suite.tests.length}</div>
+                <div style={{ fontSize: 18, fontWeight: 700, color: '#fff' }}>{testStatus.current.label}</div>
+              </div>
+              
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'center' }}>
+                {testStatus.current.options.map(opt => (
+                  <button
+                    key={opt}
+                    onClick={() => handleAnswer(testStatus.current.id, opt)}
+                    style={{
+                      padding: '14px 24px',
+                      borderRadius: 10,
+                      border: '1px solid #1e3055',
+                      background: '#0d1526',
+                      color: '#e2e8f0',
+                      fontSize: 14,
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      minWidth: 80
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = '#6366f1'; e.currentTarget.style.background = '#6366f115'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#1e3055'; e.currentTarget.style.background = '#0d1526'; }}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+              
+              <div style={{ textAlign: 'center', marginTop: 16 }}>
+                <button
+                  onClick={handleSkip}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: 8,
+                    border: 'none',
+                    background: 'transparent',
+                    color: '#64748b',
+                    fontSize: 12,
+                    cursor: 'pointer'
+                  }}
+                >
+                  ข้าม test นี้ →
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* No more tests */}
+          {!testStatus.current && (
+            <div style={{ background: '#132040', border: '1px solid #22c55e', borderRadius: 12, padding: 24, textAlign: 'center' }}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>✅</div>
+              <div style={{ fontSize: 16, fontWeight: 600, color: '#4ade80', marginBottom: 8 }}>กรอกผลครบทุก test แล้ว!</div>
+              <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 16 }}>หรือกดปุ่มด้านล่างเพื่อวิเคราะห์ผล</div>
+              <button
+                onClick={onComplete}
+                style={{
+                  padding: '12px 32px',
+                  borderRadius: 10,
+                  border: 'none',
+                  background: '#6366f1',
+                  color: '#fff',
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                🔍 วิเคราะห์ผล
+              </button>
+            </div>
+          )}
+          
+          {/* Answered Tests Summary */}
+          {testStatus.answered.length > 0 && (
+            <div style={{ background: '#0d1526', border: '1px solid #1e3055', borderRadius: 12, padding: 16 }}>
+              <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 12 }}>ผลที่กรอกแล้ว ({testStatus.answered.length})</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {testStatus.answered.map(test => (
+                  <div key={test.id} style={{ background: '#132040', border: '1px solid #22c55e40', borderRadius: 8, padding: '6px 12px' }}>
+                    <span style={{ fontSize: 11, color: '#64748b' }}>{test.label}:</span>
+                    <span style={{ fontSize: 12, color: '#4ade80', fontWeight: 600, marginLeft: 6 }}>{answers[test.id]}</span>
                   </div>
                 ))}
               </div>
             </div>
           )}
+          
+          {/* Complete button always visible */}
+          <button
+            onClick={onComplete}
+            disabled={testStatus.answered.length === 0}
+            style={{
+              padding: '14px 24px',
+              borderRadius: 10,
+              border: 'none',
+              background: testStatus.answered.length > 0 ? '#6366f1' : '#1e3055',
+              color: testStatus.answered.length > 0 ? '#fff' : '#64748b',
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: testStatus.answered.length > 0 ? 'pointer' : 'not-allowed'
+            }}
+          >
+            {testStatus.answered.length === 0 ? 'กรอกผลอย่างน้อย 1 test' : `🔍 วิเคราะห์ผล (${testStatus.answered.length} tests)`}
+          </button>
         </div>
       );
     }
 
     // ══════════════════════════════════════
-    // PRELIMINARY RESULTS COMPONENT
+    // GROUP SELECTOR COMPONENT (Simplified)
     // ══════════════════════════════════════
-    function PreliminaryResults({ gramSel, answers, onSelectOrganism, onSelectGroup }) {
-      const candidates = useMemo(() => {
+    function GroupSelector({ gramSel, answers, onSelectGroup }) {
+      const possibleGroups = useMemo(() => {
         if (!gramSel) return [];
         
-        const groupMap = { 
-          gpc_cluster: 'gpc_cluster', 
-          gpc_chain: 'gpc_chain', 
-          gpc_diplo: 'gpc_chain', 
-          gpb: 'gpb', 
-          gnb_oxi_neg: 'enterobacterales', 
-          gnb_oxi_pos_tcbs: 'vibrio', 
-          gnb_oxi_pos_nfb: 'nfb', 
-          gn_diplo: 'gn_coccobacilli' 
+        // Map gram selection to possible biochemical groups based on primary tests
+        const baseGroup = GROUP_MAP[gramSel];
+        if (!baseGroup) return [];
+        
+        // Define group hierarchy and test-based filtering
+        const groupHierarchy = {
+          'gpc_cluster': [
+            { id: 'gpc_cluster', name: 'Staphylococcus/Micrococcus', desc: 'Catalase (+)', color: '#c084fc', test: 'catalase', value: '+' },
+          ],
+          'gpc_chain': [
+            { id: 'gpc_chain', name: 'Streptococcus/Enterococcus', desc: 'Catalase (−)', color: '#4ade80', test: 'catalase', value: '−' },
+          ],
+          'gpb': [
+            { id: 'gpb', name: 'Gram Positive Bacilli', desc: 'Catalase แปรผัน', color: '#fb923c', test: null, value: null },
+          ],
+          'enterobacterales': [
+            { id: 'enterobacterales', name: 'Enterobacterales', desc: 'Oxidase (−)', color: '#f87171', test: 'oxidase', value: '−' },
+          ],
+          'vibrio': [
+            { id: 'vibrio', name: 'Vibrio/Aeromonas', desc: 'Oxidase (+), TCBS+', color: '#38bdf8', test: 'oxidase', value: '+' },
+          ],
+          'nfb': [
+            { id: 'nfb', name: 'Non-Fermentative Bacilli', desc: 'Oxidase (+), TSI K/N', color: '#22d3ee', test: 'oxidase', value: '+' },
+          ],
+          'gn_coccobacilli': [
+            { id: 'gn_coccobacilli', name: 'GN Coccobacilli', desc: 'Oxidase แปรผัน', color: '#a3e635', test: null, value: null },
+          ],
         };
         
-        const dbGroup = groupMap[gramSel];
-        if (!dbGroup) return [];
+        let groups = [];
         
-        // Get all organisms in this group
-        let orgs = LIBRARY_CLEAN.filter(b => b.group === dbGroup);
-        
-        // Filter by primary tests
-        if (answers.catalase) {
-          orgs = orgs.filter(b => {
-            const catalaseRow = b.biochem?.find(r => r.t.toLowerCase().includes('catalase'));
-            if (!catalaseRow) return true;
-            return testMatch(catalaseRow.r, answers.catalase);
-          });
+        // For gram stain categories that map to multiple possible groups
+        if (gramSel === 'gnb_oxi_pos_tcbs' || gramSel === 'gnb_oxi_pos_nfb') {
+          // Both are oxidase positive rods - need to check test results
+          if (answers.oxidase === '+') {
+            if (gramSel === 'gnb_oxi_pos_tcbs') {
+              groups = [groupHierarchy['vibrio'][0]];
+            } else {
+              groups = [groupHierarchy['nfb'][0]];
+            }
+          } else if (answers.oxidase === '−') {
+            groups = [groupHierarchy['enterobacterales'][0]];
+          } else {
+            // No oxidase result yet - show all possibilities
+            groups = [groupHierarchy['vibrio'][0], groupHierarchy['nfb'][0], groupHierarchy['enterobacterales'][0]];
+          }
+        } else if (gramSel === 'gpc_cluster' || gramSel === 'gpc_chain') {
+          // GPC - check catalase
+          if (answers.catalase === '+') {
+            groups = [groupHierarchy['gpc_cluster'][0]];
+          } else if (answers.catalase === '−') {
+            groups = [groupHierarchy['gpc_chain'][0]];
+          } else {
+            // No catalase result - show both
+            groups = [groupHierarchy['gpc_cluster'][0], groupHierarchy['gpc_chain'][0]];
+          }
+        } else {
+          // Other groups map directly
+          groups = groupHierarchy[baseGroup] || [];
         }
         
-        if (answers.oxidase) {
-          orgs = orgs.filter(b => {
-            const oxidaseRow = b.biochem?.find(r => r.t.toLowerCase().includes('oxidase'));
-            if (!oxidaseRow) return true;
-            return testMatch(oxidaseRow.r, answers.oxidase);
-          });
-        }
-        
-        if (answers.hemolysis) {
-          orgs = orgs.filter(b => {
-            const hemRow = b.biochem?.find(r => r.t.toLowerCase().includes('hemolysis'));
-            if (!hemRow) return true;
-            return testMatch(hemRow.r, answers.hemolysis);
-          });
-        }
-        
-        // Calculate preliminary probability
-        return orgs.map(bug => {
-          let score = 0, total = 0;
-          
-          if (answers.catalase) {
-            const row = bug.biochem?.find(r => r.t.toLowerCase().includes('catalase'));
-            if (row) {
-              total += 10;
-              if (testMatch(row.r, answers.catalase)) score += 10;
-            }
-          }
-          
-          if (answers.oxidase) {
-            const row = bug.biochem?.find(r => r.t.toLowerCase().includes('oxidase'));
-            if (row) {
-              total += 10;
-              if (testMatch(row.r, answers.oxidase)) score += 10;
-            }
-          }
-          
-          if (answers.hemolysis) {
-            const row = bug.biochem?.find(r => r.t.toLowerCase().includes('hemolysis'));
-            if (row) {
-              total += 5;
-              if (testMatch(row.r, answers.hemolysis)) score += 5;
-            }
-          }
-          
-          const pct = total > 0 ? Math.round((score / total) * 100) : 50;
-          return { ...bug, pct };
-        }).sort((a, b) => b.pct - a.pct);
+        return groups;
       }, [gramSel, answers]);
       
-      // Group by sub-groups
-      const grouped = useMemo(() => {
-        const groups = {};
-        candidates.forEach(bug => {
-          const key = bug.tags?.[0] || 'Others';
-          if (!groups[key]) groups[key] = [];
-          groups[key].push(bug);
-        });
-        return groups;
-      }, [candidates]);
-      
-      if (candidates.length === 0) {
+      if (possibleGroups.length === 0) {
         return (
           <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 24, textAlign: 'center' }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>🔍</div>
-            <div style={{ color: '#64748b', fontSize: 13 }}>ไม่พบเชื้อที่ตรงกับผล Primary Tests นี้</div>
-            <div style={{ color: '#94a3b8', fontSize: 12, marginTop: 8 }}>ลองตรวจสอบผลหรือกรอกข้อมูลเพิ่มเติม</div>
+            <div style={{ color: '#64748b', fontSize: 13 }}>กรุณากรอกผล Primary Tests เพิ่มเติม</div>
+            <div style={{ color: '#94a3b8', fontSize: 12, marginTop: 8 }}>Catalase หรือ Oxidase จะช่วยระบุกลุ่มเชื้อ</div>
+          </div>
+        );
+      }
+      
+      if (possibleGroups.length === 1) {
+        const group = possibleGroups[0];
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ background: '#0d1526', border: '1px solid #1e3055', borderRadius: 10, padding: 14 }}>
+              <span style={{ color: '#94a3b8', fontSize: 12 }}>กลุ่มเชื้อที่ตรงกับผล Primary Tests</span>
+            </div>
+            
+            <button
+              onClick={() => onSelectGroup(group)}
+              style={{
+                background: `${group.color}15`,
+                border: `2px solid ${group.color}`,
+                borderRadius: 12,
+                padding: 20,
+                cursor: 'pointer',
+                textAlign: 'left'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: group.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>
+                  🧫
+                </div>
+                <div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: '#fff' }}>{group.name}</div>
+                  <div style={{ fontSize: 12, color: '#94a3b8' }}>{group.desc}</div>
+                </div>
+              </div>
+              <div style={{ fontSize: 11, color: group.color, marginTop: 8 }}>
+                คลิกเพื่อดำเนินการต่อ →
+              </div>
+            </button>
           </div>
         );
       }
       
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* Stats */}
-          <div style={{ background: '#0d1526', border: '1px solid #1e3055', borderRadius: 10, padding: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ color: '#94a3b8', fontSize: 12 }}>พบเชื้อที่เป็นไปได้</span>
-            <span style={{ color: '#6366f1', fontSize: 18, fontWeight: 700 }}>{candidates.length} ชนิด</span>
+          <div style={{ background: '#0d1526', border: '1px solid #1e3055', borderRadius: 10, padding: 14 }}>
+            <span style={{ color: '#94a3b8', fontSize: 12 }}>พบ {possibleGroups.length} กลุ่มเชื้อที่เป็นไปได้ กรุณาเลือก:</span>
           </div>
           
-          {/* Top Candidates */}
-          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 16 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8', marginBottom: 12 }}>🏆 เชื้อที่เป็นไปได้มากที่สุด</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {candidates.slice(0, 5).map((bug, i) => {
-                const g = GROUPS.find(x => x.id === bug.group);
-                return (
-                  <button
-                    key={bug.id}
-                    onClick={() => onSelectOrganism(bug)}
-                    style={{
-                      background: i === 0 ? `${g?.color}15` : '#0d1526',
-                      border: `1px solid ${i === 0 ? g?.color : '#1e3055'}`,
-                      borderRadius: 10,
-                      padding: 12,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12
-                    }}
-                  >
-                    <span style={{ 
-                      width: 28, 
-                      height: 28, 
-                      borderRadius: '50%', 
-                      background: i === 0 ? g?.color : '#1e3055',
-                      color: '#fff',
-                      fontSize: 12,
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}>
-                      {i + 1}
-                    </span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0', fontStyle: 'italic' }}>{bug.name}</div>
-                      {bug.thai && <div style={{ fontSize: 10, color: '#64748b' }}>{bug.thai}</div>}
-                    </div>
-                    <span style={{ fontSize: 16, fontWeight: 700, color: bug.pct >= 70 ? '#4ade80' : bug.pct >= 40 ? '#fbbf24' : '#f87171' }}>
-                      {bug.pct}%
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {possibleGroups.map((group) => (
+              <button
+                key={group.id}
+                onClick={() => onSelectGroup(group)}
+                style={{
+                  background: '#132040',
+                  border: '1px solid #1e3055',
+                  borderRadius: 12,
+                  padding: 16,
+                  cursor: 'pointer',
+                  textAlign: 'left',
+                  transition: 'all 0.15s'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = group.color; e.currentTarget.style.background = `${group.color}08`; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = '#1e3055'; e.currentTarget.style.background = '#132040'; }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: 10, background: group.color, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>
+                    🧫
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 15, fontWeight: 600, color: '#e2e8f0' }}>{group.name}</div>
+                    <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>{group.desc}</div>
+                  </div>
+                  <span style={{ fontSize: 12, color: group.color }}>→</span>
+                </div>
+              </button>
+            ))}
           </div>
-          
-          {/* Group by Categories */}
-          {Object.entries(grouped).length > 1 && (
-            <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: '#94a3b8', marginBottom: 12 }}>📂 แยกตามกลุ่ม</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {Object.entries(grouped).map(([groupName, orgs]) => (
-                  <button
-                    key={groupName}
-                    onClick={() => onSelectGroup(groupName)}
-                    style={{
-                      background: '#0d1526',
-                      border: '1px solid #1e3055',
-                      borderRadius: 8,
-                      padding: '10px 14px',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <span style={{ fontSize: 12, color: '#e2e8f0' }}>{groupName}</span>
-                    <span style={{ fontSize: 11, color: '#64748b' }}>{orgs.length} เชื้อ</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       );
     }
@@ -4365,11 +4293,11 @@
               </div>
             )}
 
-            {/* STEP 2: Preliminary Results + Group Selection */}
-            {step === 2 && suite && (
+            {/* STEP 2: Select Group */}
+            {step === 2 && (
               <div>
-                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>🎯 Step 2 — เชื้อที่เป็นไปได้</h2>
-                <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>เลือกกลุ่มหรือเชื้อเป้าหมายเพื่อลง Biochemical Tests ต่อไป</p>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>🎯 Step 2 — เลือกกลุ่มเชื้อ</h2>
+                <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>เลือกกลุ่มเชื้อที่ตรงกับผล Primary Tests เพื่อลง Biochemical Tests ต่อไป</p>
                 
                 {/* Primary Results Summary */}
                 <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 16, marginBottom: 20 }}>
@@ -4393,116 +4321,159 @@
                   </div>
                 </div>
                 
-                {/* Candidate Organisms by Probability */}
-                <PreliminaryResults gramSel={gramSel} answers={answers} onSelectOrganism={(org) => {
-                  setAnswers(a => ({ ...a, _targetOrganism: org }));
-                  setStep(3);
-                }} onSelectGroup={(groupName) => {
-                  setAnswers(a => ({ ...a, _targetGroup: groupName }));
-                  setStep(3);
-                }} />
+                {/* Group Selector */}
+                <GroupSelector 
+                  gramSel={gramSel} 
+                  answers={answers} 
+                  onSelectGroup={(group) => {
+                    setAnswers(a => ({ ...a, _selectedGroup: group.id, _selectedGroupName: group.name }));
+                    setStep(3);
+                  }} 
+                />
                 
                 <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
                   <button onClick={() => setStep(1)} className="btn-action secondary">← แก้ไข Primary Tests</button>
-                  <button onClick={() => setStep(3)} className="btn-action primary" style={{ flex: 1 }}>
-                    ⚗️ ลง Biochemical Tests ทุกกลุ่ม →
-                  </button>
                 </div>
               </div>
             )}
 
-            {/* STEP 3: Biochemical Tests */}
+            {/* STEP 3: Select Mode (Guided vs Quick) OR Show Biochemical Form */}
             {step === 3 && suite && (
               <div>
                 <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>⚗️ Step 3 — Biochemical Tests</h2>
-                <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>
-                  {answers._targetOrganism 
-                    ? `กรอกผล tests สำหรับ: ${answers._targetOrganism.name}` 
-                    : answers._targetGroup 
-                      ? `กรอกผล tests สำหรับกลุ่ม: ${answers._targetGroup}`
-                      : 'กรอกผล Biochemical Tests เพื่อวินิจฉัยเชื้อ'}
-                </p>
                 
-                {/* Case Name */}
-                <div style={{ marginBottom: 20 }}>
-                  <label style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginBottom: 6, fontWeight: 500 }}>📋 ชื่อ Case (สำหรับบันทึก)</label>
-                  <input value={caseName} onChange={e => setCaseName(e.target.value)} placeholder="เช่น Case 001 — ผู้ป่วย UTI" className="input-field" style={{ fontSize: 13 }} />
-                </div>
-                
-                {/* View Mode Toggle */}
-                <div style={{ display: 'flex', background: '#0d1526', border: '1px solid #1e3055', borderRadius: 10, padding: 4, marginBottom: 20 }}>
-                  {[
-                    { id: 'tree', label: '🌳 Tree' },
-                    { id: 'form', label: '📝 Form' },
-                    { id: 'split', label: '◫ Split' }
-                  ].map(mode => (
-                    <button key={mode.id} onClick={() => setViewMode(mode.id)}
-                      style={{
-                        padding: '8px 14px', borderRadius: 8, border: 'none',
-                        background: viewMode === mode.id ? '#6366f1' : 'transparent',
-                        color: viewMode === mode.id ? '#fff' : '#64748b',
-                        fontSize: 12, fontWeight: 600, cursor: 'pointer'
-                      }}>
-                      {mode.label}
-                    </button>
-                  ))}
-                </div>
-                
-                {/* Tests Form */}
-                {viewMode === 'form' && (
-                  <div style={{ display: 'grid', gap: 8 }}>
-                    {suite.tests.map((test, idx) => (
-                      <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
-                        <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
-                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                          <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
-                            className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>
-                          {test.options.map(opt => (
-                            <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
-                              className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+                {/* Selected Group Info */}
+                {answers._selectedGroupName && (
+                  <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 10, padding: 12, marginBottom: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ fontSize: 20 }}>🧫</span>
+                    <div>
+                      <div style={{ fontSize: 11, color: '#94a3b8' }}>กลุ่มเชื้อที่เลือก</div>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{answers._selectedGroupName}</div>
+                    </div>
                   </div>
                 )}
                 
-                {viewMode === 'tree' && (
-                  <DecisionTreeView suite={suite} answers={answers} setAnswers={setAnswers} gramSel={gramSel} results={results} />
-                )}
-                
-                {viewMode === 'split' && (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16 }}>
-                    <div>
-                      <div style={{ fontSize: 12, fontWeight: 600, color: '#6366f1', marginBottom: 10 }}>🌳 Tree</div>
-                      <DecisionTreeView suite={suite} answers={answers} setAnswers={setAnswers} gramSel={gramSel} results={results} />
-                    </div>
-                    <div>
-                      <div style={{ fontSize: 12, fontWeight: 600, color: '#6366f1', marginBottom: 10 }}>📝 Form</div>
-                      <div style={{ display: 'grid', gap: 8 }}>
-                        {suite.tests.map((test, idx) => (
-                          <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''}`}>
-                            <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}</div>
-                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                              {test.options.map(opt => (
-                                <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
-                                  className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
-                              ))}
+                {/* Mode Selection (if not selected yet) */}
+                {!answers._testMode && (
+                  <div>
+                    <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>เลือกวิธีการกรอกผล Biochemical Tests</p>
+                    
+                    <div style={{ display: 'grid', gap: 12 }}>
+                      {/* Guided Mode */}
+                      <button
+                        onClick={() => setAnswers(a => ({ ...a, _testMode: 'guided' }))}
+                        style={{
+                          background: '#132040',
+                          border: '2px solid #6366f1',
+                          borderRadius: 12,
+                          padding: 20,
+                          cursor: 'pointer',
+                          textAlign: 'left'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                          <div style={{ fontSize: 28 }}>🎯</div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 4 }}>Guided Mode</div>
+                            <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5 }}>
+                              ระบบแนะนำ test ต่อไปตามผลที่กรอก • เหมาะสำหรับผู้เริ่มต้น • ลดการลง test ที่ไม่จำเป็น
                             </div>
                           </div>
-                        ))}
-                      </div>
+                          <span style={{ color: '#6366f1', fontSize: 20 }}>→</span>
+                        </div>
+                      </button>
+                      
+                      {/* Quick Mode */}
+                      <button
+                        onClick={() => setAnswers(a => ({ ...a, _testMode: 'quick' }))}
+                        style={{
+                          background: '#132040',
+                          border: '1px solid #1e3055',
+                          borderRadius: 12,
+                          padding: 20,
+                          cursor: 'pointer',
+                          textAlign: 'left'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                          <div style={{ fontSize: 28 }}>⚡</div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontSize: 16, fontWeight: 700, color: '#fff', marginBottom: 4 }}>Quick Mode</div>
+                            <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5 }}>
+                              กรอกผลทุก test พร้อมกัน • เหมาะสำหรับผู้มีประสบการณ์ • เร็วที่สุด
+                            </div>
+                          </div>
+                          <span style={{ color: '#64748b', fontSize: 20 }}>→</span>
+                        </div>
+                      </button>
                     </div>
                   </div>
                 )}
                 
-                <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-                  <button onClick={() => setStep(2)} className="btn-action secondary">← ย้อนกลับ</button>
-                  <button onClick={() => { const r = calcProbability(dbGroup, answers); setResults(r); setStep(4); }} className="btn-action primary" style={{ flex: 1 }}>
-                    🔍 วิเคราะห์ผล (Identify)
-                  </button>
-                  <button onClick={saveCase} className="btn-action save">💾 บันทึก</button>
-                </div>
+                {/* Guided Mode: Smart Test Suggestion */}
+                {answers._testMode === 'guided' && (
+                  <GuidedTestView 
+                    suite={suite} 
+                    answers={answers} 
+                    setAnswers={setAnswers} 
+                    gramSel={gramSel}
+                    onComplete={() => { const r = calcProbability(dbGroup, answers); setResults(r); setStep(4); }}
+                  />
+                )}
+                
+                {/* Quick Mode: All Tests Form */}
+                {answers._testMode === 'quick' && (
+                  <div>
+                    {/* Case Name */}
+                    <div style={{ marginBottom: 16 }}>
+                      <label style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginBottom: 6, fontWeight: 500 }}>📋 ชื่อ Case</label>
+                      <input value={caseName} onChange={e => setCaseName(e.target.value)} placeholder="เช่น Case 001" className="input-field" style={{ fontSize: 13 }} />
+                    </div>
+                    
+                    {/* All Tests Grid */}
+                    <div style={{ display: 'grid', gap: 8 }}>
+                      {suite.tests.map((test, idx) => (
+                        <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
+                          <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
+                          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                            <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
+                              className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>
+                            {test.options.map(opt => (
+                              <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
+                                className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Footer Actions */}
+                {answers._testMode && (
+                  <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
+                    <button 
+                      onClick={() => setAnswers(a => { const { _testMode, ...rest } = a; return rest; })} 
+                      className="btn-action secondary"
+                    >
+                      ← เปลี่ยนโหมด
+                    </button>
+                    <button 
+                      onClick={() => { const r = calcProbability(dbGroup, answers); setResults(r); setStep(4); }} 
+                      className="btn-action primary" 
+                      style={{ flex: 1 }}
+                    >
+                      🔍 วิเคราะห์ผล (Identify)
+                    </button>
+                    <button onClick={saveCase} className="btn-action save">💾 บันทึก</button>
+                  </div>
+                )}
+                
+                {!answers._testMode && (
+                  <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
+                    <button onClick={() => setStep(2)} className="btn-action secondary">← ย้อนกลับ</button>
+                  </div>
+                )}
               </div>
             )}
 

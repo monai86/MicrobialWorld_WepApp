@@ -1389,6 +1389,17 @@
         notes: 'CoNS ที่ aggressive ที่สุด — ทำ endocarditis รุนแรงเหมือน S. aureus. KEY: OD+ และ PYR+ ไม่เหมือน CoNS อื่น. Slide coagulase อาจ positive แต่ tube test NEGATIVE — ระวังสับสนกับ S. aureus. Susceptible ต่อยาส่วนใหญ่ (ต่างจาก S. aureus)'
       },
 
+      {
+        id: 's_haemolyticus', group: 'gpc_cluster', name: 'Staphylococcus haemolyticus', thai: 'สแตฟิโลค็อกคัส ฮีโมลิติคัส', gram: '+', morph: 'Cocci in clusters',
+        importance: 'moderate', tags: ['CoNS', 'β-hemolysis', 'Novobiocin S', 'Trehalose+', 'Mannitol ±'],
+        clinical: { habitat: 'Skin normal flora', diseases: ['UTI', 'Bacteremia', 'Wound infection', 'Prosthetic device infection'], transmission: 'Endogenous; nosocomial', factors: 'Biofilm; multidrug resistance common' },
+        colony: { BAP: 'Medium colony; β-hemolysis; white-opaque', MSA: 'No growth / Pink' },
+        gramStain: 'GPC in clusters; non-motile',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Coagulase', r: '−', n: 'Tube coagulase negative (CoNS)' }, { t: 'Glucose O/F', r: '+/+', n: 'Fermentative' }, { t: 'Novobiocin', r: 'S', n: 'Sensitive' }, { t: 'OD (Ornithine decarboxylase)', r: '−', n: '' }, { t: 'Trehalose', r: '+', n: 'KEY vs S. epidermidis (−)' }, { t: 'Mannitol', r: '±', n: '' }, { t: 'Hemolysis', r: 'β', n: '' }, { t: 'Oxidase', r: '−', n: '' }],
+        media: ['Blood agar', 'MSA'], condition: '35–37°C aerobic',
+        notes: 'CoNS; β-hemolysis บนวุ้น. Trehalose+ แยกจาก S. epidermidis (−). มักดื้อยาหลายชนิด (multiresistant CoNS)'
+      },
+
       // GPC CHAIN
       {
         id: 's_pyogenes', group: 'gpc_chain', name: 'Streptococcus pyogenes', thai: 'สเตรปโตค็อกคัส ไพโอจีนส์', gram: '+', morph: 'Cocci in chains',
@@ -1861,6 +1872,107 @@
         notes: 'Bile Esculin + 6.5% NaCl + = Enterococcus. Sorbitol− / Arabinose+ = E. faecium. มีอัตราการดื้อยา VRE ที่สูงมาก'
       },
 
+      {
+        id: 'e_avium', group: 'gpc_chain', name: 'Enterococcus avium', thai: 'เอนเทอโรค็อกคัส เอเวียม', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'AD−', 'Arabinose+', 'Raffinose−'],
+        clinical: { habitat: 'GI flora (birds/animals)', diseases: ['Rare opportunistic infection', 'Bacteremia'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '−', n: '' }, { t: 'AD (Arginine dihydrolase)', r: '−', n: '' }, { t: 'Arabinose', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: 'Raffinose', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Enterococcus ชนิด low importance. AD− Arabinose+ Mannitol− Sorbitol− แยกจาก E. faecalis'
+      },
+      {
+        id: 'e_casseliflavus', group: 'gpc_chain', name: 'Enterococcus casseliflavus', thai: 'เอนเทอโรค็อกคัส คาสเซลิฟลาวัส', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'Yellow pigment+', 'AD+', 'Motile+'],
+        clinical: { habitat: 'Plants/environment', diseases: ['UTI', 'Bacteremia (rare)'], transmission: 'Environmental', factors: 'Intrinsic VanC resistance' },
+        colony: { BAP: 'Small, γ-hemolysis; yellow pigment' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '+', n: 'KEY: motile (vs most Enterococcus)' }, { t: 'AD (Arginine dihydrolase)', r: '+', n: '' }, { t: 'Arabinose', r: '+', n: '' }, { t: 'Mannitol', r: '+', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: 'Raffinose', r: '+', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Yellow pigment + Motile = ลักษณะเฉพาะ. Intrinsic VanC resistance ต่าง vancomycin'
+      },
+      {
+        id: 'e_dispar', group: 'gpc_chain', name: 'Enterococcus dispar', thai: 'เอนเทอโรค็อกคัส ดิสพาร์', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'AD−', 'Arabinose−', 'Raffinose+'],
+        clinical: { habitat: 'GI tract', diseases: ['Rare infection'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '−', n: '' }, { t: 'AD (Arginine dihydrolase)', r: '−', n: '' }, { t: 'Arabinose', r: '−', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: 'Raffinose', r: '+', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'AD− Arabinose− Raffinose+ แยกจาก species อื่น'
+      },
+      {
+        id: 'e_durans', group: 'gpc_chain', name: 'Enterococcus durans', thai: 'เอนเทอโรค็อกคัส ดูแรนส์', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'AD+', 'Arabinose−', 'Mannitol−'],
+        clinical: { habitat: 'GI tract', diseases: ['Rare opportunistic infection'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '−', n: '' }, { t: 'AD (Arginine dihydrolase)', r: '+', n: '' }, { t: 'Arabinose', r: '−', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: 'Raffinose', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'AD+ Arabinose− Mannitol− แยกจาก E. faecalis (Mannitol+) และ E. faecium (Arabinose+)'
+      },
+      {
+        id: 'e_gallinorum', group: 'gpc_chain', name: 'Enterococcus gallinarum', thai: 'เอนเทอโรค็อกคัส แกลลินารัม', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'Motile+', 'AD−', 'Raffinose+'],
+        clinical: { habitat: 'GI flora', diseases: ['Bacteremia (rare)', 'UTI'], transmission: 'Endogenous', factors: 'Intrinsic VanC resistance' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '+', n: 'Motile (vs E. faecalis motile too, but AD differs)' }, { t: 'AD (Arginine dihydrolase)', r: '−', n: 'KEY vs E. casseliflavus (AD+)' }, { t: 'Arabinose', r: '+', n: '' }, { t: 'Mannitol', r: '+', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: 'Raffinose', r: '+', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Motile + AD− แยกจาก E. casseliflavus (AD+, yellow pigment). Intrinsic VanC resistance'
+      },
+      {
+        id: 'e_hirae', group: 'gpc_chain', name: 'Enterococcus hirae', thai: 'เอนเทอโรค็อกคัส ฮิเร', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'AD+', 'Arabinose−', 'Raffinose+'],
+        clinical: { habitat: 'GI tract (animals)', diseases: ['Rare clinical infection'], transmission: 'Endogenous/zoonotic', factors: 'Low virulence' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '−', n: '' }, { t: 'AD (Arginine dihydrolase)', r: '+', n: '' }, { t: 'Arabinose', r: '−', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: 'Raffinose', r: '+', n: 'KEY vs E. durans (−)' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'AD+ Arabinose− Raffinose+ แยกจาก E. durans (Raffinose−)'
+      },
+      {
+        id: 'e_mundtii', group: 'gpc_chain', name: 'Enterococcus mundtii', thai: 'เอนเทอโรค็อกคัส มุนดทิไอ', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'Yellow pigment+', 'AD+', 'Motile−'],
+        clinical: { habitat: 'Plants/environment', diseases: ['Rare infection'], transmission: 'Environmental', factors: 'Low virulence' },
+        colony: { BAP: 'Small, γ-hemolysis; yellow pigment' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '−', n: 'KEY vs E. casseliflavus (Motile+)' }, { t: 'AD (Arginine dihydrolase)', r: '+', n: '' }, { t: 'Arabinose', r: '+', n: '' }, { t: 'Mannitol', r: '+', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: 'Raffinose', r: '+', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Yellow pigment + Non-motile + AD+ แยกจาก E. casseliflavus (yellow + Motile+)'
+      },
+      {
+        id: 'e_raffinosus', group: 'gpc_chain', name: 'Enterococcus raffinosus', thai: 'เอนเทอโรค็อกคัส แรฟฟิโนซัส', gram: '+', morph: 'Cocci in pairs/short chains',
+        importance: 'low', tags: ['Bile Esculin+', '6.5%NaCl+', 'AD−', 'Arabinose+', 'Raffinose+', 'Sorbitol+'],
+        clinical: { habitat: 'GI tract', diseases: ['Bacteremia', 'UTI (rare)'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GPC pairs/short chains',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: '' }, { t: 'Motility', r: '−', n: '' }, { t: 'AD (Arginine dihydrolase)', r: '−', n: '' }, { t: 'Arabinose', r: '+', n: '' }, { t: 'Mannitol', r: '+', n: '' }, { t: 'Sorbitol', r: '+', n: 'KEY vs E. faecium (Sorbitol−)' }, { t: 'Raffinose', r: '+', n: 'KEY: Raffinose+' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'AD− Arabinose+ Sorbitol+ Raffinose+ แยกจาก E. faecium (Sorbitol−)'
+      },
+      {
+        id: 'strep_group_d', group: 'gpc_chain', name: 'Streptococcus bovis group (Group D Streptococcus)', thai: 'สเตรปโตค็อกคัส กลุ่มดี (Group D)', gram: '+', morph: 'Cocci in chains',
+        importance: 'moderate', tags: ['Bile Esculin+', '6.5%NaCl−', 'Non-enterococcal Group D', 'Colorectal cancer association'],
+        clinical: { habitat: 'GI tract flora', diseases: ['Bacteremia (associated with colorectal carcinoma)', 'Endocarditis', 'Meningitis'], transmission: 'Endogenous', factors: 'Associated with colonic malignancy' },
+        colony: { BAP: 'Small, variable hemolysis (α/β/γ)' },
+        gramStain: 'GPC chains; non-motile',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY: differentiates from non-Group D Strep' }, { t: '6.5% NaCl', r: '−', n: 'KEY: differentiates from Enterococcus (+)' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }],
+        media: ['Blood agar', 'Bile Esculin agar'], condition: '37°C',
+        notes: 'Bile Esculin+ แต่ 6.5% NaCl− = Group D Streptococcus (ไม่ใช่ Enterococcus). Bacteremia จาก S. bovis มักสัมพันธ์กับ colorectal carcinoma'
+      },
+      {
+        id: 'viridans_strep', group: 'gpc_chain', name: 'Viridans streptococcus group', thai: 'วิริแดนส์ สเตรปโตค็อกคัส (กลุ่ม)', gram: '+', morph: 'Cocci in chains',
+        importance: 'moderate', tags: ['α-hemolysis/γ', 'Optochin R', 'Bile insoluble', 'Endocarditis', 'Dental flora'],
+        clinical: { habitat: 'Oral/nasopharyngeal flora', diseases: ['Subacute bacterial endocarditis (SBE)', 'Dental abscess', 'Bacteremia after dental procedures', 'Meningitis (rare)'], transmission: 'Endogenous (dental/oral procedure)', factors: 'Dextran/mutans surface adhesin' },
+        colony: { BAP: 'Small, α-hemolysis (green) or γ' },
+        gramStain: 'GPC chains; non-motile',
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'α/γ', n: '' }, { t: 'Optochin', r: 'R', n: 'KEY: vs S. pneumoniae (S)' }, { t: 'Bile solubility', r: '−', n: 'KEY: vs S. pneumoniae (+)' }, { t: 'Bile Esculin', r: '−', n: 'KEY: vs Enterococcus (+)' }, { t: '6.5% NaCl', r: '−', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C, 5% CO₂',
+        notes: 'Optochin R + Bile insoluble = Viridans Strep (ไม่ใช่ S. pneumoniae). กลุ่มนี้รวม S. mutans, S. sanguis, S. mitis, S. salivarius ฯลฯ'
+      },
+
       // GPB
       {
         id: 'erysipelothrix_rhusiopathiae', group: 'gpb', name: 'Erysipelothrix rhusiopathiae', thai: 'อีริซิพีโลทริกซ์ รูซิโอพาเทีย', gram: '+', morph: 'Pleomorphic rods',
@@ -2280,6 +2392,26 @@
         media: ['Blood agar'], condition: '37°C',
         notes: 'Arabinose negative compared to A. hydrophila.'
       },
+      {
+        id: 'aeromonas_salmonicida', group: 'vibrio', name: 'Aeromonas salmonicida', thai: 'แอโรโมแนส แซลโมนิซิดา', gram: '−', morph: 'Rods',
+        importance: 'low', tags: ['Non-motile', 'Fish pathogen', 'Oxidase+', 'Indole+'],
+        clinical: { habitat: 'Freshwater fish/environment', diseases: ['Fish furunculosis (fish pathogen)', 'Rare wound infection in humans (fish handlers)'], transmission: 'Fish contact/freshwater', factors: 'A-layer surface protein; toxins' },
+        colony: { BAP: 'Brown/amber pigment (characteristic); β-hemolytic' },
+        gramStain: 'GNB straight rods; non-motile',
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'A/A gas+', n: '' }, { t: 'Motile', r: '−', n: 'KEY: Non-motile (vs A. hydrophila motile)' }, { t: 'Indole', r: '+', n: '' }, { t: 'VP', r: '−', n: '' }, { t: 'LDC', r: '+', n: '' }, { t: 'ODC', r: '−', n: '' }, { t: 'ADC (Arginine)', r: '+', n: '' }, { t: 'Arabinose', r: '+', n: '' }, { t: 'Sorbitol', r: '−', n: '' }, { t: '0% NaCl', r: '+', n: '' }, { t: '1% NaCl', r: '+', n: '' }, { t: '6% NaCl', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '25–30°C (lower temp preferred)',
+        notes: 'Non-motile Aeromonas — KEY difference from A. hydrophila. Brown pigment on Blood agar. Mainly fish pathogen; rare human infection.'
+      },
+      {
+        id: 'alcaligenes_faecalis', group: 'nfb', name: 'Alcaligenes faecalis', thai: 'อัลคาลิจีนิส ฟีเคลิส', gram: '−', morph: 'Rods',
+        importance: 'low', tags: ['Oxidase+', 'Non-saccharolytic', 'Motile+', 'Nitrate+'],
+        clinical: { habitat: 'Soil, water, hospital environment', diseases: ['Rare opportunistic infection', 'UTI', 'Bacteremia in immunocompromised'], transmission: 'Environmental; nosocomial', factors: 'Low virulence; environmental pathogen' },
+        colony: { BAP: 'Flat, spreading, fruity odor; non-hemolytic', MAC: 'NLF' },
+        gramStain: 'GN rods',
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N', n: 'Non-saccharolytic — no fermentation' }, { t: 'Glucose O/F', r: '−/−', n: 'Non-reactive' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Nitrate', r: '+', n: '' }, { t: 'Growth on 42°C', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Lactose', r: '−', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Xylose', r: '−', n: '' }],
+        media: ['Blood agar', 'MacConkey'], condition: '37°C aerobic',
+        notes: 'Non-saccharolytic NFB. Alkalinizes all sugars. Fruity odor on agar. TSI K/N. Rare human pathogen from environment.'
+      },
 
       // GNC (Neisseria)
       {
@@ -2394,6 +2526,141 @@
         media: ['Blood agar', 'Chocolate agar'], condition: '35–37°C',
         notes: 'Added from Unknown3 coccobacilli branch.'
       },
+
+      // --- Pasteurella spp. (from JSON table_4_4) ---
+      {
+        id: 'pasteurella_bettyae', group: 'gn_coccobacilli', name: 'Pasteurella bettyae', thai: 'พาสเจอเรลลา เบตตีเอ', gram: '−', morph: 'Coccobacilli',
+        importance: 'low', tags: ['Oxidase ±', 'Indole+', 'Urease−', 'Glucose gas+'],
+        clinical: { habitat: 'Human urogenital flora', diseases: ['Genital tract infection', 'Neonatal bacteremia (rare)'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Small, non-hemolytic', MAC: '±' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Oxidase', r: '±', n: '' }, { t: 'Catalase', r: '−', n: '' }, { t: 'Indole', r: '+', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Nitrate', r: '+', n: '' }, { t: 'Glucose', r: '+gas', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Urease', r: '−', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '35–37°C',
+        notes: 'P. bettyae: genital tract Pasteurella. Oxidase variable, Catalase−.'
+      },
+      {
+        id: 'pasteurella_canis', group: 'gn_coccobacilli', name: 'Pasteurella canis', thai: 'พาสเจอเรลลา คานิส', gram: '−', morph: 'Coccobacilli',
+        importance: 'moderate', tags: ['Animal bite', 'Indole+', 'OD+', 'Urease−', 'Dog bite'],
+        clinical: { habitat: 'Oral flora of dogs', diseases: ['Cellulitis after dog bite', 'Bacteremia'], transmission: 'Dog bite/scratch', factors: 'Capsule' },
+        colony: { BAP: 'Small, non-hemolytic', MAC: 'No growth' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'Catalase', r: '+', n: '' }, { t: 'Indole', r: '+', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Nitrate', r: '+', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: 'KEY vs P. multocida (Mannitol+)' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Urease', r: '−', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '35–37°C',
+        notes: 'Dog bite wound pathogen. Mannitol− แยกจาก P. multocida (Mannitol+).'
+      },
+      {
+        id: 'pasteurella_dagmatis', group: 'gn_coccobacilli', name: 'Pasteurella dagmatis', thai: 'พาสเจอเรลลา แดกมาติส', gram: '−', morph: 'Coccobacilli',
+        importance: 'moderate', tags: ['Animal bite', 'Indole+', 'Urease+', 'Maltose+'],
+        clinical: { habitat: 'Oral flora of cats/dogs', diseases: ['Wound infection after bite', 'Bacteremia'], transmission: 'Animal bite', factors: 'Capsule' },
+        colony: { BAP: 'Small, non-hemolytic', MAC: 'No growth' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'Catalase', r: '+', n: '' }, { t: 'Indole', r: '+', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Nitrate', r: '+', n: '' }, { t: 'Glucose', r: '+gas', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Maltose', r: '+', n: 'KEY vs P. multocida (−)' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Urease', r: '+', n: 'KEY vs P. multocida (−)' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '35–37°C',
+        notes: 'Urease+ + Maltose+ แยกจาก P. multocida (Urease−, Maltose−).'
+      },
+      {
+        id: 'pasteurella_pneumotropica', group: 'gn_coccobacilli', name: 'Pasteurella pneumotropica', thai: 'พาสเจอเรลลา นิวโมโทรปิกา', gram: '−', morph: 'Coccobacilli',
+        importance: 'low', tags: ['Rodent-associated', 'Indole+', 'Urease+', 'OD+', 'Mannitol+'],
+        clinical: { habitat: 'Oral flora of rodents/cats/dogs', diseases: ['Bite wound infection', 'Respiratory infection (rodents)'], transmission: 'Rodent bite or contact', factors: 'Zoonotic' },
+        colony: { BAP: 'Small, non-hemolytic', MAC: '±' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'Catalase', r: '+', n: '' }, { t: 'Indole', r: '+', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Nitrate', r: '+', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Mannitol', r: '+', n: 'Similar to P. multocida' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Urease', r: '+', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '35–37°C',
+        notes: 'Rodent-associated Pasteurella. Urease+ + OD+ แยกจาก P. multocida (Urease−, OD+).'
+      },
+      {
+        id: 'pasteurella_stomatis', group: 'gn_coccobacilli', name: 'Pasteurella stomatis', thai: 'พาสเจอเรลลา สโตมาติส', gram: '−', morph: 'Coccobacilli',
+        importance: 'low', tags: ['Animal bite', 'Indole+', 'Urease−', 'Maltose+', 'Sucrose−'],
+        clinical: { habitat: 'Oral flora of cats/dogs', diseases: ['Wound infection after bite'], transmission: 'Animal bite', factors: 'Zoonotic' },
+        colony: { BAP: 'Small, non-hemolytic', MAC: 'No growth' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'Catalase', r: '+', n: '' }, { t: 'Indole', r: '+', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Nitrate', r: '+', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Sucrose', r: '−', n: 'KEY vs P. dagmatis (Sucrose+)' }, { t: 'Urease', r: '−', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '35–37°C',
+        notes: 'Urease− + Maltose+ + Sucrose− แยกจาก P. dagmatis (Sucrose+) และ P. multocida (Maltose−).'
+      },
+      {
+        id: 'pasteurella_zoohelcum', group: 'gn_coccobacilli', name: 'Pasteurella zoohelcum', thai: 'พาสเจอเรลลา ซูโอเฮลคัม', gram: '−', morph: 'Coccobacilli',
+        importance: 'low', tags: ['Animal bite', 'Indole+', 'Urease+', 'Glucose−'],
+        clinical: { habitat: 'Oral flora of animals', diseases: ['Wound infection after animal bite'], transmission: 'Animal bite', factors: 'Zoonotic' },
+        colony: { BAP: 'Small, non-hemolytic', MAC: 'No growth' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'Catalase', r: '+', n: '' }, { t: 'Indole', r: '+', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Nitrate', r: '−', n: 'KEY: Nitrate− (vs most Pasteurella +)' }, { t: 'Glucose', r: '−', n: 'KEY: Glucose− unusual in Pasteurella' }, { t: 'Urease', r: '+', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '35–37°C',
+        notes: 'Glucose− + Nitrate− ผิดปกติในกลุ่ม Pasteurella. Urease+.'
+      },
+
+      // --- Haemophilus spp. (from JSON table_4_7) ---
+      {
+        id: 'h_aphrophilus', group: 'gn_coccobacilli', name: 'Haemophilus aphrophilus', thai: 'ฮีโมฟิลัส อะโฟรฟิลัส', gram: '−', morph: 'Coccobacilli (pleomorphic)',
+        importance: 'low', tags: ['X−V−', 'CO2 dependent', 'Endocarditis', 'HACEK'],
+        clinical: { habitat: 'Oral flora', diseases: ['Endocarditis (HACEK group)', 'Brain abscess', 'Bacteremia'], transmission: 'Endogenous (dental procedure)', factors: 'HACEK organism' },
+        colony: { ChocAgar: 'Small, granular; CO2 enhances growth' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Factor X (Hemin)', r: '−', n: '' }, { t: 'Factor V (NAD)', r: '−', n: 'Both X and V NOT required' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Lactose', r: '+', n: 'KEY: Lactose+' }, { t: 'Mannose', r: '+', n: '' }, { t: 'Catalase', r: '−', n: '' }],
+        media: ['Chocolate agar'], condition: '37°C, 5% CO₂',
+        notes: 'HACEK group. X and V factors NOT required. Lactose+ unique in Haemophilus. CO2 enhances growth.'
+      },
+      {
+        id: 'h_ducreyi', group: 'gn_coccobacilli', name: 'Haemophilus ducreyi', thai: 'ฮีโมฟิลัส ดัคเรยี', gram: '−', morph: 'Coccobacilli (pleomorphic)',
+        importance: 'high', tags: ['X+V−', 'Chancroid', 'STI', 'School of fish'],
+        clinical: { habitat: 'Human urogenital tract only', diseases: ['Chancroid (soft chancre) — painful genital ulcer'], transmission: 'Sexual contact', factors: 'Hemolysin; serum resistance' },
+        colony: { ChocAgar: 'Small, grey, school-of-fish arrangement' },
+        gramStain: 'GN coccobacilli; school-of-fish arrangement in Gram stain',
+        biochem: [{ t: 'Factor X (Hemin)', r: '+', n: 'Requires X factor' }, { t: 'Factor V (NAD)', r: '−', n: 'Does NOT require V factor' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Glucose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Catalase', r: '−', n: 'KEY: Catalase− (vs H. influenzae +)' }],
+        media: ['Chocolate agar', 'GC agar + IsoVitaleX'], condition: '33–35°C, 5% CO₂; slow growing',
+        notes: 'Chancroid (soft ulcer, painful). School-of-fish Gram stain. X+ V− Catalase−. STI.'
+      },
+      {
+        id: 'h_haemolyticus', group: 'gn_coccobacilli', name: 'Haemophilus haemolyticus', thai: 'ฮีโมฟิลัส ฮีโมลิติคัส', gram: '−', morph: 'Coccobacilli (pleomorphic)',
+        importance: 'low', tags: ['X+V+', 'β-hemolysis', 'Respiratory flora'],
+        clinical: { habitat: 'Upper respiratory tract flora', diseases: ['Usually non-pathogenic; rarely causes bacteremia'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Small, β-hemolysis; satellitism near S. aureus' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Factor X (Hemin)', r: '+', n: '' }, { t: 'Factor V (NAD)', r: '+', n: '' }, { t: 'Hemolysis', r: 'β', n: 'KEY: β-hemolytic (vs H. influenzae γ)' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Catalase', r: '+', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '37°C, 5% CO₂',
+        notes: 'X+V+ like H. influenzae แต่ β-hemolytic. Often mistaken for H. influenzae. Usually non-pathogenic.'
+      },
+      {
+        id: 'h_parahaemolyticus', group: 'gn_coccobacilli', name: 'Haemophilus parahaemolyticus', thai: 'ฮีโมฟิลัส พาราฮีโมลิติคัส', gram: '−', morph: 'Coccobacilli',
+        importance: 'low', tags: ['X−V+', 'β-hemolysis', 'Oral flora'],
+        clinical: { habitat: 'Oral flora', diseases: ['Pharyngitis', 'Bacteremia (rare)'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Small, β-hemolysis; satellitism' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Factor X (Hemin)', r: '−', n: 'Does NOT require X' }, { t: 'Factor V (NAD)', r: '+', n: 'Requires V factor' }, { t: 'Hemolysis', r: 'β', n: 'KEY: β-hemolytic' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Catalase', r: '+', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '37°C',
+        notes: 'X−V+, β-hemolytic. แยกจาก H. haemolyticus (X+V+, β).'
+      },
+      {
+        id: 'h_parainfluenzae', group: 'gn_coccobacilli', name: 'Haemophilus parainfluenzae', thai: 'ฮีโมฟิลัส พาราอินฟลูเอนซี', gram: '−', morph: 'Coccobacilli (pleomorphic)',
+        importance: 'moderate', tags: ['X−V+', 'Non-hemolytic', 'HACEK', 'Endocarditis'],
+        clinical: { habitat: 'Respiratory tract flora', diseases: ['Endocarditis (HACEK)', 'Sinusitis', 'Otitis media', 'Bacteremia'], transmission: 'Endogenous', factors: 'HACEK organism' },
+        colony: { ChocAgar: 'Small, non-hemolytic; satellitism' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Factor X (Hemin)', r: '−', n: 'KEY: Does NOT require X factor' }, { t: 'Factor V (NAD)', r: '+', n: 'Requires V factor' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Mannose', r: '+', n: '' }, { t: 'Catalase', r: '±', n: '' }],
+        media: ['Blood agar', 'Chocolate agar'], condition: '37°C, ± CO₂',
+        notes: 'X−V+. Non-hemolytic. HACEK group. ต่างจาก H. influenzae (X+V+).'
+      },
+      {
+        id: 'h_paraphrophilus', group: 'gn_coccobacilli', name: 'Haemophilus paraphrophilus', thai: 'ฮีโมฟิลัส พาราโฟรฟิลัส', gram: '−', morph: 'Coccobacilli',
+        importance: 'low', tags: ['X−V+', 'CO2 dependent', 'HACEK'],
+        clinical: { habitat: 'Oral flora', diseases: ['Endocarditis (HACEK)', 'Bacteremia (rare)'], transmission: 'Endogenous (dental)', factors: 'HACEK organism' },
+        colony: { ChocAgar: 'Small; requires CO₂ for growth' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Factor X (Hemin)', r: '−', n: '' }, { t: 'Factor V (NAD)', r: '+', n: '' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Mannose', r: '+', n: '' }, { t: 'Catalase', r: '−', n: '' }],
+        media: ['Chocolate agar'], condition: '37°C, 5% CO₂',
+        notes: 'HACEK group. X−V+. CO2 dependent. Catalase− แยกจาก H. parainfluenzae (Catalase ±).'
+      },
+      {
+        id: 'h_segnis', group: 'gn_coccobacilli', name: 'Haemophilus segnis', thai: 'ฮีโมฟิลัส เซกนิส', gram: '−', morph: 'Coccobacilli',
+        importance: 'low', tags: ['X−V+', 'Weak fermentation', 'Oral flora'],
+        clinical: { habitat: 'Oral flora', diseases: ['Rare opportunistic infection', 'Endocarditis'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { ChocAgar: 'Very small; slow growing' },
+        gramStain: 'GN coccobacilli',
+        biochem: [{ t: 'Factor X (Hemin)', r: '−', n: '' }, { t: 'Factor V (NAD)', r: '+', n: '' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Glucose', r: '+weak', n: 'Weak fermentation' }, { t: 'Sucrose', r: '+weak', n: 'Weak fermentation' }, { t: 'Catalase', r: '±', n: '' }],
+        media: ['Chocolate agar'], condition: '37°C, 5% CO₂',
+        notes: 'X−V+. Weak sugar fermentation distinguishes from H. parainfluenzae (stronger reactions).'
+      },
+
       {
         id: 'neisseria_cinerea', group: 'gn_coccobacilli', name: 'Neisseria cinerea', thai: 'ไนซีเรีย ซิเนเรีย', gram: '−', morph: 'Diplococci',
         importance: 'low', tags: ['Commensal', 'Asaccharolytic'],
@@ -2503,6 +2770,194 @@
         biochem: [{ t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Indole', r: '−', n: 'N/A in source table' }, { t: 'Motile', r: '−', n: '' }, { t: 'TSI', r: '—', n: 'N/A' }, { t: 'Nitrate', r: '−', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Xylose', r: '−', n: '' }, { t: 'Esculin', r: '−', n: '' }, { t: 'Urease', r: '−', n: '' }],
         media: ['Blood agar'], condition: '35–37°C',
         notes: 'Added from IMG_8025 GPB table.'
+      },
+
+      // --- Corynebacterium spp. (from JSON table_2_1) ---
+      {
+        id: 'c_amycolatum', group: 'gpb', name: 'Corynebacterium amycolatum', thai: 'โคริเนแบคทีเรียม อะมิโคลาทัม', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'low', tags: ['Urease ±', 'Glucose+', 'Nitrate ±', 'CAMP−'],
+        clinical: { habitat: 'Skin normal flora', diseases: ['Wound infection', 'Bacteremia', 'UTI'], transmission: 'Endogenous; nosocomial', factors: 'Lipophilic' },
+        colony: { BAP: 'Dry, chalky white, non-hemolytic' },
+        gramStain: 'GP club-shaped rods (Chinese letter)',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '±', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '±', n: '' }, { t: 'Sucrose', r: '±', n: '' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Most common Corynebacterium in clinical samples. Variable urease and sugar fermentation.'
+      },
+      {
+        id: 'c_glucuronolyticum', group: 'gpb', name: 'Corynebacterium glucuronolyticum', thai: 'โคริเนแบคทีเรียม กลูคูโรโนลิติคัม', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'low', tags: ['Urease ±', 'Glucose+', 'CAMP+'],
+        clinical: { habitat: 'Urogenital tract', diseases: ['UTI', 'Prostatitis'], transmission: 'Endogenous', factors: 'Glucuronidase activity' },
+        colony: { BAP: 'Small, white, non-hemolytic' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '±', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '±', n: '' }, { t: 'Sucrose', r: '±', n: '' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: '+', n: 'KEY vs C. diphtheriae (−)' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'CAMP+ แยกจาก Corynebacterium ส่วนใหญ่ที่เป็น CAMP−'
+      },
+      {
+        id: 'c_minutissimum', group: 'gpb', name: 'Corynebacterium minutissimum', thai: 'โคริเนแบคทีเรียม มินูติสซิมัม', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'low', tags: ['Urease−', 'Glucose+', 'Sucrose ±', 'Erythrasma'],
+        clinical: { habitat: 'Skin flora', diseases: ['Erythrasma (coral red fluorescence under Wood lamp)'], transmission: 'Endogenous', factors: 'Porphyrin production' },
+        colony: { BAP: 'Small, white, non-hemolytic' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '±', n: '' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Erythrasma — coral red fluorescence under Wood lamp. Maltose− แยกจาก C. diphtheriae (Maltose+)'
+      },
+      {
+        id: 'c_pseudodiphtheriticum', group: 'gpb', name: 'Corynebacterium pseudodiphtheriticum', thai: 'โคริเนแบคทีเรียม ซูโดดิฟทีริติคัม', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'low', tags: ['Urease−', 'Glucose+', 'Nitrate−', 'Non-toxigenic'],
+        clinical: { habitat: 'Respiratory tract flora', diseases: ['Pharyngitis', 'Endocarditis (rare)'], transmission: 'Endogenous', factors: 'Non-toxigenic; may mimic C. diphtheriae morphologically' },
+        colony: { BAP: 'Small, grey-white' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Nitrate', r: '−', n: 'KEY: Nitrate− (vs C. diphtheriae +)' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Non-toxigenic. Nitrate− แยกจาก C. diphtheriae. ไม่สร้าง diphtheria toxin'
+      },
+      {
+        id: 'c_pseudotuberculosis', group: 'gpb', name: 'Corynebacterium pseudotuberculosis', thai: 'โคริเนแบคทีเรียม ซูโดทูเบอร์คูโลซิส', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'low', tags: ['Urease+', 'Glucose+', 'Reverse CAMP+', 'Zoonotic'],
+        clinical: { habitat: 'Animals (sheep, goats, horses)', diseases: ['Caseous lymphadenitis (animals)', 'Rare human lymphadenitis'], transmission: 'Zoonotic contact', factors: 'Phospholipase D toxin' },
+        colony: { BAP: 'Small, dry, white; narrow β-hemolysis' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '+', n: 'KEY: Urease+ (vs most Corynebacterium −)' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Sucrose', r: '±', n: '' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: 'Reverse CAMP+', n: 'KEY: inhibits hemolysis (vs enhancement in S. agalactiae)' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Reverse CAMP+ (inhibition of hemolysis). Zoonotic pathogen — caseous lymphadenitis in ruminants'
+      },
+      {
+        id: 'c_striatum', group: 'gpb', name: 'Corynebacterium striatum', thai: 'โคริเนแบคทีเรียม สไตรเอทัม', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'low', tags: ['Urease−', 'Glucose+', 'Maltose−', 'Sucrose ±'],
+        clinical: { habitat: 'Skin/mucosa flora', diseases: ['Nosocomial pneumonia', 'Bacteremia', 'Wound infection'], transmission: 'Endogenous; healthcare', factors: 'Multidrug resistance' },
+        colony: { BAP: 'White, dry, non-hemolytic' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '±', n: '' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Emerging nosocomial pathogen. Multidrug-resistant strains increasingly reported.'
+      },
+      {
+        id: 'c_ulcerans', group: 'gpb', name: 'Corynebacterium ulcerans', thai: 'โคริเนแบคทีเรียม อัลเซอแรนส์', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'moderate', tags: ['Urease+', 'Glucose+', 'Reverse CAMP+', 'Diphtheria-like'],
+        clinical: { habitat: 'Animals (cattle, horses); raw milk', diseases: ['Diphtheria-like illness (toxigenic strains)', 'Skin ulcers', 'Respiratory infection'], transmission: 'Zoonotic; raw milk', factors: 'Can carry diphtheria toxin gene (tox+)' },
+        colony: { BAP: 'Small, white; may show hemolysis' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '+', n: 'KEY: Urease+ similar to C. pseudotuberculosis' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Sucrose', r: '−', n: 'KEY vs C. pseudotuberculosis (±)' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: 'Reverse CAMP+', n: '' }],
+        media: ['Blood agar', 'Tellurite agar'], condition: '37°C',
+        notes: 'อาจมี diphtheria toxin gene — ต้องทำ Elek test / PCR ยืนยัน. Zoonotic pathogen จากสัตว์เลี้ยงลูกด้วยนม'
+      },
+      {
+        id: 'c_urealyticum', group: 'gpb', name: 'Corynebacterium urealyticum', thai: 'โคริเนแบคทีเรียม ยูรีอะไลติคัม', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'moderate', tags: ['Urease+', 'Glucose−', 'Lipophilic', 'UTI'],
+        clinical: { habitat: 'Skin flora', diseases: ['Alkaline-encrusted cystitis', 'UTI (alkaline urine)'], transmission: 'Endogenous; nosocomial', factors: 'Urease activity → alkaline urine → encrustation' },
+        colony: { BAP: 'Pinpoint, dry, whitish; lipophilic' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '+', n: 'KEY: Rapid urease+ (strongly urease positive)' }, { t: 'Glucose', r: '−', n: 'KEY: Glucose− (vs most Corynebacterium +)' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Nitrate', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar', 'Lipid-enriched media'], condition: '37°C; lipophilic — needs lipid supplement',
+        notes: 'Lipophilic Corynebacterium. Glucose− + Urease++ = KEY ID. สาเหตุ alkaline-encrusted cystitis ใน immunocompromised'
+      },
+      {
+        id: 'c_xerosis', group: 'gpb', name: 'Corynebacterium xerosis', thai: 'โคริเนแบคทีเรียม ซีโรซิส', gram: '+', morph: 'Pleomorphic rods',
+        importance: 'low', tags: ['Urease−', 'Glucose+', 'Sucrose+', 'Nitrate ±'],
+        clinical: { habitat: 'Skin/conjunctiva flora', diseases: ['Rare opportunistic infection', 'Endocarditis'], transmission: 'Endogenous', factors: 'Low virulence' },
+        colony: { BAP: 'Dry, granular, white, non-hemolytic' },
+        gramStain: 'GP club-shaped rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Glucose', r: '+', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: 'KEY: Sucrose+ (vs C. diphtheriae −)' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Sucrose+ แยกจาก C. diphtheriae (Sucrose−). Skin and conjunctival commensal.'
+      },
+
+      // --- Listeria spp. (from JSON table_2_3) ---
+      {
+        id: 'listeria_grayi', group: 'gpb', name: 'Listeria grayi', thai: 'ลิสทีเรีย เกรยี', gram: '+', morph: 'Short rods',
+        importance: 'low', tags: ['Hemolysis γ', 'Mannitol+', 'CAMP−', 'Catalase+'],
+        clinical: { habitat: 'Soil, vegetation', diseases: ['Not typically pathogenic to humans'], transmission: 'Environmental', factors: 'Low virulence' },
+        colony: { BAP: 'Small, γ-hemolysis (non-hemolytic)' },
+        gramStain: 'GP short rods; tumbling motility',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'γ', n: 'Non-hemolytic' }, { t: 'Motile', r: '+', n: 'Tumbling motility at 22–25°C' }, { t: 'Mannitol', r: '+', n: 'KEY: Mannitol+ (vs L. monocytogenes −)' }, { t: 'Rhamnose', r: '±', n: '' }, { t: 'Xylose', r: '−', n: '' }, { t: 'Nitrate', r: '±', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C; cold enrichment 4°C',
+        notes: 'Non-pathogenic Listeria. Mannitol+ แยกจาก species อื่นทั้งหมด'
+      },
+      {
+        id: 'listeria_innocua', group: 'gpb', name: 'Listeria innocua', thai: 'ลิสทีเรีย อินโนคัวอา', gram: '+', morph: 'Short rods',
+        importance: 'low', tags: ['Hemolysis γ', 'Mannitol−', 'Rhamnose ±', 'CAMP−'],
+        clinical: { habitat: 'Environment, food', diseases: ['Not pathogenic'], transmission: 'Environmental', factors: 'Non-hemolytic' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GP short rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'γ', n: 'Non-hemolytic (KEY vs L. monocytogenes β)' }, { t: 'Motile', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Rhamnose', r: '±', n: '' }, { t: 'Xylose', r: '−', n: '' }, { t: 'Nitrate', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Non-hemolytic — แยกจาก L. monocytogenes (β-hemolytic). Common environmental contaminant in food processing.'
+      },
+      {
+        id: 'listeria_ivanovii', group: 'gpb', name: 'Listeria ivanovii', thai: 'ลิสทีเรีย อีวาโนวีอาย', gram: '+', morph: 'Short rods',
+        importance: 'low', tags: ['β-hemolysis', 'CAMP−', 'Xylose+', 'Animal pathogen'],
+        clinical: { habitat: 'Environment, animals', diseases: ['Mainly animal pathogen (sheep)', 'Rare human listeriosis'], transmission: 'Food-borne (rare in humans)', factors: 'SmcL (sphingomyelinase)' },
+        colony: { BAP: 'Small, β-hemolysis' },
+        gramStain: 'GP short rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'β', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Rhamnose', r: '−', n: 'KEY vs L. monocytogenes (Rhamnose+)' }, { t: 'Xylose', r: '+', n: 'KEY: Xylose+ (vs L. monocytogenes −)' }, { t: 'Nitrate', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: 'KEY vs L. monocytogenes (CAMP+)' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Xylose+ + Rhamnose− + CAMP− แยกจาก L. monocytogenes. Mainly sheep pathogen.'
+      },
+      {
+        id: 'listeria_seeligeri', group: 'gpb', name: 'Listeria seeligeri', thai: 'ลิสทีเรีย ซีลิเกอรี', gram: '+', morph: 'Short rods',
+        importance: 'low', tags: ['β-hemolysis', 'CAMP+', 'Xylose+', 'Mannitol−'],
+        clinical: { habitat: 'Environment', diseases: ['Not pathogenic'], transmission: 'Environmental', factors: 'Non-pathogenic' },
+        colony: { BAP: 'Small, β-hemolysis (weaker than L. monocytogenes)' },
+        gramStain: 'GP short rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'β', n: 'Weak β-hemolysis' }, { t: 'Motile', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Rhamnose', r: '−', n: '' }, { t: 'Xylose', r: '+', n: '' }, { t: 'Nitrate', r: 'ND', n: '' }, { t: 'CAMP test', r: '+', n: 'CAMP+ but non-pathogenic (vs L. monocytogenes which is pathogenic)' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'CAMP+ + Xylose+ + Rhamnose− แยกจาก L. monocytogenes (Xylose−, Rhamnose+). Non-pathogenic.'
+      },
+      {
+        id: 'listeria_welshimeri', group: 'gpb', name: 'Listeria welshimeri', thai: 'ลิสทีเรีย เวลชิเมอรี', gram: '+', morph: 'Short rods',
+        importance: 'low', tags: ['Hemolysis γ', 'Xylose+', 'CAMP−', 'Mannitol−'],
+        clinical: { habitat: 'Environment, food', diseases: ['Not pathogenic'], transmission: 'Environmental', factors: 'Non-pathogenic' },
+        colony: { BAP: 'Small, γ-hemolysis' },
+        gramStain: 'GP short rods',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'γ', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Rhamnose', r: '±', n: '' }, { t: 'Xylose', r: '+', n: 'KEY: Xylose+ + γ-hemolysis (non-pathogenic)' }, { t: 'Nitrate', r: 'ND', n: '' }, { t: 'CAMP test', r: '−', n: '' }],
+        media: ['Blood agar'], condition: '37°C',
+        notes: 'Non-hemolytic + Xylose+ แยกจาก L. ivanovii (β-hemolytic) และ L. seeligeri (β-hemolytic)'
+      },
+
+      // --- Bacillus spp. (from JSON table_2_4) ---
+      {
+        id: 'b_mycoides', group: 'gpb', name: 'Bacillus mycoides', thai: 'บาซิลลัส ไมโคอิดีส', gram: '+', morph: 'Large rods with endospore',
+        importance: 'low', tags: ['β-hemolysis', 'Lecithinase+', 'Non-motile', 'Rhizoid colony'],
+        clinical: { habitat: 'Soil, environment', diseases: ['Rarely pathogenic', 'Food contamination'], transmission: 'Environmental', factors: 'Low virulence' },
+        colony: { BAP: 'Large, rhizoid (root-like spreading) colony; β-hemolysis' },
+        gramStain: 'GP large rods; endospore (central/subterminal)',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'β', n: '' }, { t: 'Motile', r: '−', n: 'KEY: Non-motile (vs B. cereus motile)' }, { t: 'Lecithinase', r: '+', n: '' }, { t: 'Penicillin', r: 'R', n: '' }],
+        media: ['Blood agar'], condition: '37°C aerobic',
+        notes: 'Rhizoid colony + Non-motile แยกจาก B. cereus (motile). ไม่ค่อยก่อโรคในคน'
+      },
+      {
+        id: 'b_megaterium', group: 'gpb', name: 'Bacillus megaterium', thai: 'บาซิลลัส เมกาทีเรียม', gram: '+', morph: 'Large rods with endospore',
+        importance: 'low', tags: ['Hemolysis ±', 'Lecithinase−', 'Motile+', 'Penicillin S'],
+        clinical: { habitat: 'Soil, environment', diseases: ['Rarely pathogenic'], transmission: 'Environmental', factors: 'Low virulence; large cell size' },
+        colony: { BAP: 'Large colony; ± hemolysis; flat, irregular' },
+        gramStain: 'GP very large rods (largest Bacillus); endospore',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: '±', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Lecithinase', r: '−', n: 'KEY: Lecithinase− (vs B. cereus +)' }, { t: 'Penicillin', r: 'S', n: 'KEY: Penicillin S (vs B. cereus R)' }],
+        media: ['Blood agar'], condition: '37°C aerobic',
+        notes: 'Lecithinase− + Penicillin S แยกจาก B. cereus (Lecithinase+, Penicillin R). Largest Bacillus species.'
+      },
+      {
+        id: 'b_thuringiensis', group: 'gpb', name: 'Bacillus thuringiensis', thai: 'บาซิลลัส ทูรินเจียนซิส', gram: '+', morph: 'Large rods with endospore',
+        importance: 'low', tags: ['β-hemolysis', 'Lecithinase+', 'Motile+', 'Parasporal crystal', 'Bioinsecticide'],
+        clinical: { habitat: 'Soil; commercial bioinsecticide', diseases: ['Rarely pathogenic to humans'], transmission: 'Environmental', factors: 'Parasporal crystal toxic to insects (not humans)' },
+        colony: { BAP: 'Medium-large colony; β-hemolysis' },
+        gramStain: 'GP large rods; endospore + parasporal crystal',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Hemolysis', r: 'β', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Lecithinase', r: '+', n: '' }, { t: 'Penicillin', r: 'R', n: '' }],
+        media: ['Blood agar'], condition: '37°C aerobic',
+        notes: 'KEY: parasporal crystal (protein toxin ต่อแมลง). แยกจาก B. cereus ด้วย phase contrast microscopy ดู parasporal crystal'
+      },
+
+      // --- Rhodococcus equi ---
+      {
+        id: 'rhodococcus_equi', group: 'gpb', name: 'Rhodococcus equi', thai: 'โรโดค็อกคัส อีควิไอ', gram: '+', morph: 'Coccobacilli / short rods',
+        importance: 'moderate', tags: ['Weakly acid-fast', 'Catalase+', 'Salmon pink colony', 'Immunocompromised', 'Equine'],
+        clinical: { habitat: 'Soil (horse feces); equine environment', diseases: ['Pulmonary infection (HIV/immunocompromised)', 'Lung abscess', 'Bacteremia'], transmission: 'Inhalation from soil/horse environment', factors: 'VapA plasmid virulence; intracellular survival in macrophages' },
+        colony: { BAP: 'Salmon-pink to coral-colored; mucoid; grows slowly' },
+        gramStain: 'GP coccobacilli (variable morphology — coccoid to rod); weakly acid-fast',
+        biochem: [{ t: 'Catalase', r: '+', n: '' }, { t: 'Urease', r: '+', n: 'Urease+' }, { t: 'Motile', r: '−', n: '' }, { t: 'Nitrate', r: '+', n: '' }, { t: 'Glucose', r: '−', n: 'Asaccharolytic' }, { t: 'Acid-fast stain', r: '+weak', n: 'Weakly acid-fast (partial)' }],
+        media: ['Blood agar'], condition: '37°C aerobic; slow growing 3–5 days',
+        notes: 'Salmon-pink mucoid colony. Weakly acid-fast — อาจสับสนกับ Mycobacterium หรือ Nocardia. สำคัญใน HIV/immunocompromised patients (pulmonary infection)'
       }
     ];
 
@@ -2908,7 +3363,7 @@
         const mg = grp === 'all' || b.group === grp;
         const mq = !q || b.name.toLowerCase().includes(q.toLowerCase()) || (b.thai || '').includes(q) || (b.tags || []).some(t => t.toLowerCase().includes(q.toLowerCase()));
         return mg && mq;
-      }), [grp, q]);
+      }).sort((a, b) => a.name.localeCompare(b.name)), [grp, q]);
 
       const selBug = LIBRARY_CLEAN.find(b => b.id === sel);
 

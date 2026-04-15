@@ -2689,31 +2689,49 @@
       return false;
     }
 
+    // Extract key tests from biochem notes: tests marked with n: 'KEY...'
+    function getKeyTestsForBug(bug) {
+      const rows = getCanonicalBiochemRows(bug);
+      return rows.filter(row => row.n && row.n.toUpperCase().startsWith('KEY'));
+    }
+
     function calcProbability(group, answers) {
       const candidates = LIBRARY_CLEAN.filter(b => b.group === group);
+      const answerEntries = Object.entries(answers).filter(([, v]) => v);
+
       return candidates.map(bug => {
         const tests = getCanonicalBiochemRows(bug);
+        const keyTestsForBug = getKeyTestsForBug(bug);
         let score = 0, total = 0;
-        
-        Object.keys(answers).forEach(ansKey => {
-          const ans = answers[ansKey];
-          if (!ans) return;
+        let keyMatchCount = 0, keyMismatchCount = 0, keyTestedCount = 0;
 
+        answerEntries.forEach(([ansKey, ans]) => {
           const cleanAnsKey = ansKey.replace(/[^a-z0-9]/g, '');
-          
+
           const testDef = tests.find(b => {
             const bk = b.t.toLowerCase().replace(/[^a-z0-9]/g, '');
             return bk === cleanAnsKey || cleanAnsKey.includes(bk) || bk.includes(cleanAnsKey);
           });
 
-          const isKey = KEY_TESTS.some(k => cleanAnsKey.includes(k.replace(/[^a-z0-9]/g, '')) || k.replace(/[^a-z0-9]/g, '').includes(cleanAnsKey));
-          const weight = isKey ? 5 : 3;
+          // Check if this answered test is a KEY test for this bug
+          const isKeyForThisBug = keyTestsForBug.some(kt => {
+            const kk = kt.t.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return kk === cleanAnsKey || cleanAnsKey.includes(kk) || kk.includes(cleanAnsKey);
+          });
+
+          // Also check global key tests list
+          const isGlobalKey = KEY_TESTS.some(k => {
+            const kk = k.replace(/[^a-z0-9]/g, '');
+            return cleanAnsKey.includes(kk) || kk.includes(cleanAnsKey);
+          });
+
+          const isKey = isKeyForThisBug || isGlobalKey;
+          const weight = isKeyForThisBug ? 8 : isGlobalKey ? 5 : 3;
 
           if (!testDef) {
             total += weight;
-            // ไม่มีใน database ของเชื้อนี้
             if (String(ans).includes('-') || String(ans).includes('−')) {
-               score += 1;
+              score += 1;
             }
             return;
           }
@@ -2723,13 +2741,34 @@
           const isV = r.replace(/−/g, '-').toLowerCase() === 'v' || r.includes('+/-') || r.includes('-/+');
           const matchResult = testMatch(r, ans);
 
-          if (matchResult === true) score += weight;
-          else if (matchResult === null || isV) score += Math.floor(weight / 3); // partial for variable
-          // false = 0 points (mismatch)
+          if (isKey) keyTestedCount++;
+
+          if (matchResult === true) {
+            score += weight;
+            if (isKey) keyMatchCount++;
+          } else if (matchResult === null || isV) {
+            score += Math.floor(weight / 3);
+          } else {
+            // Mismatch
+            if (isKeyForThisBug) {
+              // KEY test mismatch for this bug = strong penalty (subtract score)
+              score -= weight * 2;
+              keyMismatchCount++;
+            }
+          }
         });
 
-        const pct = total > 0 ? Math.round((score / total) * 100) : 0;
-        return { ...bug, pct };
+        // Bonus: if ALL key tests for this bug were answered and ALL matched → confident ID
+        const bugKeyTestedAll = keyTestsForBug.length > 0 &&
+          keyTestedCount >= Math.min(keyTestsForBug.length, answerEntries.length) &&
+          keyMismatchCount === 0 &&
+          keyMatchCount >= Math.min(2, keyTestsForBug.length);
+
+        let rawPct = total > 0 ? (score / total) * 100 : 0;
+        if (bugKeyTestedAll) rawPct = Math.max(rawPct, 85); // confident: floor at 85%
+
+        const pct = Math.min(99, Math.max(0, Math.round(rawPct)));
+        return { ...bug, pct, _keyMatch: keyMatchCount, _keyMismatch: keyMismatchCount };
       }).sort((a, b) => b.pct - a.pct);
     }
 

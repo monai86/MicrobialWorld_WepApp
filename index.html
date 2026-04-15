@@ -1452,8 +1452,8 @@
         clinical: { habitat: 'Soil, water, hospital sinks, moist environments', diseases: ['Ventilator-associated pneumonia (VAP)', 'Burn wound infection', 'UTI (catheter)', 'CF lung colonization', 'Otitis externa (swimmer\'s ear)', 'Bacteremia'], transmission: 'Environment; hospital; water; equipment' },
         colony: { BAP: 'Flat, spreading; blue-green PYOCYANIN pigment; fruity grape-like odor; β-hemolysis', MAC: 'NLF (pale, grows)' },
         gramStain: 'GNB single; motile (polar flagella)',
-        biochem: [{ t: 'Oxidase', r: '+', n: 'KEY' }, { t: 'TSI', r: 'K/N', n: 'No fermentation' }, { t: 'King P', r: '+', n: 'Pyocyanin (blue-green)' }, { t: 'King F', r: '+', n: 'Fluorescein (UV)' }, { t: 'Growth 42°C', r: '+', n: 'KEY vs others' }, { t: 'Nitrate→N₂', r: '+', n: 'Denitrification' }, { t: 'Glucose O/F', r: 'O', n: 'Oxidative only' }],
-        media: ['Blood agar', 'MacConkey', 'King A/B'], condition: '37–42°C aerobic',
+        biochem: [{ t: 'Oxidase', r: '+', n: 'KEY' }, { t: 'TSI', r: 'K/N', n: 'No fermentation' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '+/−', n: 'Oxidative only' }, { t: 'Nitrate reduction', r: '+', n: '' }, { t: 'N₂ gas from NO₃', r: '+', n: 'KEY vs P. putida/fluorescens (−)' }, { t: 'Gelatin', r: '+', n: '' }, { t: 'Starch', r: '−', n: 'KEY vs P. stutzeri (+)' }, { t: 'King P', r: '+', n: 'KEY: Pyocyanin (blue-green)' }, { t: 'King F', r: '+', n: 'Fluorescein (UV)' }, { t: 'Growth 42°C', r: '+', n: 'KEY vs P. fluorescens/putida (−)' }, { t: 'Urease', r: '±', n: '' }, { t: 'Maltose', r: '−', n: 'KEY vs S. maltophilia (+)' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Lactose', r: '−', n: '' }, { t: 'Arabinose', r: '−', n: '' }],
+        media: ['Blood agar', 'MacConkey', 'King A/B', 'Cetrimide agar'], condition: '37–42°C aerobic',
         notes: 'Pyocyanin (blue-green pigment) + Oxidase+ + 42°C growth = definitive. Intrinsically resistant to many antibiotics'
       },
 
@@ -1851,7 +1851,7 @@
         clinical: { habitat: 'Environmental, water, soil, refrigerated foods', diseases: ['Transfusion-associated bacteremia (grows at 4°C)', 'Rarely opportunistic'], transmission: 'Contaminated medical devices/blood products', factors: 'Cold growth' },
         colony: { BAP: 'Grey, mucoid, fluorescent yellow-green under UV' },
         gramStain: 'GNB motile',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'King F', r: '+', n: 'Fluorescein+' }, { t: 'King P', r: '−', n: 'Pyocyanin negative' }, { t: 'Growth at 42°C', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'Gelatin', r: '+', n: 'KEY vs P. putida (−)' }, { t: 'Nitrate reduction', r: '+', n: '' }, { t: 'N₂ gas from NO₃', r: '−', n: 'vs P. aeruginosa' }],
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '+/−', n: 'Oxidative' }, { t: 'Nitrate reduction', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'N₂ gas from NO₃', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'Gelatin', r: '+', n: 'KEY vs P. putida (−)' }, { t: 'Starch', r: '−', n: '' }, { t: 'King P', r: '−', n: 'KEY: Pyocyanin negative' }, { t: 'King F', r: '+', n: 'KEY: Fluorescein+' }, { t: 'Growth 42°C', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'Urease', r: '−', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Lactose', r: '−', n: '' }],
         media: ['Blood agar', 'MacConkey', 'King B'], condition: 'Grows well at 25-30°C, does NOT grow at 42°C',
         notes: 'Produces pyoverdin (fluorescein) but NOT pyocyanin. Can grow at 4°C.'
       },
@@ -1861,9 +1861,9 @@
         clinical: { habitat: 'Environmental, water, soil', diseases: ['Rare opportunistic (catheter-related bacteremia)'], transmission: 'Nosocomial/water', factors: 'Low virulence' },
         colony: { BAP: 'Grey, fluorescent' },
         gramStain: 'GNB motile',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'King F', r: '+', n: '' }, { t: 'King P', r: '−', n: '' }, { t: 'Growth at 42°C', r: '−', n: '' }, { t: 'Gelatin', r: '−', n: 'KEY vs P. fluorescens (+)' }],
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '+/−', n: 'Oxidative' }, { t: 'Nitrate reduction', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'N₂ gas from NO₃', r: '−', n: '' }, { t: 'Gelatin', r: '−', n: 'KEY vs P. fluorescens (+)' }, { t: 'Starch', r: '−', n: '' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '+', n: 'KEY: Fluorescein+' }, { t: 'Growth 42°C', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'Urease', r: '−', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Lactose', r: '−', n: '' }],
         media: ['Blood agar', 'MacConkey'], condition: '25-30°C',
-        notes: 'Similar to P. fluorescens but is Gelatin hydrolysis negative.'
+        notes: 'Similar to P. fluorescens but Gelatin hydrolysis negative. Both P. fluorescens and P. putida = King F+ / King P− / Growth 42°C−'
       },
       {
         id: 'pseudomonas_stutzeri', group: 'nfb', name: 'Pseudomonas stutzeri', thai: 'ซูโดโมแนส สตุทเซอรี', gram: '−', morph: 'Rods',
@@ -1871,9 +1871,9 @@
         clinical: { habitat: 'Soil, water, hospital equipment', diseases: ['Opportunistic wound, UTI, bacteremia'], transmission: 'Environmental exposure', factors: 'None specific' },
         colony: { BAP: 'Dry, wrinkled, leathery, adherent! (Can look like B. pseudomallei)' },
         gramStain: 'GNB motile',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'N₂ gas from NO₃', r: '+', n: '' }, { t: 'Starch', r: '+', n: 'KEY test for P. stutzeri' }, { t: 'Growth at 42°C', r: '+', n: '' }],
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '+/−', n: 'Oxidative' }, { t: 'Nitrate reduction', r: '+', n: '' }, { t: 'N₂ gas from NO₃', r: '+', n: 'KEY vs P. fluorescens/putida (−)' }, { t: 'Gelatin', r: '−', n: '' }, { t: 'Starch', r: '+', n: 'KEY: vs all other Pseudomonas (−)' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: 'KEY vs P. fluorescens/putida (+)' }, { t: 'Growth 42°C', r: '±', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Lactose', r: '−', n: '' }],
         media: ['Blood agar', 'MacConkey'], condition: '37°C aerobic',
-        notes: 'Wrinkled colonies + Starch hydrolysis positive = P. stutzeri.'
+        notes: 'Wrinkled colonies + Starch+ = P. stutzeri. King P−/F− + N₂ gas+ = แยกจาก P. aeruginosa (King P+/F+) และ P. fluorescens/putida (King F+, N₂ gas−)'
       },
       {
         id: 'burkholderia_cepacia', group: 'nfb', name: 'Burkholderia cepacia complex', thai: 'เบิร์คโฮลเดอเรีย เซปาเชีย', gram: '−', morph: 'Rods',
@@ -1881,9 +1881,9 @@
         clinical: { habitat: 'Soil, water, hospital equipment/fluids (even disinfectants!)', diseases: ['Pneumonia in Cystic Fibrosis (CF) patients (Cepacia syndrome)', 'Bacteremia'], transmission: 'Nosocomial; contaminated equipment/solutions', factors: 'High intrinsic resistance' },
         colony: { BAP: 'Smooth, sometimes yellow/green pigment', BCSA: 'Yellow halo (sucrose/lactose oxidizer)' },
         gramStain: 'GNB, polar tuft motile',
-        biochem: [{ t: 'Oxidase', r: '+ (weak)', n: '' }, { t: 'LDC', r: '+', n: 'KEY vs S. maltophilia (−)' }, { t: 'ODC', r: '−', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'DNase', r: '−', n: 'vs S. maltophilia' }],
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N or A/A', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '+/−', n: '' }, { t: 'Nitrate reduction', r: '±', n: '' }, { t: 'N₂ gas from NO₃', r: '−', n: 'KEY vs B. pseudomallei (+)' }, { t: 'Urease', r: '+', n: '' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Lactose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Xylose', r: '+', n: '' }, { t: 'Arabinose', r: '+', n: 'KEY vs B. pseudomallei (−)' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Yellow pigment', r: '+', n: 'KEY vs B. pseudomallei (−)' }, { t: 'DNase', r: '−', n: 'KEY vs S. maltophilia (+)' }, { t: 'LDC', r: '+', n: '' }, { t: 'ODC', r: '−', n: '' }, { t: 'Esculin', r: '+', n: '' }],
         media: ['BCSA (B. cepacia selective agar)', 'Blood agar', 'MacConkey'], condition: '37°C aerobic',
-        notes: 'Major pathogen for CF patients. Intrinsically MDR, use TMP-SMX or meropenem.'
+        notes: 'Major pathogen for CF patients. Yellow pigment + Arabinose+ + N₂ gas− = B. cepacia (vs B. pseudomallei). Intrinsically MDR.'
       },
       {
         id: 'burkholderia_thailandensis', group: 'nfb', name: 'Burkholderia thailandensis', thai: 'เบิร์คโฮลเดอเรีย ไทยแลนเดนซิส', gram: '−', morph: 'Rods',
@@ -1891,9 +1891,9 @@
         clinical: { habitat: 'Soil and water in SE Asia', diseases: ['Rarely causes disease in humans'], transmission: 'Environmental', factors: 'Lacks key virulence factors of B. pseudomallei' },
         colony: { BAP: 'Similar to B. pseudomallei' },
         gramStain: 'GNB bipolar staining',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'Arabinose', r: '+', n: 'KEY differentiator from B. pseudomallei (−)' }, { t: 'Growth 42°C', r: '−', n: '' }],
-        media: ['Ashdown agar'], condition: '37°C',
-        notes: 'Environmental mimic of B. pseudomallei, but Arabinose positive!'
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N or A/A', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '+/−', n: '' }, { t: 'N₂ gas from NO₃', r: '+', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Lactose', r: '+', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Xylose', r: '+', n: '' }, { t: 'Arabinose', r: '+', n: 'KEY vs B. pseudomallei (−)' }, { t: 'Yellow pigment', r: '−', n: 'KEY vs B. cepacia (+)' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }, { t: 'DNase', r: '−', n: '' }, { t: 'Esculin', r: '+', n: '' }],
+        media: ['Ashdown agar', 'Blood agar'], condition: '37°C',
+        notes: 'Environmental mimic ของ B. pseudomallei แต่ Arabinose+ และ Yellow pigment− (vs B. cepacia Yellow pigment+)'
       },
       {
         id: 'shewanella_putrefaciens', group: 'nfb', name: 'Shewanella putrefaciens', thai: 'ชีวาเนลลา พิวทรีเฟเชียนส์', gram: '−', morph: 'Rods',
@@ -1901,9 +1901,9 @@
         clinical: { habitat: 'Marine environments, fish', diseases: ['Wound infections (seawater exposure)', 'Otitis media'], transmission: 'Seawater', factors: 'Halophilic' },
         colony: { BAP: 'Orange/tan pigment, convex' },
         gramStain: 'GN straight or curved rods',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'H₂S in TSI', r: '+', n: 'KEY: Only prominent NFB that is H₂S positive!' }, { t: 'Motile', r: '+', n: '' }, { t: 'Glucose O/F', r: '−/−', n: 'Non-saccharolytic (or weak)' }, { t: '6.5% NaCl', r: '−', n: '(S. algae is +)' }],
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'H₂S in TSI', r: '+', n: 'KEY: H₂S+ NFB' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '±/−', n: 'Weakly saccharolytic' }, { t: '0% NaCl', r: '+', n: 'KEY vs S. algae (−)' }, { t: '6% NaCl', r: '−(+)', n: 'KEY vs S. algae (+)' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }],
         media: ['Blood agar', 'MacConkey'], condition: '37°C',
-        notes: 'H₂S production + NFB + Oxidase+ = Shewanella. (S. algae is halophilic and grows in 6.5% NaCl)'
+        notes: 'H₂S+ NFB + Oxidase+ + 0% NaCl+ = S. putrefaciens. ต่างจาก S. algae ที่ 0% NaCl− (ต้องการเกลือ)'
       },
       {
         id: 'shewanella_algae', group: 'nfb', name: 'Shewanella algae', thai: 'ชีวาเนลลา แอลเจ', gram: '−', morph: 'Rods',
@@ -1911,9 +1911,9 @@
         clinical: { habitat: 'Marine environments, seawater', diseases: ['Wound infections, bacteremia'], transmission: 'Seawater exposure', factors: 'More virulent than S. putrefaciens' },
         colony: { BAP: 'Mucoid, beta-hemolysis' },
         gramStain: 'GNB',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'H₂S in TSI', r: '+', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: '6.5% NaCl', r: '+', n: 'KEY vs S. putrefaciens (−)' }],
-        media: ['Blood agar'], condition: '37°C',
-        notes: 'True human pathogen compared to S. putrefaciens. Halotolerant (requires/tolerates NaCl).'
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'H₂S in TSI', r: '+', n: 'KEY: H₂S+ NFB (lead acetate only)' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '−/−', n: 'Non-saccharolytic' }, { t: '0% NaCl', r: '−', n: 'KEY vs S. putrefaciens (+)' }, { t: '6% NaCl', r: '+', n: 'KEY vs S. putrefaciens (−)' }, { t: 'Sucrose', r: '−', n: 'KEY vs S. putrefaciens (+)' }, { t: 'Maltose', r: '−', n: 'KEY vs S. putrefaciens (+)' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }],
+        media: ['Blood agar', 'SS Agar'], condition: '37°C',
+        notes: 'H₂S+ NFB (lead acetate only) + 6% NaCl+ (halotolerant) + 0% NaCl− = S. algae. Sucrose/Maltose negative ต่างจาก S. putrefaciens'
       },
       {
         id: 'elizabethkingia_meningoseptica', group: 'nfb', name: 'Elizabethkingia meningoseptica', thai: 'อลิซาเบธคิงเจีย เมนิงโกเซปติกา', gram: '−', morph: 'Rods (thin)',
@@ -1921,9 +1921,9 @@
         clinical: { habitat: 'Hospital water systems, soil', diseases: ['Neonatal meningitis (high mortality)', 'Pneumonia/bacteremia in ICU'], transmission: 'Nosocomial water sources', factors: 'MDR' },
         colony: { BAP: 'Pale yellow pigment, smooth', MAC: 'Poor or no growth!' },
         gramStain: 'Thin GN bacilli',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'Motile', r: '−', n: 'KEY' }, { t: 'Indole', r: '+', n: 'KEY (one of the few NFB Indole+)' }, { t: 'DNase', r: '+', n: '' }, { t: 'Esculin', r: '+', n: '' }, { t: 'Mannitol', r: '+', n: '' }],
+        biochem: [{ t: 'Oxidase', r: '+', n: 'KEY' }, { t: 'Motile', r: '−', n: 'KEY: non-motile (vs other NFB)' }, { t: 'Indole', r: '+', n: 'KEY: Indole+ NFB' }, { t: 'Glucose O/F', r: '+/−', n: 'Oxidative' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Lactose', r: '+', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Xylose', r: '−', n: '' }, { t: 'Arabinose', r: '−', n: '' }, { t: 'Mannitol', r: '+', n: '' }, { t: 'Pigment', r: '+', n: 'Pale yellow' }, { t: 'Gelatin', r: '+', n: '' }, { t: 'Esculin', r: '+', n: '' }, { t: 'DNase', r: '+', n: '' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }],
         media: ['Blood agar'], condition: '37°C',
-        notes: 'Yellow pigment + Indole+ + Non-motile + Oxidase+ = Elizabethkingia. Huge MDR problem.'
+        notes: 'Pale yellow pigment + Indole+ + Non-motile + Oxidase+ = Elizabethkingia. Maltose+/Lactose+/Sucrose− pattern distinctive. MDR.'
       },
       {
         id: 'acinetobacter_lwoffii', group: 'nfb', name: 'Acinetobacter lwoffii', thai: 'อาซิเนโตแบคเตอร์ ลวอฟฟิไอ', gram: '−', morph: 'Coccobacilli',
@@ -1931,9 +1931,9 @@
         clinical: { habitat: 'Skin flora, hospital environment', diseases: ['Opportunistic, catheter-related bacteremia'], transmission: 'Nosocomial', factors: 'Less virulent than A. baumannii' },
         colony: { BAP: 'Small, white-grey', MAC: 'NLF' },
         gramStain: 'GN coccobacilli',
-        biochem: [{ t: 'Oxidase', r: '−', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Glucose O/F', r: '−/−', n: 'KEY vs A. baumannii (O/F +/−)' }, { t: 'Lactose', r: '−', n: '' }],
+        biochem: [{ t: 'Oxidase', r: '−', n: 'KEY: NFB Oxidase−' }, { t: 'TSI', r: 'K/N', n: '' }, { t: 'Motile', r: '−', n: 'KEY: non-motile' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '−/−', n: 'KEY: Asaccharolytic (vs A. baumannii +/−)' }, { t: 'Growth 42°C', r: '±', n: 'KEY vs A. baumannii (+)' }, { t: 'Citrate', r: '−/+', n: '' }, { t: 'Malonate', r: '−', n: '' }, { t: 'Gelatin', r: '−', n: '' }, { t: 'Maltose', r: '−', n: '' }, { t: 'Lactose', r: '−', n: 'KEY vs A. baumannii (+)' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }, { t: 'DNase', r: '−', n: '' }],
         media: ['Blood agar', 'MacConkey'], condition: '37°C',
-        notes: 'Asaccharolytic Acinetobacter (does not use glucose) unlike A. baumannii.'
+        notes: 'Asaccharolytic Acinetobacter: Glucose O/F −/− (vs A. baumannii +/−). Growth 42°C ± (vs A. baumannii +). Lactose− (vs A. baumannii +).'
       },
 
       // ENTEROBACTERALES

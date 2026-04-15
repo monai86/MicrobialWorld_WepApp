@@ -1445,17 +1445,21 @@
         name: 'GPC Cluster Suite (Staphylococcus)',
         trigger: 'GPC in clusters + Catalase +',
         tests: [
-          { id: 'glucose_of', label: 'Glucose O/F', options: ['+/+', 'O/F', '+/−', '−/−'] },
+          { id: 'catalase_cluster', label: 'Catalase', options: ['+', '−'] },
+          { id: 'oxidase_cluster', label: 'Oxidase', options: ['+', '−'] },
+          { id: 'hemolysis_cluster', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'] },
           { id: 'coagulase', label: 'Coagulase', options: ['+', '−'] },
           { id: 'dnase', label: 'DNase', options: ['+', '−'] },
           { id: 'msa', label: 'MSA (Mannitol)', options: ['Yellow (Mannitol+)', 'Red (Mannitol−)', 'No growth'] },
           { id: 'novobiocin', label: 'Novobiocin', options: ['S (sensitive)', 'R (resistant)'] },
+          { id: 'urease_cluster', label: 'Urease', options: ['+', '−'] },
         ]
       },
       gpc_chain: {
         name: 'GPC Chain Suite (Streptococcus/Enterococcus)',
         trigger: 'GPC in chains + Catalase −',
         tests: [
+          { id: 'catalase', label: 'Catalase', options: ['+', '−'] },
           { id: 'hemolysis', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'] },
           { id: 'bacitracin', label: 'Bacitracin', options: ['S (sensitive)', 'R (resistant)'] },
           { id: 'pyr', label: 'PYR test', options: ['+', '−'] },
@@ -1465,6 +1469,10 @@
           { id: 'hippurate', label: 'Hippurate hydrolysis', options: ['+', '−'] },
           { id: 'bile_esculin', label: 'Bile Esculin', options: ['+', '−'] },
           { id: 'nacl_6', label: '6.5% NaCl', options: ['+', '−'] },
+          { id: 'growth_45', label: 'Growth 45°C', options: ['+', '−'] },
+          { id: 'quellung', label: 'Quellung', options: ['+', '−'] },
+          { id: 'sorbitol_chain', label: 'Sorbitol', options: ['+', '−', '?'] },
+          { id: 'arabinose_chain', label: 'Arabinose', options: ['+', '−', '?'] },
         ]
       },
       enterobacterales: {
@@ -1551,6 +1559,7 @@
         name: 'GN Diplococci/Coccobacilli Suite',
         trigger: 'GN diplococci/coccobacilli + Oxidase +',
         tests: [
+          { id: 'oxidase_neiss', label: 'Oxidase', options: ['+', '−'] },
           { id: 'ca_growth', label: 'Growth on Chocolate agar (CA)', options: ['+', '−'] },
           { id: 'cta_glu', label: 'CTA Glucose', options: ['+', '−'] },
           { id: 'cta_mal', label: 'CTA Maltose', options: ['+', '−'] },
@@ -1566,6 +1575,7 @@
         name: 'GPB Suite (Bacillus / Listeria / Corynebacterium)',
         trigger: 'GP Bacilli + Catalase +',
         tests: [
+          { id: 'catalase_gpb', label: 'Catalase', options: ['+', '−'] },
           { id: 'hemolysis_gpb', label: 'Hemolysis', options: ['β (complete)', 'α (partial)', 'γ (none)'] },
           { id: 'indole_gpb', label: 'Indole', options: ['+', '−'] },
           { id: 'motile_gpb', label: 'Motility (25°C)', options: ['+', '−'] },
@@ -2343,6 +2353,13 @@
     }
 
     const TEST_ALIASES = {
+      catalase: ['catalase'],
+      catalase_cluster: ['catalase'],
+      catalase_gpb: ['catalase'],
+      oxidase_cluster: ['oxidase'],
+      oxidase_neiss: ['oxidase'],
+      hemolysis_cluster: ['hemolysis'],
+      urease_cluster: ['urease'],
       oxidase_ent: ['oxidase'],
       tsi: ['tsi'],
       h2s: ['h2s', 'h2s tsi', 'h2s in tsi'],
@@ -2361,6 +2378,19 @@
       arabinose: ['arabinose'],
       adonitol: ['adonitol'],
       sorbitol: ['sorbitol'],
+      hemolysis: ['hemolysis'],
+      bacitracin: ['bacitracin'],
+      pyr: ['pyr', 'pyr test'],
+      camp: ['camp', 'camp test'],
+      optochin: ['optochin'],
+      bile_solubility: ['bile solubility', 'bile soluble'],
+      hippurate: ['hippurate', 'hippurate hydrolysis'],
+      bile_esculin: ['bile esculin', 'bile esculin hydrolysis'],
+      nacl_6: ['6.5 nacl', '6.5% nacl', '6.5% nacl growth'],
+      growth_45: ['growth 45', 'growth 45c', 'growth 45°c', 'growth 45c'],
+      quellung: ['quellung', 'quellung reaction', 'capsule swelling'],
+      sorbitol_chain: ['sorbitol'],
+      arabinose_chain: ['arabinose'],
       tsi_v: ['tsi'],
       oxidase_v: ['oxidase'],
       indole_v: ['indole'],
@@ -2620,7 +2650,7 @@
               <div style={isMobile ? {
                 position: 'fixed',
                 inset: 0,
-                zIndex: 60,
+                zIndex: 2000,
                 background: '#080e1a',
                 overflowY: 'auto',
                 animation: 'mobileSheetIn .22s ease-out'
@@ -2939,6 +2969,7 @@
     function CasesPage({ onLoad, showPrompt, user }) {
       const [cases, setCases] = useState(() => JSON.parse(localStorage.getItem('mbcases') || '[]'));
       const [loading, setLoading] = useState(false);
+      const [deleteConfirm, setDeleteConfirm] = useState(null);
 
       useEffect(() => {
         if (isFirebaseActive && user) {
@@ -2955,13 +2986,18 @@
       }, [user]);
 
       const del = async id => {
-        if (!window.confirm('ยืนยันลบเคสนี้?')) return;
-        const updated = cases.filter(c => c.id !== id);
+        setDeleteConfirm(id);
+      };
+
+      const confirmDelete = async () => {
+        if (!deleteConfirm) return;
+        const updated = cases.filter(c => c.id !== deleteConfirm);
         setCases(updated);
         localStorage.setItem('mbcases', JSON.stringify(updated));
         if (isFirebaseActive && user) {
-          try { await db.collection('users').doc(user.uid).collection('cases').doc(id.toString()).delete(); } catch (e) { }
+          try { await db.collection('users').doc(user.uid).collection('cases').doc(deleteConfirm.toString()).delete(); } catch (e) { }
         }
+        setDeleteConfirm(null);
       };
 
       const rename = (id, oldName) => {
@@ -3051,6 +3087,27 @@
               );
             })}
           </div>
+
+          {/* Custom Delete Confirmation Modal */}
+          {deleteConfirm && (
+            <div style={{ position: 'fixed', inset: 0, background: 'rgba(0, 0, 0, 0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, animation: 'fadeIn 0.2s ease-out' }}>
+              <div style={{ background: 'rgba(17, 24, 39, 0.95)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: 20, padding: 32, width: '90%', maxWidth: 400, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) inset', animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 48, marginBottom: 16 }}>🗑️</div>
+                  <h3 style={{ fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 8, letterSpacing: '-0.5px' }}>ยืนยันลบเคสนี้?</h3>
+                  <p style={{ fontSize: 13, color: '#94a3b8', marginBottom: 24, lineHeight: 1.6 }}>คุณต้องการลบเคสนี้หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+                  <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+                    <button onClick={() => setDeleteConfirm(null)} style={{ padding: '12px 24px', borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: 'pointer', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', color: '#94a3b8', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}>
+                      ยกเลิก
+                    </button>
+                    <button onClick={confirmDelete} style={{ padding: '12px 24px', borderRadius: 12, fontSize: 14, fontWeight: 600, cursor: 'pointer', background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', border: 'none', color: '#fff', boxShadow: '0 4px 14px rgba(239, 68, 68, 0.3)', transition: 'all 0.2s' }} onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #f87171 0%, #ef4444 100%)'; e.currentTarget.style.transform = 'translateY(-2px)'; }} onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+                      ตกลง
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       );
     }

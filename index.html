@@ -3594,6 +3594,262 @@
       }).sort((a, b) => b.pct - a.pct);
     }
 
+    // TestImportanceView component for Step 2
+    function TestImportanceView({ suite, dbGroup, answers, setAnswers, caseName, setCaseName, onBack, onAnalyze, onSave }) {
+      const importanceScores = useMemo(() => {
+        return calcTestImportance(dbGroup, answers);
+      }, [dbGroup, answers]);
+      
+      const topTests = importanceScores.slice(0, 5);
+      const remainingTests = importanceScores.slice(5);
+      
+      return (
+        <div>
+          <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>⚗️ Step 2 — {suite.name}</h2>
+          
+          {/* Test Importance Summary */}
+          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 16, marginBottom: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <span style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0' }}>📊 Test Importance Score</span>
+              <span style={{ fontSize: 11, color: '#94a3b8' }}>แสดง test ที่ discriminates ได้ดีที่สุด</span>
+            </div>
+            
+            {/* Top Important Tests */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {topTests.filter(t => !t.answered).map((item, i) => {
+                const importance = item.importance;
+                let color = '#64748b';
+                let label = 'Low';
+                if (importance >= 80) { color = '#ef4444'; label = 'Critical'; }
+                else if (importance >= 60) { color = '#f97316'; label = 'High'; }
+                else if (importance >= 40) { color = '#eab308'; label = 'Moderate'; }
+                
+                return (
+                  <div key={item.test.id} style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 10,
+                    padding: '8px 12px',
+                    background: '#0d1526',
+                    borderRadius: 8,
+                    border: `1px solid ${color}40`
+                  }}>
+                    <span style={{ fontSize: 11, color: '#64748b', minWidth: 20 }}>#{i+1}</span>
+                    <span style={{ flex: 1, fontSize: 12, color: '#e2e8f0' }}>{item.test.label}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 60, height: 4, background: '#1e3055', borderRadius: 2 }}>
+                        <div style={{ width: `${importance}%`, height: '100%', background: color, borderRadius: 2 }} />
+                      </div>
+                      <span style={{ fontSize: 11, color, fontWeight: 600, minWidth: 50 }}>{label} ({importance})</span>
+                    </div>
+                  </div>
+                );
+              })}
+              
+              {topTests.filter(t => t.answered).length > 0 && (
+                <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #1e3055' }}>
+                  <span style={{ fontSize: 11, color: '#22c55e' }}>✓ กรอกแล้ว: {topTests.filter(t => t.answered).length} test</span>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Case Name */}
+          <div style={{ marginBottom: 20 }}>
+            <label style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginBottom: 6, fontWeight: 500 }}>📋 ชื่อ Case (สำหรับบันทึก)</label>
+            <input value={caseName} onChange={e => setCaseName(e.target.value)} placeholder="เช่น Case 001 — ผู้ป่วย UTI" className="input-field" style={{ fontSize: 13 }} />
+          </div>
+          
+          {/* All Tests - Sorted by Importance */}
+          <div style={{ marginBottom: 12 }}>
+            <span style={{ fontSize: 12, color: '#94a3b8', fontWeight: 600 }}>🧪 รายการทดสอบ (เรียงตามความสำคัญ)</span>
+          </div>
+          
+          <div style={{ display: 'grid', gap: 8 }}>
+            {/* Top Priority Tests */}
+            {topTests.map((item, idx) => {
+              const test = item.test;
+              const isAnswered = answers[test.id];
+              const importance = item.importance;
+              
+              let impColor = '#64748b';
+              if (importance >= 80) impColor = '#ef4444';
+              else if (importance >= 60) impColor = '#f97316';
+              else if (importance >= 40) impColor = '#eab308';
+              
+              return (
+                <div key={test.id} className={`wf-test-card ${isAnswered ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`} 
+                  style={{ 
+                    borderColor: !isAnswered ? impColor : undefined,
+                    background: !isAnswered && importance >= 60 ? `${impColor}08` : undefined
+                  }}>
+                  <div className="wf-test-label">
+                    <span className="idx" style={{ background: isAnswered ? '#22c55e' : impColor }}>{idx + 1}</span>
+                    {test.label}
+                    {!isAnswered && importance >= 60 && (
+                      <span style={{ 
+                        fontSize: 10, 
+                        color: impColor, 
+                        marginLeft: 8,
+                        background: `${impColor}20`,
+                        padding: '2px 6px',
+                        borderRadius: 4
+                      }}>
+                        {importance >= 80 ? '⭐ CRITICAL' : importance >= 60 ? '🔥 HIGH' : ''}
+                      </span>
+                    )}
+                    {test.extra && <span className="extra-badge">เพิ่มเติม</span>}
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
+                      className={`wf-opt-btn skip ${!isAnswered ? 'selected' : ''}`}>— ยังไม่ทำ</button>
+                    {test.options.map(opt => (
+                      <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
+                        className={`wf-opt-btn ${isAnswered === opt ? 'selected' : ''}`}>{opt}</button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+            
+            {/* Remaining Tests (Collapsible) */}
+            {remainingTests.length > 0 && (
+              <details style={{ marginTop: 8 }}>
+                <summary style={{ 
+                  cursor: 'pointer', 
+                  fontSize: 12, 
+                  color: '#94a3b8',
+                  padding: '8px 12px',
+                  background: '#0d1526',
+                  borderRadius: 8,
+                  border: '1px solid #1e3055'
+                }}>
+                  แสดง test อื่นๆ ({remainingTests.length} test)
+                </summary>
+                <div style={{ display: 'grid', gap: 8, marginTop: 8 }}>
+                  {remainingTests.map((item, idx) => {
+                    const test = item.test;
+                    const isAnswered = answers[test.id];
+                    
+                    return (
+                      <div key={test.id} className={`wf-test-card ${isAnswered ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
+                        <div className="wf-test-label">
+                          <span className="idx">{topTests.length + idx + 1}</span>
+                          {test.label}
+                          {test.extra && <span className="extra-badge">เพิ่มเติม</span>}
+                        </div>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
+                            className={`wf-opt-btn skip ${!isAnswered ? 'selected' : ''}`}>— ยังไม่ทำ</button>
+                          {test.options.map(opt => (
+                            <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
+                              className={`wf-opt-btn ${isAnswered === opt ? 'selected' : ''}`}>{opt}</button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </details>
+            )}
+          </div>
+          
+          <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
+            <button onClick={onBack} className="btn-action secondary">← ย้อนกลับ</button>
+            <button onClick={onAnalyze} className="btn-action primary" style={{ flex: 1 }}>
+              🔍 วิเคราะห์ผล (Identify Organism)
+            </button>
+            <button onClick={onSave} className="btn-action save">💾 บันทึก</button>
+          </div>
+        </div>
+      );
+    }
+
+    // Calculate test importance score based on discriminating power
+    function calcTestImportance(group, currentAnswers) {
+      const candidates = LIBRARY_CLEAN.filter(b => b.group === group);
+      if (candidates.length === 0) return [];
+      
+      // Get all test IDs from the suite
+      const suiteTests = SUITES[group]?.tests || [];
+      
+      return suiteTests.map(test => {
+        const testId = test.id;
+        
+        // Skip if already answered
+        if (currentAnswers[testId]) {
+          return { test, importance: 0, answered: true };
+        }
+        
+        // Calculate how well this test discriminates current candidates
+        const optionGroups = {};
+        
+        test.options.forEach(opt => {
+          optionGroups[opt] = [];
+        });
+        
+        // Group organisms by their expected result for this test
+        candidates.forEach(bug => {
+          const testRow = bug.biochem?.find(b => {
+            const bk = b.t.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const tk = test.label.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return bk === tk || bk.includes(tk) || tk.includes(bk);
+          });
+          
+          if (testRow) {
+            const expected = testRow.r;
+            // Find matching option
+            test.options.forEach(opt => {
+              if (testMatch(expected, opt)) {
+                optionGroups[opt].push(bug);
+              }
+            });
+          }
+        });
+        
+        // Calculate discrimination power (entropy reduction)
+        const totalOrgs = candidates.length;
+        let maxGroupSize = 0;
+        let nonEmptyGroups = 0;
+        
+        Object.values(optionGroups).forEach(group => {
+          if (group.length > 0) {
+            nonEmptyGroups++;
+            maxGroupSize = Math.max(maxGroupSize, group.length);
+          }
+        });
+        
+        // Importance = how evenly distributed organisms are across options
+        // High importance = splits organisms evenly (discriminates well)
+        // Low importance = all organisms give same result
+        let importance = 0;
+        if (nonEmptyGroups > 1) {
+          // Calculate entropy
+          let entropy = 0;
+          Object.values(optionGroups).forEach(group => {
+            if (group.length > 0) {
+              const p = group.length / totalOrgs;
+              entropy -= p * Math.log2(p);
+            }
+          });
+          // Normalize to 0-100
+          const maxEntropy = Math.log2(nonEmptyGroups);
+          importance = Math.round((entropy / maxEntropy) * 100);
+        }
+        
+        // Boost importance for key tests
+        const isKeyTest = KEY_TESTS.some(k => {
+          const kk = k.toLowerCase().replace(/[^a-z0-9]/g, '');
+          const tk = test.label.toLowerCase().replace(/[^a-z0-9]/g, '');
+          return kk === tk || kk.includes(tk) || tk.includes(kk);
+        });
+        
+        if (isKeyTest) importance = Math.min(100, importance + 15);
+        
+        return { test, importance, answered: false, optionGroups };
+      }).sort((a, b) => b.importance - a.importance);
+    }
+
     // ══════════════════════════════════════
     // PAGE: LIBRARY
     // ══════════════════════════════════════
@@ -3929,36 +4185,17 @@
 
             {/* STEP 2 */}
             {step === 2 && suite && (
-              <div>
-                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>⚗️ Step 2 — {suite.name}</h2>
-                <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>กรอกผลการทดสอบให้มากที่สุดเท่าที่มี (ข้ามได้ถ้ายังไม่ได้ทำ)</p>
-                <div style={{ marginBottom: 20 }}>
-                  <label style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginBottom: 6, fontWeight: 500 }}>📋 ชื่อ Case (สำหรับบันทึก)</label>
-                  <input value={caseName} onChange={e => setCaseName(e.target.value)} placeholder="เช่น Case 001 — ผู้ป่วย UTI" className="input-field" style={{ fontSize: 13 }} />
-                </div>
-                <div style={{ display: 'grid', gap: 8 }}>
-                  {suite.tests.map((test, idx) => (
-                    <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
-                      <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
-                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                        <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
-                          className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>
-                        {test.options.map(opt => (
-                          <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
-                            className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-                  <button onClick={() => setStep(1)} className="btn-action secondary">← ย้อนกลับ</button>
-                  <button onClick={runAnalysis} className="btn-action primary" style={{ flex: 1 }}>
-                    🔍 วิเคราะห์ผล (Identify Organism)
-                  </button>
-                  <button onClick={saveCase} className="btn-action save">💾 บันทึก</button>
-                </div>
-              </div>
+              <TestImportanceView 
+                suite={suite} 
+                dbGroup={dbGroup}
+                answers={answers} 
+                setAnswers={setAnswers}
+                caseName={caseName}
+                setCaseName={setCaseName}
+                onBack={() => setStep(1)}
+                onAnalyze={runAnalysis}
+                onSave={saveCase}
+              />
             )}
 
             {/* STEP 3 */}

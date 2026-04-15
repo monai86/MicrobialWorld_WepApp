@@ -1463,9 +1463,9 @@
         clinical: { habitat: 'Hospital surfaces, ICU equipment, soil/water', diseases: ['HAP/VAP', 'Bacteremia/sepsis', 'Wound infection', 'Meningitis (neurosurgery)'], transmission: 'Hospital; equipment; healthcare workers hands' },
         colony: { BAP: 'Small-medium, grey-white, smooth; may look like CoNS!', MAC: 'NLF (pale)' },
         gramStain: 'GN coccobacilli (may resemble GPC!); non-motile',
-        biochem: [{ t: 'Oxidase', r: '−', n: 'KEY: NFB Oxidase−' }, { t: 'TSI', r: 'K/A or K/N', n: '' }, { t: 'Motile', r: '−', n: '' }, { t: 'Glucose O/F', r: '+ /−', n: 'Oxidizes glucose (vs A. lwoffii)' }, { t: 'Growth 42°C', r: '+', n: '' }, { t: 'Nitrate', r: '−', n: '' }],
+        biochem: [{ t: 'Oxidase', r: '−', n: 'KEY: NFB Oxidase−' }, { t: 'TSI', r: 'K/A or K/N', n: '' }, { t: 'Motile', r: '−', n: 'KEY: non-motile' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: '+/−', n: 'KEY: Oxidizes glucose (vs A. lwoffii −/−)' }, { t: 'Nitrate reduction', r: '−', n: '' }, { t: 'N₂ gas from NO₃', r: '−', n: '' }, { t: 'Growth 42°C', r: '+', n: 'KEY vs A. lwoffii (+/−)' }, { t: 'Urease', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: '' }, { t: 'Maltose', r: '−', n: 'KEY vs S. maltophilia (+)' }, { t: 'Mannitol', r: '−', n: '' }, { t: 'Lactose', r: '+', n: 'KEY vs A. lwoffii (−)' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }, { t: 'DNase', r: '−', n: '' }, { t: 'Gelatin', r: '−', n: '' }, { t: 'Esculin', r: '−', n: '' }],
         media: ['Blood agar', 'MacConkey'], condition: '37–44°C aerobic',
-        notes: 'Oxidase− NFB = Acinetobacter. Glucose O/F +/− (oxidizes) vs A. lwoffii (−/−). CRAB (Carbapenem-resistant) = extremely dangerous MDR'
+        notes: 'Oxidase− NFB = Acinetobacter. Glucose O/F +/− (oxidizes) vs A. lwoffii (−/−). Maltose− = แยกจาก S. maltophilia (Maltose+). CRAB (Carbapenem-resistant) = extremely dangerous MDR'
       },
 
       {
@@ -1750,7 +1750,7 @@
         clinical: { habitat: 'Soil and water in tropical regions; highly endemic in Thailand and SE Asia', diseases: ['Melioidosis: pneumonia, bacteremia, septicemia', 'Localized infection: skin, bone, prostate abscess', 'Septic shock (mortality up to 50%)', 'Recurrent/relapsing disease'], transmission: 'Inhalation of contaminated soil; skin inoculation; ingestion; NOT person-to-person', factors: 'Intracellular survival; T3SS/T6SS; capsular polysaccharide; intrinsic resistance to penicillin & aminoglycosides' },
         colony: { BAP: 'Wrinkled, dry, irregular colony (48–72h); earthy/musty odor; small dull at 24h', MAC: 'NLF (grows)' },
         gramStain: 'GNB "safety pin" bipolar staining (darker at poles); Wayson or methylene blue stain best shows bipolar appearance',
-        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N or A/A', n: 'Unusual for NFB — fermentative!' }, { t: 'Motile', r: '+', n: '' }, { t: 'Esculin', r: '+', n: 'KEY vs P. aeruginosa (−)' }, { t: 'Glucose O/F', r: 'F+/O+', n: 'BOTH fermentative and oxidative' }, { t: 'Growth 42°C', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'King P', r: '−', n: '' }, { t: 'Arabinose', r: '−', n: 'KEY vs B. thailandensis (+)' }, { t: 'Xylose', r: '+', n: '' }, { t: 'Lactose', r: '+', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Nitrate', r: '+', n: '' }],
+        biochem: [{ t: 'Oxidase', r: '+', n: '' }, { t: 'TSI', r: 'K/N or A/A', n: 'Unusual for NFB — fermentative!' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: 'F+/O+', n: 'KEY: BOTH fermentative and oxidative' }, { t: 'Nitrate reduction', r: '+', n: '' }, { t: 'N₂ gas from NO₃', r: '+', n: 'KEY vs B. cepacia (−)' }, { t: 'Growth 42°C', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'Urease', r: '−', n: '' }, { t: 'Sucrose', r: '+', n: '' }, { t: 'Maltose', r: '+', n: '' }, { t: 'Mannitol', r: '+', n: 'KEY vs S. maltophilia (−)' }, { t: 'Lactose', r: '+', n: '' }, { t: 'Arabinose', r: '−', n: 'KEY vs B. thailandensis (+)' }, { t: 'Xylose', r: '+', n: '' }, { t: 'Esculin', r: '+', n: 'KEY vs P. aeruginosa (−)' }, { t: 'King P', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'King F', r: '−', n: 'KEY vs P. aeruginosa (+)' }, { t: 'DNase', r: '−', n: 'KEY vs S. maltophilia (+)' }, { t: 'Gelatin', r: '+', n: '' }, { t: 'Starch', r: '−', n: '' }],
         media: ['Blood agar (BAP)', 'MacConkey (MCA)', 'Ashdown agar (selective)'], condition: '37–42°C aerobic; requires 48–72h for typical wrinkled colony; BSL-3',
         notes: '⚠️ ENDEMIC IN THAILAND. BSL-3. Wrinkled colony at 48–72h + "safety pin" Gram stain = Burkholderia pseudomallei. Melioidosis is underdiagnosed. Treatment: IV ceftazidime or meropenem (intensive phase), then TMP-SMX (eradication phase). Relapse is common'
       },
@@ -1841,9 +1841,9 @@
         clinical: { habitat: 'Water, soil, plants, hospital environments', diseases: ['HAP/VAP', 'Bacteremia', 'UTI (catheter)'], transmission: 'Nosocomial', factors: 'Biofilm, resistance to carbapenems (intrinsic L1/L2 metallo-beta-lactamases)' },
         colony: { BAP: 'Large, pale yellow/lavender green, ammonia odor', MAC: 'NLF' },
         gramStain: 'GN short rods, motile (polar tuft flagella)',
-        biochem: [{ t: 'Oxidase', r: '−', n: 'KEY vs Pseudomonas (+)' }, { t: 'TSI', r: 'K/K or K/N', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'DNase', r: '+', n: 'KEY test' }, { t: 'Glucose O/F', r: 'O', n: 'Weak oxidizer' }, { t: 'Maltose', r: '+', n: 'Strong oxidizer (hence maltophilia)' }, { t: 'Esculin', r: '+', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Nitrate reduction', r: 'V', n: '' }],
+        biochem: [{ t: 'Oxidase', r: '−', n: 'KEY vs Pseudomonas/Burkholderia (+)' }, { t: 'TSI', r: 'K/K or K/N', n: '' }, { t: 'Motile', r: '+', n: '' }, { t: 'Indole', r: '−', n: '' }, { t: 'Glucose O/F', r: 'O (+/−)', n: 'Weak oxidizer only' }, { t: 'Nitrate reduction', r: 'V', n: '' }, { t: 'N₂ gas from NO₃', r: '−', n: '' }, { t: 'Growth 42°C', r: 'V', n: '' }, { t: 'Urease', r: '−', n: '' }, { t: 'Sucrose', r: '−', n: 'KEY vs B. pseudomallei (+)' }, { t: 'Maltose', r: '+', n: 'KEY: Strong oxidizer (hence maltophilia)' }, { t: 'Mannitol', r: '−', n: 'KEY vs B. pseudomallei (+)' }, { t: 'Lactose', r: '−', n: 'KEY vs B. pseudomallei (+)' }, { t: 'Arabinose', r: '−', n: '' }, { t: 'Xylose', r: '−', n: '' }, { t: 'Esculin', r: '+', n: '' }, { t: 'King P', r: '−', n: '' }, { t: 'King F', r: '−', n: '' }, { t: 'DNase', r: '+', n: 'KEY: vs other NFB (−)' }, { t: 'Gelatin', r: '+', n: '' }, { t: 'Starch', r: '−', n: '' }],
         media: ['Blood agar', 'MacConkey'], condition: '37°C aerobic',
-        notes: 'Oxidase negative NFB + DNase positive + Maltose oxidizer = S. maltophilia. Intrinsically resistant to Imipenem, treatment of choice is TMP-SMX.'
+        notes: 'Oxidase− NFB + DNase+ + Maltose+ = S. maltophilia. Sucrose−/Mannitol−/Lactose− = แยกจาก B. pseudomallei. Intrinsically resistant to Imipenem, treatment of choice is TMP-SMX.'
       },
       {
         id: 'pseudomonas_fluorescens', group: 'nfb', name: 'Pseudomonas fluorescens', thai: 'ซูโดโมแนส ฟลูออเรสเซนส์', gram: '−', morph: 'Rods',
@@ -2635,7 +2635,7 @@
     // HARD EXCLUSION: if mismatch → organism is virtually eliminated
     const HARD_EXCLUSION_TESTS = ['hemolysis', 'coagulase', 'oxidase', 'catalase'];
     // KEY DISCRIMINATING TESTS - mismatch gives heavy penalty
-    const KEY_TESTS = ['bacitracin', 'ppr', 'camp', 'optochin', 'bile solubility', 'bile esculin', '6.5% nacl', '6.5 nacl', 'coagulase', 'oxidase', 'catalase', 'hemolysis', 'hippurate', 'novobiocin'];
+    const KEY_TESTS = ['bacitracin', 'ppr', 'camp', 'optochin', 'bile solubility', 'bile esculin', '6.5% nacl', '6.5 nacl', 'coagulase', 'oxidase', 'catalase', 'hemolysis', 'hippurate', 'novobiocin', 'dnase', 'maltose', 'n2 gas', 'esculin', 'arabinose', 'king p', 'king f', 'mannitol', 'lactose', 'sucrose', 'gelatin', 'starch', 'indole', 'motile', 'motility', 'growth 42', 'growth42'];
 
     function normalizeSR(val) {
       // Extract only the first letter S or R for sensitive/resistant tests

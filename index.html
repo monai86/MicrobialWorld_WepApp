@@ -3801,6 +3801,212 @@
     }
 
     // ══════════════════════════════════════
+    // DECISION TREE COMPONENT
+    // ══════════════════════════════════════
+    function DecisionTreeView({ suite, answers, setAnswers, gramSel, results }) {
+      const [expandedNodes, setExpandedNodes] = useState(new Set());
+      
+      // Build tree structure from suite and library
+      const treeData = useMemo(() => {
+        if (!suite || !gramSel) return null;
+        
+        const candidates = LIBRARY_CLEAN.filter(b => {
+          const groupMap = { gpc_cluster: 'gpc_cluster', gpc_chain: 'gpc_chain', gpc_diplo: 'gpc_chain', gpb: 'gpb', gnb_oxi_neg: 'enterobacterales', gnb_oxi_pos_tcbs: 'vibrio', gnb_oxi_pos_nfb: 'nfb', gn_diplo: 'gn_coccobacilli' };
+          return b.group === groupMap[gramSel];
+        });
+        
+        // Group candidates by their key test results
+        const nodes = [];
+        const firstTest = suite.tests[0];
+        
+        if (firstTest) {
+          const testOptions = firstTest.options;
+          testOptions.forEach(opt => {
+            const matchingOrgs = candidates.filter(bug => {
+              const testRow = bug.biochem?.find(b => 
+                b.t.toLowerCase().includes(firstTest.label.toLowerCase()) ||
+                firstTest.label.toLowerCase().includes(b.t.toLowerCase())
+              );
+              if (!testRow) return false;
+              return testMatch(testRow.r, opt);
+            });
+            
+            if (matchingOrgs.length > 0) {
+              nodes.push({
+                test: firstTest,
+                result: opt,
+                organisms: matchingOrgs,
+                children: []
+              });
+            }
+          });
+        }
+        
+        return { root: suite.name, tests: suite.tests, branches: nodes };
+      }, [suite, gramSel]);
+      
+      const toggleNode = (nodeId) => {
+        setExpandedNodes(prev => {
+          const newSet = new Set(prev);
+          if (newSet.has(nodeId)) newSet.delete(nodeId);
+          else newSet.add(nodeId);
+          return newSet;
+        });
+      };
+      
+      const handleTestClick = (testId, result) => {
+        setAnswers(prev => ({ ...prev, [testId]: result }));
+      };
+      
+      if (!treeData) return <div style={{ color: '#64748b', textAlign: 'center', padding: 40 }}>เลือก Gram Stain เพื่อเริ่มต้น</div>;
+      
+      const answeredCount = Object.values(answers).filter(v => v).length;
+      const totalTests = treeData.tests.length;
+      
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Progress Header */}
+          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ fontSize: 13, color: '#94a3b8' }}>ความคืบหน้า</span>
+              <span style={{ fontSize: 13, color: '#6366f1', fontWeight: 600 }}>{answeredCount}/{totalTests} tests</span>
+            </div>
+            <div style={{ height: 6, background: '#0d1526', borderRadius: 3, overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${(answeredCount/totalTests)*100}%`, background: 'linear-gradient(90deg,#6366f1,#8b5cf6)', transition: 'width 0.3s', borderRadius: 3 }} />
+            </div>
+          </div>
+          
+          {/* Tree Visualization */}
+          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: '18px 20px' }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span>🌳</span> Decision Tree: {treeData.root}
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {treeData.tests.map((test, idx) => {
+                const isAnswered = answers[test.id];
+                const isExpanded = expandedNodes.has(test.id);
+                
+                return (
+                  <div key={test.id} style={{ 
+                    border: `1px solid ${isAnswered ? '#22c55e40' : '#1e3055'}`, 
+                    borderRadius: 10,
+                    background: isAnswered ? 'rgba(34,197,94,0.08)' : '#0d1526',
+                    overflow: 'hidden'
+                  }}>
+                    {/* Test Header */}
+                    <div 
+                      onClick={() => toggleNode(test.id)}
+                      style={{
+                        padding: '12px 16px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ 
+                          width: 26, 
+                          height: 26, 
+                          borderRadius: '50%', 
+                          background: isAnswered ? '#22c55e' : '#6366f1',
+                          color: '#fff',
+                          fontSize: 12,
+                          fontWeight: 700,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                          {isAnswered ? '✓' : idx + 1}
+                        </span>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: isAnswered ? '#86efac' : '#e2e8f0' }}>
+                          {test.label}
+                        </span>
+                        {isAnswered && (
+                          <span style={{ 
+                            background: '#22c55e20', 
+                            color: '#4ade80', 
+                            border: '1px solid #22c55e40',
+                            borderRadius: 6,
+                            padding: '2px 8px',
+                            fontSize: 11,
+                            fontWeight: 600
+                          }}>
+                            {answers[test.id]}
+                          </span>
+                        )}
+                      </div>
+                      <span style={{ color: '#64748b', fontSize: 16, transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▼</span>
+                    </div>
+                    
+                    {/* Options */}
+                    {(isExpanded || !isAnswered) && (
+                      <div style={{ padding: '0 16px 16px', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        <button
+                          onClick={() => handleTestClick(test.id, undefined)}
+                          style={{
+                            padding: '8px 14px',
+                            borderRadius: 8,
+                            border: `1px solid ${!isAnswered ? '#6366f1' : '#1e3055'}`,
+                            background: !isAnswered ? '#6366f120' : 'transparent',
+                            color: !isAnswered ? '#6366f1' : '#64748b',
+                            fontSize: 12,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          — ยังไม่ทำ
+                        </button>
+                        {test.options.map(opt => {
+                          const isSelected = answers[test.id] === opt;
+                          return (
+                            <button
+                              key={opt}
+                              onClick={() => handleTestClick(test.id, opt)}
+                              style={{
+                                padding: '8px 14px',
+                                borderRadius: 8,
+                                border: `1px solid ${isSelected ? '#22c55e' : '#1e3055'}`,
+                                background: isSelected ? '#22c55e20' : '#132040',
+                                color: isSelected ? '#4ade80' : '#94a3b8',
+                                fontSize: 12,
+                                fontWeight: isSelected ? 600 : 400,
+                                cursor: 'pointer',
+                                transition: 'all 0.15s'
+                              }}
+                            >
+                              {opt}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          
+          {/* Quick Stats */}
+          {results && results.length > 0 && (
+            <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: '14px 18px' }}>
+              <div style={{ fontSize: 12, color: '#64748b', marginBottom: 8 }}>ผลลัพธ์ที่เป็นไปได้ (Top 3)</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {results.slice(0, 3).map((bug, i) => (
+                  <div key={bug.id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ fontSize: 12, color: i === 0 ? '#fbbf24' : '#64748b', fontWeight: i === 0 ? 700 : 400 }}>#{i+1}</span>
+                    <span style={{ flex: 1, fontSize: 13, color: '#e2e8f0', fontStyle: 'italic' }}>{bug.name}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: bug.pct >= 70 ? '#4ade80' : bug.pct >= 40 ? '#fbbf24' : '#f87171' }}>{bug.pct}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ══════════════════════════════════════
     // PAGE: WORKFLOW
     // ══════════════════════════════════════
     const GRAM_OPTIONS = [
@@ -3821,12 +4027,13 @@
       const [answers, setAnswers] = useState(initData?.answers || {});
       const [results, setResults] = useState(initData?.results || null);
       const [caseName, setCaseName] = useState(initData?.caseName || '');
+      const [viewMode, setViewMode] = useState(initData?.viewMode || 'tree'); // 'tree' | 'form' | 'split'
 
       const dbGroup = gramSel ? GROUP_MAP[gramSel] : null;
       const suite = dbGroup ? SUITES[dbGroup] : null;
 
       const setCurrent = () => {
-        const data = { step, gramSel, answers, results, caseName };
+        const data = { step, gramSel, answers, results, caseName, viewMode };
         setWfData(data);
       };
 
@@ -3930,27 +4137,99 @@
             {/* STEP 2 */}
             {step === 2 && suite && (
               <div>
-                <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>⚗️ Step 2 — {suite.name}</h2>
-                <p style={{ color: '#64748b', fontSize: 13, marginBottom: 20, lineHeight: 1.5 }}>กรอกผลการทดสอบให้มากที่สุดเท่าที่มี (ข้ามได้ถ้ายังไม่ได้ทำ)</p>
-                <div style={{ marginBottom: 20 }}>
-                  <label style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginBottom: 6, fontWeight: 500 }}>📋 ชื่อ Case (สำหรับบันทึก)</label>
-                  <input value={caseName} onChange={e => setCaseName(e.target.value)} placeholder="เช่น Case 001 — ผู้ป่วย UTI" className="input-field" style={{ fontSize: 13 }} />
+                {/* Header with Mode Toggle */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
+                    <div>
+                      <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>⚗️ Step 2 — {suite.name}</h2>
+                      <p style={{ color: '#64748b', fontSize: 13, lineHeight: 1.5 }}>เลือกโหมดที่ต้องการใช้งาน</p>
+                    </div>
+                    {/* View Mode Toggle */}
+                    <div style={{ display: 'flex', background: '#0d1526', border: '1px solid #1e3055', borderRadius: 10, padding: 4 }}>
+                      {[
+                        { id: 'tree', label: '🌳 Tree', desc: 'แนะนำ step-by-step' },
+                        { id: 'form', label: '📝 Form', desc: 'กรอกทั้งหมด' },
+                        { id: 'split', label: '◫ Split', desc: 'ทั้งสองแบบ' }
+                      ].map(mode => (
+                        <button
+                          key={mode.id}
+                          onClick={() => setViewMode(mode.id)}
+                          title={mode.desc}
+                          style={{
+                            padding: '8px 14px',
+                            borderRadius: 8,
+                            border: 'none',
+                            background: viewMode === mode.id ? '#6366f1' : 'transparent',
+                            color: viewMode === mode.id ? '#fff' : '#64748b',
+                            fontSize: 12,
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.15s'
+                          }}
+                        >
+                          {mode.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Case Name */}
+                  <div>
+                    <label style={{ fontSize: 12, color: '#94a3b8', display: 'block', marginBottom: 6, fontWeight: 500 }}>📋 ชื่อ Case (สำหรับบันทึก)</label>
+                    <input value={caseName} onChange={e => setCaseName(e.target.value)} placeholder="เช่น Case 001 — ผู้ป่วย UTI" className="input-field" style={{ fontSize: 13 }} />
+                  </div>
                 </div>
-                <div style={{ display: 'grid', gap: 8 }}>
-                  {suite.tests.map((test, idx) => (
-                    <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
-                      <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
-                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                        <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
-                          className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>
-                        {test.options.map(opt => (
-                          <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
-                            className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
+                
+                {/* Content based on View Mode */}
+                {viewMode === 'tree' && (
+                  <DecisionTreeView suite={suite} answers={answers} setAnswers={setAnswers} gramSel={gramSel} results={results} />
+                )}
+                
+                {viewMode === 'form' && (
+                  <div style={{ display: 'grid', gap: 8 }}>
+                    {suite.tests.map((test, idx) => (
+                      <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
+                        <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
+                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                          <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
+                            className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>
+                          {test.options.map(opt => (
+                            <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
+                              className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {viewMode === 'split' && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 16 }}>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#6366f1', marginBottom: 10 }}>🌳 Decision Tree</div>
+                      <DecisionTreeView suite={suite} answers={answers} setAnswers={setAnswers} gramSel={gramSel} results={results} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: '#6366f1', marginBottom: 10 }}>📝 Form View</div>
+                      <div style={{ display: 'grid', gap: 8 }}>
+                        {suite.tests.map((test, idx) => (
+                          <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
+                            <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
+                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                              <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
+                                className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>
+                              {test.options.map(opt => (
+                                <button key={opt} onClick={() => setAnswers(a => ({ ...a, [test.id]: opt }))}
+                                  className={`wf-opt-btn ${answers[test.id] === opt ? 'selected' : ''}`}>{opt}</button>
+                              ))}
+                            </div>
+                          </div>
                         ))}
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
+                
                 <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
                   <button onClick={() => setStep(1)} className="btn-action secondary">← ย้อนกลับ</button>
                   <button onClick={runAnalysis} className="btn-action primary" style={{ flex: 1 }}>

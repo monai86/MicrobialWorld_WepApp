@@ -706,6 +706,7 @@
       { id: 'workflow', label: '🔬 วินิจฉัย', sub: 'Diagnostic Flow' },
       { id: 'cases', label: '💾 Case ที่บันทึก', sub: 'Saved Cases' },
       { id: 'library', label: '📚 คลังเชื้อ', sub: 'Bacteria Library' },
+      { id: 'tests', label: '⚗️ การทดสอบ', sub: 'Biochemical Tests' },
     ];
 
     // ══════════════════════════════════════
@@ -1142,6 +1143,7 @@
             {page === 'workflow' && <WorkflowPage initData={wfData} setWfData={setWfData} showPrompt={showPrompt} showAlert={showAlert} user={user} isGuest={isGuest} />}
             {page === 'cases' && <CasesPage onLoad={(d) => { setWfData(d); setPage('workflow'); }} showPrompt={showPrompt} user={user} isGuest={isGuest} />}
             {page === 'library' && <LibraryPage />}
+            {page === 'tests' && <TestsPage />}
             {page === 'settings' && <SettingsPage settings={settings} saveSettings={saveSettings} user={user} showAlert={showAlert} />}
           </main>
 
@@ -4471,6 +4473,561 @@
             >
               {saving ? 'กำลังบันทึก...' : '💾 บันทึกการตั้งค่า'}
             </button>
+          </div>
+        </div>
+      );
+    }
+
+    // ══════════════════════════════════════
+    // PAGE: BIOCHEMICAL TESTS REFERENCE
+    // ══════════════════════════════════════
+    const BIOCHEM_TESTS_DATA = [
+      {
+        category: 'Basic Tests',
+        color: '#3b82f6',
+        tests: [
+          {
+            id: 'catalase',
+            name: 'Catalase Test',
+            thai: 'การทดสอบคาทาเลส',
+            principle: 'ตรวจหาเอนไซม์ catalase ที่สลาย hydrogen peroxide (H₂O₂) เป็นน้ำและออกซิเจน',
+            procedure: 'หยด H₂O₂ 3% ลงบน colony หรือสไลด์ สังเกตฟองอากาศ',
+            positive: 'เกิดฟองอากาศ (bubbling) ทันที',
+            negative: 'ไม่มีฟองอากาศ',
+            significance: 'แยก Staphylococcus (+) จาก Streptococcus (-); แยก GPC จาก GNC',
+            organisms: 'S. aureus (+), S. pyogenes (-), Enterococcus (-)'
+          },
+          {
+            id: 'oxidase',
+            name: 'Oxidase Test (Kovacs)',
+            thai: 'การทดสอบออกซิเดส',
+            principle: 'ตรวจหา cytochrome c oxidase ที่oxidize tetramethyl-p-phenylenediamine ให้เปลี่ยนเป็นสีม่วง',
+            procedure: 'ใช้กระดาษ oxidase หรือหยด reagent ลงบน colony สด',
+            positive: 'เปลี่ยนเป็นสีม่วง/น้ำเงิน-ม่วง ภายใน 10-30 วินาที',
+            negative: 'ไม่เปลี่ยนสี หรือเปลี่ยนสีช้า (>30 วินาที)',
+            significance: 'แยก Pseudomonas, Neisseria (+) จาก Enterobacteriaceae (-)',
+            organisms: 'P. aeruginosa (+), E. coli (-), Klebsiella (-)'
+          },
+          {
+            id: 'coagulase',
+            name: 'Coagulase Test',
+            thai: 'การทดสอบโคแกูเลส',
+            principle: 'ตรวจหา enzyme coagulase ที่จับ fibrinogen ใน plasma เป็น fibrin',
+            procedure: 'ผสม colony กับ plasma (rabbit/human) บน slide หรือ tube',
+            positive: 'เกิด clotting/coagulation (slide: clumping, tube: solidification)',
+            negative: 'ยังคงเหลว ไม่มี clot',
+            significance: 'แยก S. aureus (+) จาก Coagulase-negative Staphylococci (CoNS)',
+            organisms: 'S. aureus (+), S. epidermidis (-), S. saprophyticus (-)'
+          },
+          {
+            id: 'hemolysis',
+            name: 'Hemolysis Test',
+            thai: 'การทดสอบการย่อยเม็ดเลือดแดง',
+            principle: 'ตรวจสอบความสามารถในการผลิต hemolysin ที่ย่อย erythrocytes',
+            procedure: 'เพาะบน Blood agar 37°C 18-24h สังเกต zone รอบ colony',
+            beta: 'β-hemolysis: zone clear/transparent (เช่น S. pyogenes, S. aureus)',
+            alpha: 'α-hemolysis: zone เขียว-เขียวหม่น (เช่น S. pneumoniae, Viridans)',
+            gamma: 'γ-hemolysis: ไม่มี hemolysis (เช่น Enterococcus)',
+            significance: 'แยกสายพันธุ์ Streptococcus ได้สำคัญมาก',
+            organisms: 'S. pyogenes (β), S. pneumoniae (α), E. faecalis (γ)'
+          }
+        ]
+      },
+      {
+        category: 'Carbohydrate Fermentation',
+        color: '#22c55e',
+        tests: [
+          {
+            id: 'glucose_of',
+            name: 'Glucose O/F Test (Oxidation-Fermentation)',
+            thai: 'การทดสอบการสลายกลูโคส',
+            principle: 'ตรวจว่าแบคทีเรียา oxidize หรือ ferment กลูโคส Hugh-Liefson medium มี indicator bromothymol blue',
+            procedure: 'inoculate 2 tubes (one with mineral oil overlay) บ่ม 37°C',
+            oxidation: '+/−: สีเหลืองเฉพาะ tube ที่ไม่มี oil (aerobic)',
+            fermentation: '+/+: สีเหลืองทั้ง 2 tubes',
+            nonreactive: '−/−: สีเขียว/ฟ้าทั้ง 2 tubes',
+            significance: 'แยก oxidative GNB (Pseudomonas) จาก fermenters (Enterobacteriaceae)',
+            organisms: 'E. coli (+/+), P. aeruginosa (+/−), Alcaligenes (−/−)'
+          },
+          {
+            id: 'tsi',
+            name: 'TSI Agar (Triple Sugar Iron)',
+            thai: 'อาหารเลี้ยง TSI',
+            principle: 'ตรวจ fermentation ของ glucose, lactose, sucrose พร้อม detect H₂S และ gas production',
+            procedure: 'stab butt และ streak slant บ่ม 37°C 18-24h',
+            aa: 'A/A (Acid/Acid): ferment lactose/sucrose + glucose → สีเหลืองทั้ง butt และ slant',
+            ka: 'K/A (Alkaline/Acid): ferment glucose only → เหลือง butt, แดง slant',
+            gas: 'Gas: butt แยก/ cracked, bubbles ใน agar',
+            h2s: 'H₂S: สีดำ (iron sulfide) ตาม butt',
+            significance: 'ขั้นตอนแรกในการ identify Enterobacteriaceae',
+            organisms: 'E. coli (A/A), Salmonella (K/A H₂S+), Shigella (K/A)'
+          },
+          {
+            id: 'mannitol',
+            name: 'Mannitol Fermentation',
+            thai: 'การสลายแมนนิตอล',
+            principle: 'ตรวจการ ferment mannitol ผลิต acid ทำให้ pH ต่ำลง',
+            positive: 'เปลี่ยนเป็นสีเหลือง (acid)',
+            negative: 'สีชมพู/ม่วง (alkaline/neutral)',
+            significance: 'MSA medium ใช้ isolate S. aureus; TSI ใช้ differentiate GNB',
+            organisms: 'S. aureus (+), S. epidermidis (-), E. coli (+)'
+          },
+          {
+            id: 'lactose',
+            name: 'Lactose Fermentation (MAC)',
+            thai: 'การสลายแลคโตส',
+            principle: 'ตรวจการ ferment lactose → ผลิต acid → pH ↓ → neutral red indicator เปลี่ยนสี',
+            positive: ' colonies สีชมพู/แดง (lactose fermenters, LF)',
+            negative: ' colonies สีขาว/ใส (non-lactose fermenters, NLF)',
+            significance: 'แยก LF (coliforms) จาก NLF (Salmonella, Shigella, Pseudomonas)',
+            organisms: 'E. coli (LF), Klebsiella (LF), Salmonella (NLF)'
+          }
+        ]
+      },
+      {
+        category: 'Amino Acid & Protein Tests',
+        color: '#a855f7',
+        tests: [
+          {
+            id: 'indole',
+            name: 'Indole Test (Tryptophan)',
+            thai: 'การทดสอบอินโดล',
+            principle: 'ตรวจว่าแบคทีเรียา hydrolyze tryptophan → indole + pyruvic acid + ammonia ใช้ Kovacs/Ehrlich reagent',
+            procedure: 'เพาะใน tryptone broth 18-24h แล้วหยด Kovacs reagent',
+            positive: 'ring สีแดง/ม่วง-แดง ที่ surface (indole + aldehyde)',
+            negative: 'สีเหลือง/ส้ม (no reaction)',
+            significance: 'IMViC test ตัว I; แยก E. coli (+) จาก Enterobacter/Klebsiella (-)',
+            organisms: 'E. coli (+), Klebsiella (-), Proteus (+)'
+          },
+          {
+            id: 'mr',
+            name: 'Methyl Red (MR) Test',
+            thai: 'การทดสอบเมทิลเรด',
+            principle: 'ตรวจการผลิต acid ที่แรงและมั่นคงจาก glucose fermentation pH < 4.4',
+            procedure: 'เพาะใน MR-VP broth 5 วัน แล้วหยด methyl red indicator',
+            positive: 'สีแดง (stable acid)',
+            negative: 'สีเหลือง/ส้ม (acid ถูก neutralize)',
+            significance: 'IMViC test ตัว M; แยก E. coli (+) จาก Enterobacter (-)',
+            organisms: 'E. coli (+), Enterobacter (-), Klebsiella (-)'
+          },
+          {
+            id: 'vp',
+            name: 'Voges-Proskauer (VP) Test',
+            thai: 'การทดสอบ VP',
+            principle: 'ตรวจ acetoin (acetylmethylcarbinol) ที่เป็น intermediate จาก glucose fermentation',
+            procedure: 'เพาะใน MR-VP broth หยด α-naphthol + KOH (Barritt reagent)',
+            positive: 'เปลี่ยนเป็นสีแดง/ชมพู ภายใน 15-30 นาที',
+            negative: 'สีน้ำตาล/เหลือง (no color change)',
+            significance: 'IMViC test ตัว V; แยก Enterobacter/Klebsiella (+) จาก E. coli (-)',
+            organisms: 'Klebsiella (+), Enterobacter (+), E. coli (-)'
+          },
+          {
+            id: 'citrate',
+            name: 'Citrate Utilization',
+            thai: 'การใช้ซิเตรต',
+            principle: 'ตรวจการใช้ citrate เป็นแหล่ง carbon อย่างเดียว ผลิต alkaline ทำให้ pH ↑',
+            procedure: 'streak บน Simmons citrate agar (slant only) บ่ม 37°C',
+            positive: 'สีน้ำเงิน (bromothymol blue → alkaline) + growth',
+            negative: 'สีเขียว (no change) หรือไม่มี growth',
+            significance: 'IMViC test ตัว C; แยก Klebsiella/Enterobacter (+) จาก E. coli (-)',
+            organisms: 'Klebsiella (+), Serratia (+), E. coli (-)'
+          },
+          {
+            id: 'urease',
+            name: 'Urease Test',
+            thai: 'การทดสอบยูเรส',
+            principle: 'ตรวจ enzyme urease ที่ hydrolyze urea → ammonia (NH₃) + CO₂ → pH ↑',
+            procedure: 'inoculate urea broth/agar (Christensen) บ่ม 37°C',
+            rapid: 'Rapid ++: เปลี่ยนสีชมพู/ม่วง ภายใน 4-6 ชั่วโมง (Proteus)',
+            positive: 'ชมพู/ม่วง ภายใน 24h',
+            negative: 'สีส้ม/เหลือง (no change)',
+            significance: 'แยก Proteus/Providencia (+) จาก other Enterobacteriaceae',
+            organisms: 'Proteus (++), Klebsiella (±), E. coli (-)'
+          },
+          {
+            id: 'h2s',
+            name: 'H₂S Production',
+            thai: 'การผลิตไฮโดรเจนซัลไฟด์',
+            principle: 'ตรวจการ reduce sulfur-containing compounds (peptone) เป็น H₂S ที่ react กับ iron/lead',
+            procedure: 'TSI หรือ KIA medium สังเกต blackening',
+            positive: 'สีดำตาม butt หรือ lead acetate เปลี่ยนสีดำ',
+            negative: 'ไม่มีสีดำ',
+            significance: 'Salmonella, Proteus, Citrobacter (+); Shigella, E. coli (-)',
+            organisms: 'Salmonella (+), Proteus (+), E. coli (-)'
+          },
+          {
+            id: 'ldc_odc',
+            name: 'Decarboxylase Tests (LDC, ODC, ADC)',
+            thai: 'การทดสอบดีคาร์บอกซิเลส',
+            principle: 'ตรวจ enzyme decarboxylase ที่ remove carboxyl group จาก amino acid ผลิต amine (pH ↑)',
+            substrates: 'LDC: Lysine → Cadaverine, ODC: Ornithine → Putrescine, ADC: Arginine → Citrulline',
+            procedure: 'Moeller decarboxylase broth มี glucose + amino acid + pH indicator',
+            positive: 'สีม่วง (alkaline) ที่ท้าย incubation',
+            negative: 'สีเหลือง (acid from glucose)',
+            significance: 'แยก Enterobacteriaceae: Klebsiella (LDC+), E. coli (LDC+ ODC+), Salmonella (LDC+ ODC+)',
+            organisms: 'Klebsiella (LDC+), E. coli (LDC+ ODC+), S. marcescens (ODC+)'
+          }
+        ]
+      },
+      {
+        category: 'Special Media & Selective Tests',
+        color: '#f59e0b',
+        tests: [
+          {
+            id: 'msa',
+            name: 'MSA (Mannitol Salt Agar)',
+            thai: 'อาหารเลี้ยง MSA',
+            principle: 'Selective + Differential: 7.5% NaCl ยับยั้ง most bacteria ยกเว้น Staphylococcus; mannitol ตรวจ fermentation',
+            selective: 'Salt (7.5% NaCl) → only salt-tolerant bacteria grow',
+            differential: 'Mannitol + phenol red → acid = yellow',
+            yellow: 'Mannitol fermenters (S. aureus) → yellow colonies',
+            pink: 'Non-fermenters (CoNS) → pink/red colonies',
+            significance: 'Isolation และ presumptive ID ของ S. aureus',
+            organisms: 'S. aureus (yellow), S. epidermidis (pink), Streptococcus (no growth)'
+          },
+          {
+            id: 'bile_esculin',
+            name: 'Bile Esculin Test',
+            thai: 'การทดสอบไบล์เอสคูลิน',
+            principle: 'ตรวจ hydrolysis of esculin ใน presence of bile (4-10%) → esculetin + glucose',
+            procedure: 'Bile esculin agar หรือ slant',
+            positive: 'สีดำ/น้ำตาล-ดำ (esculetin + iron)',
+            negative: 'ไม่เปลี่ยนสี',
+            significance: 'Group D Streptococcus/Enterococcus (+) แยกจาก other Strep',
+            organisms: 'E. faecalis (+), S. pyogenes (-), S. pneumoniae (-)'
+          },
+          {
+            id: 'nacl_6',
+            name: '6.5% NaCl Tolerance',
+            thai: 'ความทนทานต่อเกลือ 6.5%',
+            principle: 'ตรวจ ability to grow in high salt concentration',
+            procedure: ' broth with 6.5% NaCl + indicator เทียบกับ control',
+            positive: 'Turbidity/growth (ไม่เปลี่ยนสีถ้ามี indicator)',
+            negative: 'No growth (clear)',
+            significance: 'Enterococcus (+) แยกจาก non-enterococcal Group D Strep (-)',
+            organisms: 'E. faecalis (+), S. bovis (-)'
+          },
+          {
+            id: 'optochin',
+            name: 'Optochin Susceptibility',
+            thai: 'การทดสอบออปโตชิน',
+            principle: 'Optochin (ethylhydrocupreine) ยับยั้ง S. pneumoniae แต่ไม่กับ Viridans Strep',
+            procedure: 'Blood agar + optochin disc (5µg) บ่ม CO₂',
+            sensitive: 'Zone ≥14 mm (S. pneumoniae)',
+            resistant: 'Zone <14 mm (Viridans Strep)',
+            significance: 'Presumptive identification ของ S. pneumoniae',
+            organisms: 'S. pneumoniae (S), S. viridans (R)'
+          },
+          {
+            id: 'bacitracin',
+            name: 'Bacitracin Susceptibility',
+            thai: 'การทดสอบแบซิตราซิน',
+            principle: 'Bacitracin (A disc, 0.04U) ยับยั้ง S. pyogenes (Group A)',
+            procedure: 'Blood agar + bacitracin disc บ่ม overnight',
+            sensitive: 'Zone of inhibition (any size = susceptible)',
+            resistant: 'No zone/growth up to disc',
+            significance: 'Presumptive ID ของ Group A Strep (S. pyogenes)',
+            organisms: 'S. pyogenes (S), other β-hemolytic Strep (R)'
+          },
+          {
+            id: 'novobiocin',
+            name: 'Novobiocin Susceptibility',
+            thai: 'การทดสอบโนโวบิโอซิน',
+            principle: 'Differentiate S. saprophyticus (resistant) จาก S. epidermidis (sensitive)',
+            procedure: 'BAP + novobiocin disc (5µg)',
+            resistant: 'Zone ≤12 mm (S. saprophyticus)',
+            sensitive: 'Zone >12 mm (S. epidermidis, other CoNS)',
+            significance: 'ID ของ S. saprophyticus (UTI pathogen)',
+            organisms: 'S. saprophyticus (R), S. epidermidis (S)'
+          }
+        ]
+      },
+      {
+        category: 'Vibrio & Salt Tests',
+        color: '#06b6d4',
+        tests: [
+          {
+            id: 'tcbs',
+            name: 'TCBS Agar (Thiosulfate Citrate Bile Salts)',
+            thai: 'อาหารเลี้ยง TCBS',
+            principle: 'Selective for Vibrio (alkaline pH + bile salts); differential by sucrose fermentation',
+            selective: 'High pH (8.6) + bile salts ยับยั้ง most GNB ยกเว้น Vibrio',
+            yellow: 'Sucrose fermenters (V. cholerae, V. alginolyticus)',
+            green: 'Non-sucrose fermenters (V. parahaemolyticus, V. vulnificus)',
+            significance: 'Isolation และ presumptive ID ของ Vibrio spp.',
+            organisms: 'V. cholerae (yellow), V. parahaemolyticus (green)'
+          },
+          {
+            id: 'nacl_tolerance',
+            name: 'NaCl Tolerance (0%, 1%, 6%, 8%)',
+            thai: 'การทดสอบความทนต่อ NaCl',
+            principle: 'Vibrio spp. ต่างกันใน salt requirement และ tolerance',
+            nonhalophilic: '0-1% NaCl: V. cholerae (non-halophilic)',
+            halophilic: '6% NaCl: V. parahaemolyticus (halophilic)',
+            high: '8-10% NaCl: V. alginolyticus, V. vulnificus (highly halophilic)',
+            significance: 'Differentiation ของ Vibrio species',
+            organisms: 'V. cholerae (0%+), V. parahaemolyticus (6%+), V. alginolyticus (8%+)'
+          }
+        ]
+      },
+      {
+        category: 'DNase & Other Enzymes',
+        color: '#ec4899',
+        tests: [
+          {
+            id: 'dnase',
+            name: 'DNase Test',
+            thai: 'การทดสอบ DNase',
+            principle: 'ตรวจ enzyme deoxyribonuclease ที่ย่อย DNA',
+            procedure: 'DNase agar (มี DNA) หลัง incubate หยด HCl หรือ toluidine blue',
+            positive: 'Clear zone รอบ colony (HCl: precipitate dissolve, toluidine blue: pink halo)',
+            negative: 'No clear zone',
+            significance: 'S. aureus (+), M. catarrhalis (+) แยกจาก similar organisms',
+            organisms: 'S. aureus (+), S. epidermidis (-), M. catarrhalis (+)'
+          },
+          {
+            id: 'camp',
+            name: 'CAMP Test',
+            thai: 'การทดสอบ CAMP',
+            principle: 'Enhanced hemolysis โดย synergism ระหว่าง CAMP factor ของ S. agalactiae กับ β-lysin ของ S. aureus',
+            procedure: 'Streak S. aureus ตรงกลาง BAP แล้ว streak test organism ขวาง',
+            positive: 'Arrowhead/diamond shaped zone of enhanced hemolysis',
+            negative: 'No enhanced hemolysis',
+            significance: 'Presumptive ID ของ Group B Strep (S. agalactiae)',
+            organisms: 'S. agalactiae (+), S. pyogenes (-), other Strep (-)'
+          },
+          {
+            id: 'hippurate',
+            name: 'Hippurate Hydrolysis',
+            thai: 'การทดสอบไฮปูริก',
+            principle: 'ตรวจ hydrolysis of sodium hippurate → glycine + benzoic acid',
+            procedure: 'Ninhydrin test: glycine + ninhydrin = purple color',
+            positive: 'สีม่วง (within 30 min)',
+            negative: 'สีเหลือง/ส้ม (no color change)',
+            significance: 'S. agalactiae (+) แยกจาก other β-hemolytic Strep',
+            organisms: 'S. agalactiae (+), S. pyogenes (-)'
+          }
+        ]
+      }
+    ];
+
+    function TestsPage() {
+      const [search, setSearch] = useState('');
+      const [expanded, setExpanded] = useState({});
+      
+      const filteredData = useMemo(() => {
+        if (!search.trim()) return BIOCHEM_TESTS_DATA;
+        const q = search.toLowerCase();
+        return BIOCHEM_TESTS_DATA.map(cat => ({
+          ...cat,
+          tests: cat.tests.filter(t => 
+            t.name.toLowerCase().includes(q) ||
+            (t.thai && t.thai.includes(q)) ||
+            (t.principle && t.principle.toLowerCase().includes(q)) ||
+            (t.organisms && t.organisms.toLowerCase().includes(q))
+          )
+        })).filter(cat => cat.tests.length > 0);
+      }, [search]);
+
+      const toggleExpand = (id) => {
+        setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
+      };
+
+      return (
+        <div style={{ height: 'calc(100vh - 56px)', overflowY: 'auto', background: 'var(--bg)' }}>
+          <div style={{ maxWidth: 1100, margin: '0 auto', padding: '32px 40px' }}>
+            {/* Header */}
+            <div style={{ 
+              background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
+              border: '1px solid #1e3055',
+              borderRadius: 16,
+              padding: '28px 32px',
+              marginBottom: 28
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{ 
+                  width: 60, 
+                  height: 60, 
+                  borderRadius: 16,
+                  background: 'linear-gradient(135deg, #a855f720, #ec489920)',
+                  border: '2px solid #a855f740',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 30
+                }}>
+                  ⚗️
+                </div>
+                <div>
+                  <h1 style={{ fontSize: 26, fontWeight: 800, color: '#f1f5f9', marginBottom: 6 }}>Biochemical Tests Reference</h1>
+                  <p style={{ color: '#64748b', fontSize: 14 }}>คู่มืออ้างอิงการทดสอบทางชีวเคมีทั้งหมดในระบบ</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Search */}
+            <div style={{ position: 'relative', marginBottom: 24 }}>
+              <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontSize: 16 }}>🔍</span>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="ค้นหาการทดสอบ (ชื่อไทย/อังกฤษ, หลักการ, เชื้อ)..."
+                style={{
+                  width: '100%',
+                  background: '#132040',
+                  border: '1px solid #1e3055',
+                  borderRadius: 12,
+                  padding: '12px 16px 12px 44px',
+                  color: '#e2e8f0',
+                  fontSize: 14
+                }}
+              />
+            </div>
+
+            {/* Categories */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              {filteredData.map((category) => (
+                <div key={category.category}>
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 10, 
+                    marginBottom: 14,
+                    paddingLeft: 4
+                  }}>
+                    <span style={{ 
+                      width: 6, 
+                      height: 24, 
+                      borderRadius: 3,
+                      background: category.color
+                    }} />
+                    <h2 style={{ fontSize: 16, fontWeight: 700, color: category.color }}>{category.category}</h2>
+                    <span style={{ 
+                      background: `${category.color}15`,
+                      color: category.color,
+                      border: `1px solid ${category.color}30`,
+                      borderRadius: 10,
+                      padding: '2px 10px',
+                      fontSize: 12,
+                      fontWeight: 600
+                    }}>{category.tests.length} tests</span>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))', gap: 12 }}>
+                    {category.tests.map((test) => (
+                      <div key={test.id} style={{
+                        background: '#132040',
+                        border: `1px solid ${category.color}25`,
+                        borderRadius: 12,
+                        overflow: 'hidden',
+                        transition: 'all 0.2s'
+                      }}>
+                        {/* Header */}
+                        <div 
+                          onClick={() => toggleExpand(test.id)}
+                          style={{
+                            padding: '14px 18px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <div>
+                            <div style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0' }}>{test.name}</div>
+                            <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{test.thai}</div>
+                          </div>
+                          <span style={{
+                            color: category.color,
+                            fontSize: 18,
+                            transform: expanded[test.id] ? 'rotate(180deg)' : 'none',
+                            transition: 'transform 0.2s'
+                          }}>▼</span>
+                        </div>
+
+                        {/* Expanded Content */}
+                        {expanded[test.id] && (
+                          <div style={{ 
+                            padding: '0 18px 16px',
+                            borderTop: `1px solid ${category.color}15`
+                          }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 12 }}>
+                              {/* Principle */}
+                              <div>
+                                <div style={{ fontSize: 11, color: category.color, fontWeight: 600, marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.5 }}>หลักการ (Principle)</div>
+                                <p style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.6 }}>{test.principle}</p>
+                              </div>
+
+                              {/* Results */}
+                              <div style={{ display: 'grid', gap: 8 }}>
+                                {(test.positive || test.rapid) && (
+                                  <div style={{ 
+                                    background: 'rgba(34,197,94,0.1)', 
+                                    border: '1px solid rgba(34,197,94,0.2)',
+                                    borderRadius: 8,
+                                    padding: '10px 12px'
+                                  }}>
+                                    <div style={{ fontSize: 11, color: '#22c55e', fontWeight: 700, marginBottom: 3 }}>✓ Positive / Rapid</div>
+                                    <p style={{ color: '#86efac', fontSize: 12 }}>{test.positive || test.rapid}</p>
+                                    {test.beta && <p style={{ color: '#86efac', fontSize: 11, marginTop: 2 }}>• {test.beta}</p>}
+                                    {test.alpha && <p style={{ color: '#fde047', fontSize: 11, marginTop: 2 }}>• {test.alpha}</p>}
+                                    {test.gamma && <p style={{ color: '#9ca3af', fontSize: 11, marginTop: 2 }}>• {test.gamma}</p>}
+                                  </div>
+                                )}
+                                
+                                {test.negative && (
+                                  <div style={{ 
+                                    background: 'rgba(239,68,68,0.1)', 
+                                    border: '1px solid rgba(239,68,68,0.2)',
+                                    borderRadius: 8,
+                                    padding: '10px 12px'
+                                  }}>
+                                    <div style={{ fontSize: 11, color: '#ef4444', fontWeight: 700, marginBottom: 3 }}>✗ Negative</div>
+                                    <p style={{ color: '#fca5a5', fontSize: 12 }}>{test.negative}</p>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Significance */}
+                              {test.significance && (
+                                <div>
+                                  <div style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600, marginBottom: 3 }}>ความสำคัญ (Significance)</div>
+                                  <p style={{ color: '#fcd34d', fontSize: 12 }}>{test.significance}</p>
+                                </div>
+                              )}
+
+                              {/* Organisms */}
+                              {test.organisms && (
+                                <div>
+                                  <div style={{ fontSize: 11, color: '#60a5fa', fontWeight: 600, marginBottom: 3 }}>เชื้อที่เกี่ยวข้อง</div>
+                                  <p style={{ color: '#93c5fd', fontSize: 12, fontStyle: 'italic' }}>{test.organisms}</p>
+                                </div>
+                              )}
+
+                              {/* Extra fields */}
+                              {test.procedure && (
+                                <div>
+                                  <div style={{ fontSize: 11, color: '#64748b', fontWeight: 600, marginBottom: 3 }}>วิธีทำ (Procedure)</div>
+                                  <p style={{ color: '#94a3b8', fontSize: 12 }}>{test.procedure}</p>
+                                </div>
+                              )}
+
+                              {(test.oxidation || test.fermentation || test.nonreactive) && (
+                                <div style={{ display: 'grid', gap: 4 }}>
+                                  {test.oxidation && <p style={{ color: '#a78bfa', fontSize: 11 }}>→ Oxidation: {test.oxidation}</p>}
+                                  {test.fermentation && <p style={{ color: '#22c55e', fontSize: 11 }}>→ Fermentation: {test.fermentation}</p>}
+                                  {test.nonreactive && <p style={{ color: '#9ca3af', fontSize: 11 }}>→ Non-reactive: {test.nonreactive}</p>}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       );

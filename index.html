@@ -367,6 +367,28 @@
       justify-content: center;
       flex-shrink: 0;
     }
+    .extra-badge {
+      background: rgba(251, 146, 60, 0.15);
+      color: #fb923c;
+      border: 1px solid rgba(251, 146, 60, 0.3);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .wf-test-card.extra-card {
+      border-color: rgba(251, 146, 60, 0.12);
+      background: rgba(251, 146, 60, 0.03);
+      opacity: 0.85;
+    }
+    .wf-test-card.extra-card:hover {
+      border-color: rgba(251, 146, 60, 0.25);
+      background: rgba(251, 146, 60, 0.06);
+      opacity: 1;
+    }
     .wf-opt-btn {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1568,16 +1590,16 @@
         trigger: 'GPC in clusters + Catalase +',
         tests: [
           { id: 'catalase_cluster', label: 'Catalase', options: ['+', '−'] },
-          { id: 'hemolysis_cluster', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'] },
           { id: 'glucose_of', label: 'Glucose O/F', options: ['+/+ (fermentative)', '+/− (oxidative)', '−/− (non-reactive)'] },
           { id: 'coagulase', label: 'Coagulase', options: ['+', '−'] },
           { id: 'novobiocin', label: 'Novobiocin', options: ['S (sensitive)', 'R (resistant)'] },
-          { id: 'msa', label: 'MSA (Mannitol)', options: ['Yellow (Mannitol+)', 'Red (Mannitol−)', 'No growth'] },
-          { id: 'dnase', label: 'DNase', options: ['+', '−'] },
-          { id: 'urease_cluster', label: 'Urease', options: ['+', '−'] },
-          { id: 'oxidase_cluster', label: 'Oxidase', options: ['+', '−'] },
-          { id: 'trehalose', label: 'Trehalose', options: ['+', '−'] },
           { id: 'od_cluster', label: 'OD (Ornithine decarboxylase)', options: ['+', '−'] },
+          { id: 'oxidase_cluster', label: 'Oxidase', options: ['+', '−'] },
+          { id: 'hemolysis_cluster', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'], extra: true },
+          { id: 'msa', label: 'MSA (Mannitol)', options: ['Yellow (Mannitol+)', 'Red (Mannitol−)', 'No growth'], extra: true },
+          { id: 'trehalose', label: 'Trehalose', options: ['+', '−'], extra: true },
+          { id: 'dnase', label: 'DNase', options: ['+', '−'], extra: true },
+          { id: 'urease_cluster', label: 'Urease', options: ['+', '−'], extra: true },
         ]
       },
       gpc_chain: {
@@ -1585,22 +1607,22 @@
         trigger: 'GPC in chains + Catalase −',
         tests: [
           { id: 'catalase', label: 'Catalase', options: ['+', '−'] },
-          { id: 'hemolysis', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'] },
-          { id: 'bacitracin', label: 'Bacitracin', options: ['S (sensitive)', 'R (resistant)'] },
-          { id: 'ppr', label: 'PPR test', options: ['+', '−'] },
-          { id: 'camp', label: 'CAMP test', options: ['+', '−'] },
-          { id: 'optochin', label: 'Optochin', options: ['S (sensitive)', 'R (resistant)'] },
           { id: 'bile_esculin', label: 'Bile Esculin', options: ['+', '−'] },
           { id: 'nacl_6', label: '6.5% NaCl', options: ['+', '−'] },
-          { id: 'hippurate', label: 'Hippurate hydrolysis', options: ['+', '−'] },
-          { id: 'bile_solubility', label: 'Bile Solubility', options: ['+', '−'] },
-          { id: 'growth_45', label: 'Growth 45°C', options: ['+', '−'] },
-          { id: 'sorbitol_ent', label: 'Sorbitol (E. spp.)', options: ['+', '−'] },
-          { id: 'arabinose_ent', label: 'Arabinose (E. spp.)', options: ['+', '−'] },
-          { id: 'mannitol_ent', label: 'Mannitol (E. spp.)', options: ['+', '−'] },
-          { id: 'raffinose_ent', label: 'Raffinose (E. spp.)', options: ['+', '−'] },
-          { id: 'ad_ent', label: 'AD (Arginine dihydrolase)', options: ['+', '−'] },
+          { id: 'optochin', label: 'Optochin', options: ['S (sensitive)', 'R (resistant)'] },
+          { id: 'ppr', label: 'PPR test', options: ['+', '−'] },
+          { id: 'bacitracin', label: 'Bacitracin', options: ['S (sensitive)', 'R (resistant)'] },
           { id: 'motile_ent', label: 'Motility', options: ['+', '−'] },
+          { id: 'arabinose_ent', label: 'Arabinose (E. spp.)', options: ['+', '−'] },
+          { id: 'raffinose_ent', label: 'Raffinose (E. spp.)', options: ['+', '−'] },
+          { id: 'sorbitol_ent', label: 'Sorbitol (E. spp.)', options: ['+', '−'] },
+          { id: 'mannitol_ent', label: 'Mannitol (E. spp.)', options: ['+', '−'] },
+          { id: 'ad_ent', label: 'AD (Arginine dihydrolase)', options: ['+', '−'] },
+          { id: 'camp', label: 'CAMP test', options: ['+', '−'] },
+          { id: 'hemolysis', label: 'Hemolysis', options: ['β (complete)', 'α (partial/green)', 'γ (none)'], extra: true },
+          { id: 'hippurate', label: 'Hippurate hydrolysis', options: ['+', '−'], extra: true },
+          { id: 'bile_solubility', label: 'Bile Solubility', options: ['+', '−'], extra: true },
+          { id: 'growth_45', label: 'Growth 45°C', options: ['+', '−'], extra: true },
         ]
       },
       enterobacterales: {
@@ -1622,18 +1644,18 @@
           { id: 'malonate', label: 'Malonate', options: ['+', '−'] },
           { id: 'urease', label: 'Urease', options: ['++ (rapid)', '+', '−'] },
           { id: 'mannitol', label: 'Mannitol', options: ['+', '−'] },
-          { id: 'sorbitol', label: 'Sorbitol', options: ['+', '−'] },
           { id: 'arabinose', label: 'Arabinose', options: ['+', '−'] },
-          { id: 'adonitol', label: 'Adonitol', options: ['+', '−'] },
-          { id: 'lactose', label: 'Lactose', options: ['+', '−'] },
-          { id: 'dulcitol', label: 'Dulcitol', options: ['+', '−'] },
-          { id: 'inositol', label: 'Inositol', options: ['+', '−'] },
-          { id: 'sucrose_ent', label: 'Sucrose', options: ['+', '−'] },
-          { id: 'raffinose', label: 'Raffinose', options: ['+', '−'] },
-          { id: 'rhamnose', label: 'Rhamnose', options: ['+', '−'] },
-          { id: 'salicin', label: 'Salicin', options: ['+', '−'] },
-          { id: 'kcn', label: 'KCN growth', options: ['+', '−'] },
           { id: 'dnase_ent', label: 'DNase', options: ['+', '−'] },
+          { id: 'sorbitol', label: 'Sorbitol', options: ['+', '−'], extra: true },
+          { id: 'adonitol', label: 'Adonitol', options: ['+', '−'], extra: true },
+          { id: 'lactose', label: 'Lactose', options: ['+', '−'], extra: true },
+          { id: 'dulcitol', label: 'Dulcitol', options: ['+', '−'], extra: true },
+          { id: 'inositol', label: 'Inositol', options: ['+', '−'], extra: true },
+          { id: 'sucrose_ent', label: 'Sucrose', options: ['+', '−'], extra: true },
+          { id: 'raffinose', label: 'Raffinose', options: ['+', '−'], extra: true },
+          { id: 'rhamnose', label: 'Rhamnose', options: ['+', '−'], extra: true },
+          { id: 'salicin', label: 'Salicin', options: ['+', '−'], extra: true },
+          { id: 'kcn', label: 'KCN growth', options: ['+', '−'], extra: true },
         ]
       },
       vibrio: {
@@ -1652,18 +1674,18 @@
           { id: 'nacl_1', label: '1% NaCl', options: ['+', '−'] },
           { id: 'nacl_6', label: '6% NaCl', options: ['+', '±', '−'] },
           { id: 'nacl_8', label: '8% NaCl', options: ['+', '±', '−'] },
-          { id: 'nacl_10', label: '10% NaCl', options: ['+', '−'] },
-          { id: 'glucose_v', label: 'Glucose', options: ['+', '−'] },
-          { id: 'mannitol_v', label: 'Mannitol', options: ['+', '−'] },
-          { id: 'lactose_v', label: 'Lactose', options: ['+', '−'] },
-          { id: 'sucrose_v', label: 'Sucrose', options: ['+', '−'] },
           { id: 'arabinose_v', label: 'Arabinose', options: ['+', '−'] },
           { id: 'sorbitol_v', label: 'Sorbitol', options: ['+', '−'] },
-          { id: 'inositol_v', label: 'Inositol', options: ['+', '−'] },
-          { id: 'salicin_v', label: 'Salicin', options: ['+', '−'] },
-          { id: 'tcbs', label: 'TCBS Colony', options: ['Yellow (sucrose+)', 'Green/Blue (sucrose−)', 'No growth'] },
-          { id: 'string_test', label: 'String Test', options: ['+', '−'] },
-          { id: 'esculin_v', label: 'Esculin', options: ['+', '−'] },
+          { id: 'nacl_10', label: '10% NaCl', options: ['+', '−'], extra: true },
+          { id: 'glucose_v', label: 'Glucose', options: ['+', '−'], extra: true },
+          { id: 'mannitol_v', label: 'Mannitol', options: ['+', '−'], extra: true },
+          { id: 'lactose_v', label: 'Lactose', options: ['+', '−'], extra: true },
+          { id: 'sucrose_v', label: 'Sucrose', options: ['+', '−'], extra: true },
+          { id: 'inositol_v', label: 'Inositol', options: ['+', '−'], extra: true },
+          { id: 'salicin_v', label: 'Salicin', options: ['+', '−'], extra: true },
+          { id: 'tcbs', label: 'TCBS Colony', options: ['Yellow (sucrose+)', 'Green/Blue (sucrose−)', 'No growth'], extra: true },
+          { id: 'string_test', label: 'String Test', options: ['+', '−'], extra: true },
+          { id: 'esculin_v', label: 'Esculin', options: ['+', '−'], extra: true },
         ]
       },
       nfb: {
@@ -1676,24 +1698,24 @@
           { id: 'indole_nfb', label: 'Indole', options: ['+', '−'] },
           { id: 'glucose_of_nfb', label: 'Glucose O/F', options: ['O (oxidative)', 'F (fermentative)', '−/− (non-reactive)'] },
           { id: 'nitrate_nfb', label: 'Nitrate reduction', options: ['+', '−'] },
-          { id: 'n2_gas', label: 'N₂ gas from NO₃', options: ['+', '−'] },
           { id: 'growth42', label: 'Growth on 42°C', options: ['+', '−'] },
           { id: 'urease_nfb', label: 'Urease', options: ['+', '−'] },
-          { id: 'sucrose_nfb', label: 'Sucrose', options: ['+', '−'] },
-          { id: 'maltose_nfb', label: 'Maltose', options: ['+', '−'] },
-          { id: 'mannitol_nfb', label: 'Mannitol', options: ['+', '−'] },
           { id: 'king_p', label: 'King P (Pyocyanin)', options: ['+', '−'] },
           { id: 'king_f', label: 'King F (Fluorescein UV)', options: ['+', '−'] },
-          { id: 'dnase_nfb', label: 'DNase', options: ['+', '−'] },
-          { id: 'gelatin_nfb', label: 'Gelatin', options: ['+', '−'] },
-          { id: 'starch_nfb', label: 'Starch', options: ['+', '−'] },
-          { id: 'esculin_nfb', label: 'Esculin', options: ['+', '−'] },
-          { id: 'h2s_nfb', label: 'H₂S in TSI', options: ['+', '−'] },
-          { id: 'arabinose_nfb', label: 'Arabinose', options: ['+', '−'] },
-          { id: 'nacl_65_nfb', label: '6.5% NaCl', options: ['+', '−'] },
+          { id: 'mannitol_nfb', label: 'Mannitol', options: ['+', '−'] },
           { id: 'lactose_nfb', label: 'Lactose', options: ['+', '−'] },
+          { id: 'maltose_nfb', label: 'Maltose', options: ['+', '−'] },
           { id: 'xylose_nfb', label: 'Xylose', options: ['+', '−'] },
-          { id: 'sucrose_nfb2', label: 'Sucrose', options: ['+', '−'] },
+          { id: 'sucrose_nfb', label: 'Sucrose', options: ['+', '−'] },
+          { id: 'dnase_nfb', label: 'DNase', options: ['+', '−'] },
+          { id: 'starch_nfb', label: 'Starch', options: ['+', '−'] },
+          { id: 'gelatin_nfb', label: 'Gelatin', options: ['+', '−'] },
+          { id: 'n2_gas', label: 'N₂ gas from NO₃', options: ['+', '−'], extra: true },
+          { id: 'esculin_nfb', label: 'Esculin', options: ['+', '−'], extra: true },
+          { id: 'h2s_nfb', label: 'H₂S in TSI', options: ['+', '−'], extra: true },
+          { id: 'arabinose_nfb', label: 'Arabinose', options: ['+', '−'], extra: true },
+          { id: 'nacl_65_nfb', label: '6.5% NaCl', options: ['+', '−'], extra: true },
+          { id: 'sucrose_nfb2', label: 'Sucrose (dup)', options: ['+', '−'], extra: true },
         ]
       },
       gn_coccobacilli: {
@@ -1701,25 +1723,23 @@
         trigger: 'GN diplococci/coccobacilli + Oxidase +',
         tests: [
           { id: 'oxidase_neiss', label: 'Oxidase', options: ['+', '−'] },
-          { id: 'ca_growth', label: 'Growth on Chocolate agar (CA)', options: ['+', '−'] },
+          { id: 'growth_nu', label: 'Growth on Nutrient agar', options: ['+', '−'] },
           { id: 'cta_glu', label: 'CTA Glucose', options: ['+', '−'] },
           { id: 'cta_mal', label: 'CTA Maltose', options: ['+', '−'] },
           { id: 'cta_lac', label: 'CTA Lactose', options: ['+', '−'] },
           { id: 'cta_suc', label: 'CTA Sucrose', options: ['+', '−'] },
-          { id: 'cta_fru', label: 'CTA Fructose', options: ['+', '−'] },
           { id: 'nitrate_neiss', label: 'Nitrate reduction', options: ['+', '−'] },
           { id: 'dnase_neiss', label: 'DNase', options: ['+', '−'] },
-          { id: 'growth_nu', label: 'Growth on Nutrient agar', options: ['+', '−'] },
-          // Tests for Pasteurella (JSON: coccobacilli branch)
           { id: 'tsi_gnc', label: 'TSI', options: ['A/A', 'K/A', 'K/K', 'K/N'] },
           { id: 'motile_gnc', label: 'Motility', options: ['+', '−'] },
           { id: 'indole_gnc', label: 'Indole', options: ['+', '−'] },
           { id: 'urease_gnc', label: 'Urease', options: ['+', '−'] },
           { id: 'mannitol_gnc', label: 'Mannitol', options: ['+', '−'] },
-          // Tests for Haemophilus (JSON: pleomorphic branch - XV factor)
           { id: 'factor_x', label: 'X factor (Hemin) required', options: ['+', '−'] },
           { id: 'factor_v', label: 'V factor (NAD) required', options: ['+', '−'] },
           { id: 'satellitism', label: 'Satellitism (growth near S.aureus)', options: ['+', '−'] },
+          { id: 'ca_growth', label: 'Growth on Chocolate agar (CA)', options: ['+', '−'], extra: true },
+          { id: 'cta_fru', label: 'CTA Fructose', options: ['+', '−'], extra: true },
         ]
       },
       gpb: {
@@ -1727,21 +1747,21 @@
         trigger: 'GP Bacilli + Catalase +',
         tests: [
           { id: 'catalase_gpb', label: 'Catalase', options: ['+', '−'] },
-          { id: 'hemolysis_gpb', label: 'Hemolysis', options: ['β (complete)', 'α (partial)', 'γ (none)'] },
-          { id: 'indole_gpb', label: 'Indole', options: ['+', '−'] },
           { id: 'motile_gpb', label: 'Motility (25°C)', options: ['+', '−'] },
           { id: 'tsi_gpb', label: 'TSI', options: ['A/A', 'K/A', 'K/K', 'K/N'] },
-          { id: 'lecithinase_gpb', label: 'Lecithinase (Egg yolk)', options: ['+', '−'] },
-          { id: 'camp_gpb', label: 'CAMP test', options: ['+', '−', 'Reverse CAMP+'] },
+          { id: 'indole_gpb', label: 'Indole', options: ['+', '−'] },
+          { id: 'nitrate_gpb', label: 'Nitrate', options: ['+', '−'] },
           { id: 'glucose_gpb', label: 'Glucose', options: ['+', '−'] },
+          { id: 'xylose_gpb', label: 'Xylose', options: ['+', '−'] },
           { id: 'maltose_gpb', label: 'Maltose', options: ['+', '−', 'V'] },
           { id: 'sucrose_gpb', label: 'Sucrose', options: ['+', '−', 'V'] },
-          { id: 'xylose_gpb', label: 'Xylose', options: ['+', '−'] },
-          { id: 'esculin_gpb', label: 'Esculin', options: ['+', '−'] },
-          { id: 'nitrate_gpb', label: 'Nitrate', options: ['+', '−'] },
           { id: 'urease_gpb', label: 'Urease', options: ['+', '−'] },
           { id: 'rhamnose_gpb', label: 'Rhamnose', options: ['+', '−'] },
-          { id: 'h2s_gpb', label: 'H₂S in TSI', options: ['+', '−'] },
+          { id: 'camp_gpb', label: 'CAMP test', options: ['+', '−', 'Reverse CAMP+'] },
+          { id: 'lecithinase_gpb', label: 'Lecithinase (Egg yolk)', options: ['+', '−'] },
+          { id: 'hemolysis_gpb', label: 'Hemolysis', options: ['β (complete)', 'α (partial)', 'γ (none)'], extra: true },
+          { id: 'h2s_gpb', label: 'H₂S in TSI', options: ['+', '−'], extra: true },
+          { id: 'esculin_gpb', label: 'Esculin', options: ['+', '−'], extra: true },
         ]
       },
     };
@@ -3194,8 +3214,8 @@
                 </div>
                 <div style={{ display: 'grid', gap: 8 }}>
                   {suite.tests.map((test, idx) => (
-                    <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''}`}>
-                      <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}</div>
+                    <div key={test.id} className={`wf-test-card ${answers[test.id] ? 'answered' : ''} ${test.extra ? 'extra-card' : ''}`}>
+                      <div className="wf-test-label"><span className="idx">{idx + 1}</span> {test.label}{test.extra && <span className="extra-badge">เพิ่มเติม</span>}</div>
                       <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                         <button onClick={() => setAnswers(a => ({ ...a, [test.id]: undefined }))}
                           className={`wf-opt-btn skip ${!answers[test.id] ? 'selected' : ''}`}>— ยังไม่ทำ</button>

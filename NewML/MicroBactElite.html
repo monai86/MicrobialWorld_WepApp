@@ -843,16 +843,27 @@
 
         setResetLoading(true);
         try {
-          await auth.sendPasswordResetEmail(resetEmail.trim());
-          setResetMsg('✅ ส่งอีเมลรีเซ็ตรหัสผ่านเรียบร้อยแล้ว กรุณาตรวจสอบอีเมลของคุณ');
+          console.log('Sending password reset email to:', resetEmail.trim());
+          await auth.sendPasswordResetEmail(resetEmail.trim(), {
+            url: window.location.href
+          });
+          console.log('Password reset email sent successfully');
+          setResetMsg('✅ ส่งอีเมลรีเซ็ตรหัสผ่านเรียบร้อยแล้ว กรุณาตรวจสอบอีเมลของคุณ (อาจอยู่ใน Spam/Junk folder)');
         } catch (error) {
           console.error('Password reset error:', error);
+          console.error('Error code:', error.code);
+          console.error('Error message:', error.message);
+          
           if (error.code === 'auth/user-not-found') {
             setResetMsg('ไม่พบอีเมลนี้ในระบบ');
           } else if (error.code === 'auth/invalid-email') {
             setResetMsg('รูปแบบอีเมลไม่ถูกต้อง');
+          } else if (error.code === 'auth/operation-not-allowed') {
+            setResetMsg('❌ ระบบส่งอีเมลรีเซ็ตรหัสผ่านยังไม่ถูกเปิดใช้งาน\nกรุณาไปที่ Firebase Console → Authentication → Sign-in method → เปิด Email/Password และตรวจสอบ Email templates');
+          } else if (error.code === 'auth/too-many-requests') {
+            setResetMsg('ส่งคำขอรีเซ็ตรหัสผ่านถี่เกินไป กรุณารอสักครู่แล้วลองใหม่');
           } else {
-            setResetMsg('เกิดข้อผิดพลาด: ' + error.message);
+            setResetMsg('เกิดข้อผิดพลาด: ' + error.message + '\n(Error Code: ' + error.code + ')');
           }
         }
         setResetLoading(false);
@@ -3239,6 +3250,17 @@
 
       const handleSave = async () => {
         setSaving(true);
+        
+        // Update Firebase user profile if display name changed
+        if (user && displayName !== settings.displayName) {
+          try {
+            await user.updateProfile({ displayName: displayName.trim() });
+            await user.reload();
+          } catch (e) {
+            console.error('Error updating display name:', e);
+          }
+        }
+        
         await saveSettings({
           ...settings,
           displayName,

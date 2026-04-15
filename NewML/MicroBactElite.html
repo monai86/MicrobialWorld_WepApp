@@ -794,6 +794,10 @@
       const togglePwd = () => setShowPwd(!showPwd);
 
       const [authErr, setAuthErr] = useState('');
+      const [showForgotPwd, setShowForgotPwd] = useState(false);
+      const [resetEmail, setResetEmail] = useState('');
+      const [resetLoading, setResetLoading] = useState(false);
+      const [resetMsg, setResetMsg] = useState('');
 
       const handleEmailAuth = async (e) => {
         e.preventDefault();
@@ -829,6 +833,29 @@
           setAuthErr(msg);
         }
         setLoading(false);
+      };
+
+      const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        setResetMsg('');
+        if (!resetEmail || !resetEmail.trim()) return setResetMsg('กรุณากรอกอีเมลของคุณ');
+        if (!isFirebaseActive) return setResetMsg('กรุณาตั้งค่า Firebase Config ในโค้ดก่อนใช้งานครับ');
+
+        setResetLoading(true);
+        try {
+          await auth.sendPasswordResetEmail(resetEmail.trim());
+          setResetMsg('✅ ส่งอีเมลรีเซ็ตรหัสผ่านเรียบร้อยแล้ว กรุณาตรวจสอบอีเมลของคุณ');
+        } catch (error) {
+          console.error('Password reset error:', error);
+          if (error.code === 'auth/user-not-found') {
+            setResetMsg('ไม่พบอีเมลนี้ในระบบ');
+          } else if (error.code === 'auth/invalid-email') {
+            setResetMsg('รูปแบบอีเมลไม่ถูกต้อง');
+          } else {
+            setResetMsg('เกิดข้อผิดพลาด: ' + error.message);
+          }
+        }
+        setResetLoading(false);
       };
 
       const eyeIcon = (
@@ -905,6 +932,49 @@
               </button>
             </form>
 
+            {mode === 'login' && !showForgotPwd && (
+              <button
+                onClick={() => { setShowForgotPwd(true); setResetEmail(email); }}
+                style={{ background: 'none', border: 'none', color: 'var(--accent)', fontSize: 13, cursor: 'pointer', marginTop: 8, textDecoration: 'underline' }}
+              >
+                ลืมรหัสผ่าน?
+              </button>
+            )}
+
+            {showForgotPwd && (
+              <div style={{ marginTop: 24, padding: 20, background: 'var(--bg)', borderRadius: 12, border: '1px solid var(--surface-border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff' }}>รีเซ็ตรหัสผ่าน</h3>
+                  <button
+                    onClick={() => { setShowForgotPwd(false); setResetEmail(''); setResetMsg(''); }}
+                    style={{ background: 'none', border: 'none', color: 'var(--text3)', cursor: 'pointer', fontSize: 20 }}
+                  >
+                    ✕
+                  </button>
+                </div>
+                <form onSubmit={handleForgotPassword} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {resetMsg && (
+                    <div style={{ background: resetMsg.includes('✅') ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)', border: resetMsg.includes('✅') ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(239, 68, 68, 0.3)', padding: '10px 14px', borderRadius: 8, color: resetMsg.includes('✅') ? '#10b981' : '#fca5a5', fontSize: 12 }}>
+                      {resetMsg}
+                    </div>
+                  )}
+                  <div className="input-wrapper">
+                    <input
+                      type="email"
+                      required
+                      placeholder="อีเมลสำหรับรีเซ็ตรหัสผ่าน"
+                      value={resetEmail}
+                      onChange={e => setResetEmail(e.target.value)}
+                      className="input-field"
+                    />
+                  </div>
+                  <button type="submit" className="btn btn-primary" style={{ padding: '12px', fontSize: 14 }} disabled={resetLoading}>
+                    {resetLoading ? 'กำลังส่ง...' : 'ส่งอีเมลรีเซ็ตรหัสผ่าน'}
+                  </button>
+                </form>
+              </div>
+            )}
+
             <div style={{ textAlign: 'center', marginTop: 24, fontSize: 14 }}>
               <span style={{ color: 'var(--text3)' }}>
                 {mode === 'login' ? 'ยังไม่ได้เปิดบัญชี?' : 'มีบัญชีอยู่แล้ว?'}
@@ -912,6 +982,7 @@
               <button onClick={() => {
                 setMode(mode === 'login' ? 'signup' : 'login');
                 setPwd(''); setPwd2(''); setEmail('');
+                setShowForgotPwd(false);
               }} style={{ background: 'none', border: 'none', color: '#fff', fontWeight: 600, marginLeft: 6, cursor: 'pointer' }}>
                 {mode === 'login' ? 'สร้างบัญชีใหม่' : 'เข้าสู่ระบบ'}
               </button>
@@ -952,6 +1023,7 @@
       const [user, setUser] = useState(null);
       const [isGuest, setIsGuest] = useState(false);
       const [loadingAuth, setLoadingAuth] = useState(true);
+      const [settings, setSettings] = useState(() => JSON.parse(localStorage.getItem('mbsettings') || '{}'));
 
       // Global custom prompt state
       const [promptState, setPromptState] = useState({ isOpen: false, title: '', value: '', onConfirm: null });
@@ -962,12 +1034,35 @@
           const unsubscribe = auth.onAuthStateChanged(usr => {
             setUser(usr);
             setLoadingAuth(false);
+            if (usr) {
+              db.collection('users').doc(usr.uid).collection('settings').doc('preferences').get()
+                .then(doc => {
+                  if (doc.exists) {
+                    const cloudSettings = doc.data();
+                    setSettings(cloudSettings);
+                    localStorage.setItem('mbsettings', JSON.stringify(cloudSettings));
+                  }
+                })
+                .catch(e => console.error('Error loading settings:', e));
+            }
           });
           return unsubscribe;
         } else {
           setLoadingAuth(false);
         }
       }, []);
+
+      const saveSettings = async (newSettings) => {
+        setSettings(newSettings);
+        localStorage.setItem('mbsettings', JSON.stringify(newSettings));
+        if (isFirebaseActive && user) {
+          try {
+            await db.collection('users').doc(user.uid).collection('settings').doc('preferences').set(newSettings);
+          } catch (e) {
+            console.error('Error saving settings to Firebase:', e);
+          }
+        }
+      };
 
       const loginWithGoogle = async () => {
         if (!isFirebaseActive) return alert('กรุณาใส่ Firebase Config ก่อนครับ (ดูในโค้ดบรรทัดที่ 60)');
@@ -1011,9 +1106,10 @@
           <Header page={page} setPage={setPage} user={user} loginWithGoogle={loginWithGoogle} logout={logout} exitGuest={() => setIsGuest(false)} />
           <main style={{ flex: 1, overflow: 'hidden' }}>
             {page === 'specimen' && <SpecimenPage />}
-            {page === 'workflow' && <WorkflowPage initData={wfData} setWfData={setWfData} showPrompt={showPrompt} showAlert={showAlert} user={user} />}
-            {page === 'cases' && <CasesPage onLoad={(d) => { setWfData(d); setPage('workflow'); }} showPrompt={showPrompt} user={user} />}
+            {page === 'workflow' && <WorkflowPage initData={wfData} setWfData={setWfData} showPrompt={showPrompt} showAlert={showAlert} user={user} isGuest={isGuest} />}
+            {page === 'cases' && <CasesPage onLoad={(d) => { setWfData(d); setPage('workflow'); }} showPrompt={showPrompt} user={user} isGuest={isGuest} />}
             {page === 'library' && <LibraryPage />}
+            {page === 'settings' && <SettingsPage settings={settings} saveSettings={saveSettings} user={user} showAlert={showAlert} />}
           </main>
 
           <Modal
@@ -1089,6 +1185,10 @@
                 {p.label}
               </button>
             ))}
+            <button key="settings" onClick={() => setPage('settings')}
+              className={`nav-tab ${page === 'settings' ? 'active-tab' : ''}`}>
+              ⚙️ ตั้งค่า
+            </button>
           </nav>
           <div className="nav-user">
             {user ? (
@@ -2772,7 +2872,7 @@
     ];
     const GROUP_MAP = { gpc_cluster: 'gpc_cluster', gpc_chain: 'gpc_chain', gpc_diplo: 'gpc_chain', gpb: 'gpb', gnb_oxi_neg: 'enterobacterales', gnb_oxi_pos_tcbs: 'vibrio', gnb_oxi_pos_nfb: 'nfb', gn_diplo: 'gn_coccobacilli' };
 
-    function WorkflowPage({ initData, setWfData, showPrompt, showAlert, user }) {
+    function WorkflowPage({ initData, setWfData, showPrompt, showAlert, user, isGuest }) {
       const [step, setStep] = useState(initData?.step || 1);
       const [gramSel, setGramSel] = useState(initData?.gramSel || null);
       const [answers, setAnswers] = useState(initData?.answers || {});
@@ -2793,10 +2893,12 @@
         const id = Date.now();
         const entry = { id, name: finalName, date: new Date().toLocaleDateString('th-TH'), gramSel, answers, results, step };
 
-        // Save to LocalStorage
-        const saved = JSON.parse(localStorage.getItem('mbcases') || '[]');
-        saved.unshift(entry);
-        localStorage.setItem('mbcases', JSON.stringify(saved.slice(0, 50)));
+        // Save to LocalStorage (only if not guest mode)
+        if (!isGuest) {
+          const saved = JSON.parse(localStorage.getItem('mbcases') || '[]');
+          saved.unshift(entry);
+          localStorage.setItem('mbcases', JSON.stringify(saved.slice(0, 50)));
+        }
 
         // Save to Firestore if available
         if (isFirebaseActive && user) {
@@ -2805,7 +2907,7 @@
           } catch (e) { console.error('Firestore save error', e); }
         }
 
-        if (showAlert) showAlert('✅ บันทึกสำเร็จ', `ข้อมูลของเคส "${finalName}" ถูกบันทึกลงระบบเรียบร้อยแล้วครับ!`);
+        if (showAlert) showAlert('✅ บันทึกสำเร็จ', isGuest ? `ข้อมูลของเคส "${finalName}" ถูกบันทึกไว้ในเซสชันนี้เท่านั้น (Guest Mode)` : `ข้อมูลของเคส "${finalName}" ถูกบันทึกลงระบบเรียบร้อยแล้วครับ!`);
         else alert('บันทึก Case เรียบร้อย!');
       };
 
@@ -2966,12 +3068,16 @@
     // ══════════════════════════════════════
     // PAGE: SAVED CASES
     // ══════════════════════════════════════
-    function CasesPage({ onLoad, showPrompt, user }) {
-      const [cases, setCases] = useState(() => JSON.parse(localStorage.getItem('mbcases') || '[]'));
+    function CasesPage({ onLoad, showPrompt, user, isGuest }) {
+      const [cases, setCases] = useState(() => isGuest ? [] : JSON.parse(localStorage.getItem('mbcases') || '[]'));
       const [loading, setLoading] = useState(false);
       const [deleteConfirm, setDeleteConfirm] = useState(null);
 
       useEffect(() => {
+        if (isGuest) {
+          setCases([]);
+          return;
+        }
         if (isFirebaseActive && user) {
           setLoading(true);
           db.collection('users').doc(user.uid).collection('cases').orderBy('id', 'desc').get().then(snap => {
@@ -2983,7 +3089,7 @@
             console.error(e); setLoading(false);
           });
         }
-      }, [user]);
+      }, [user, isGuest]);
 
       const del = async id => {
         setDeleteConfirm(id);
@@ -2993,7 +3099,9 @@
         if (!deleteConfirm) return;
         const updated = cases.filter(c => c.id !== deleteConfirm);
         setCases(updated);
-        localStorage.setItem('mbcases', JSON.stringify(updated));
+        if (!isGuest) {
+          localStorage.setItem('mbcases', JSON.stringify(updated));
+        }
         if (isFirebaseActive && user) {
           try { await db.collection('users').doc(user.uid).collection('cases').doc(deleteConfirm.toString()).delete(); } catch (e) { }
         }
@@ -3006,7 +3114,9 @@
           const t = newName.trim();
           const updated = cases.map(c => c.id === id ? { ...c, name: t } : c);
           setCases(updated);
-          localStorage.setItem('mbcases', JSON.stringify(updated));
+          if (!isGuest) {
+            localStorage.setItem('mbcases', JSON.stringify(updated));
+          }
           if (isFirebaseActive && user) {
             try { await db.collection('users').doc(user.uid).collection('cases').doc(id.toString()).update({ name: t }); } catch (e) { }
           }
@@ -3029,7 +3139,7 @@
                 Case ที่บันทึกไว้
               </h2>
               <p style={{ color: 'var(--text3)', fontSize: 13, marginTop: 6, fontWeight: 500, letterSpacing: 0.5, textTransform: 'uppercase' }}>
-                {user ? '☁️ Cloud Sync Active' : '💾 Local Storage'}
+                {isGuest ? '👤 Guest Mode (No Persistence)' : (user ? '☁️ Cloud Sync Active' : '💾 Local Storage')}
               </p>
             </div>
             <div style={{ color: 'var(--text2)', fontSize: 14, fontWeight: 600 }}>ทั้งหมด {cases.length} เคส</div>
@@ -3108,6 +3218,308 @@
               </div>
             </div>
           )}
+        </div>
+      );
+    }
+
+    // ══════════════════════════════════════
+    // PAGE: SETTINGS
+    // ══════════════════════════════════════
+    function SettingsPage({ settings, saveSettings, user, showAlert }) {
+      const [displayName, setDisplayName] = useState(settings.displayName || '');
+      const [defaultGram, setDefaultGram] = useState(settings.defaultGram || '');
+      const [autoSave, setAutoSave] = useState(settings.autoSave !== false);
+      const [saving, setSaving] = useState(false);
+      const [showPasswordForm, setShowPasswordForm] = useState(false);
+      const [currentPwd, setCurrentPwd] = useState('');
+      const [newPwd, setNewPwd] = useState('');
+      const [confirmNewPwd, setConfirmNewPwd] = useState('');
+      const [pwdError, setPwdError] = useState('');
+      const [changingPwd, setChangingPwd] = useState(false);
+
+      const handleSave = async () => {
+        setSaving(true);
+        await saveSettings({
+          ...settings,
+          displayName,
+          defaultGram,
+          autoSave
+        });
+        setSaving(false);
+        showAlert('✅ บันทึกสำเร็จ', 'การตั้งค่าของคุณถูกบันทึกเรียบร้อยแล้ว');
+      };
+
+      const handleReset = async () => {
+        setDefaultGram('');
+        setAutoSave(true);
+        await saveSettings({
+          displayName,
+          defaultGram: '',
+          autoSave: true
+        });
+        showAlert('✅ รีเซ็ตสำเร็จ', 'การตั้งค่าถูกคืนค่าเริ่มต้นแล้ว');
+      };
+
+      const handleChangePassword = async () => {
+        setPwdError('');
+        if (!currentPwd || !newPwd || !confirmNewPwd) {
+          setPwdError('กรุณากรอกรหัสผ่านให้ครบทุกช่อง');
+          return;
+        }
+        if (newPwd !== confirmNewPwd) {
+          setPwdError('รหัสผ่านใหม่และการยืนยันรหัสผ่านไม่ตรงกัน');
+          return;
+        }
+        if (newPwd.length < 6) {
+          setPwdError('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร');
+          return;
+        }
+
+        setChangingPwd(true);
+        try {
+          const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPwd);
+          await user.reauthenticateWithCredential(credential);
+          await user.updatePassword(newPwd);
+          setCurrentPwd('');
+          setNewPwd('');
+          setConfirmNewPwd('');
+          setShowPasswordForm(false);
+          showAlert('✅ เปลี่ยนรหัสผ่านสำเร็จ', 'รหัสผ่านของคุณถูกเปลี่ยนเรียบร้อยแล้ว');
+        } catch (error) {
+          console.error('Password change error:', error);
+          if (error.code === 'auth/wrong-password') {
+            setPwdError('รหัสผ่านปัจจุบันไม่ถูกต้อง');
+          } else if (error.code === 'auth/weak-password') {
+            setPwdError('รหัสผ่านใหม่อ่อนเกินไป');
+          } else {
+            setPwdError('เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน: ' + error.message);
+          }
+        }
+        setChangingPwd(false);
+      };
+
+      return (
+        <div className="fade-in" style={{ padding: '40px', maxWidth: 800, margin: '0 auto', height: 'calc(100vh - 60px)', overflowY: 'auto' }}>
+          <div style={{ marginBottom: 32, paddingBottom: 20, borderBottom: '1px solid var(--surface-border)' }}>
+            <h2 style={{ fontSize: 26, fontWeight: 700, color: '#fff', letterSpacing: '-0.5px', marginBottom: 8 }}>
+              ⚙️ ตั้งค่า
+            </h2>
+            <p style={{ color: 'var(--text3)', fontSize: 13, marginTop: 6, fontWeight: 500, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+              {user ? '☁️ Cloud Sync Active' : '💾 Local Storage'}
+            </p>
+          </div>
+
+          {/* User Info Card */}
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+              <div style={{ width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, fontWeight: 700, color: '#fff' }}>
+                {user?.displayName ? user.displayName.charAt(0).toUpperCase() : '?'}
+              </div>
+              <div>
+                <div style={{ fontSize: 18, fontWeight: 600, color: '#fff', marginBottom: 4 }}>{user?.displayName || 'Guest User'}</div>
+                <div style={{ fontSize: 13, color: 'var(--text2)' }}>{user?.email || 'Guest Mode'}</div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div>
+                <label style={{ fontSize: 12, color: 'var(--text2)', display: 'block', marginBottom: 6, fontWeight: 500 }}>ชื่อที่ต้องการแสดง (Display Name)</label>
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={e => setDisplayName(e.target.value)}
+                  placeholder="ชื่อของคุณ"
+                  className="input-field"
+                  style={{ fontSize: 14 }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: 12, color: 'var(--text2)', display: 'block', marginBottom: 6, fontWeight: 500 }}>อีเมล (Email)</label>
+                <input
+                  type="email"
+                  value={user?.email || ''}
+                  disabled
+                  className="input-field"
+                  style={{ fontSize: 14, opacity: 0.6, cursor: 'not-allowed' }}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Password Change Card (only for logged-in users with email/password auth) */}
+          {user && user.providerData.some(p => p.providerId === 'password') && (
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 20 }}>ความปลอดภัยบัญชี</h3>
+
+              {!showPasswordForm ? (
+                <button
+                  onClick={() => setShowPasswordForm(true)}
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    background: 'var(--bg)',
+                    border: '1px solid var(--surface-border)',
+                    borderRadius: 8,
+                    color: '#fff',
+                    fontSize: 14,
+                    fontWeight: 500,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--surface-border)'}
+                >
+                  🔑 เปลี่ยนรหัสผ่าน
+                </button>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  {pwdError && (
+                    <div style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', padding: '10px 14px', borderRadius: 8, color: '#fca5a5', fontSize: 12 }}>
+                      ⚠️ {pwdError}
+                    </div>
+                  )}
+                  <div>
+                    <label style={{ fontSize: 12, color: 'var(--text2)', display: 'block', marginBottom: 6, fontWeight: 500 }}>รหัสผ่านปัจจุบัน</label>
+                    <input
+                      type="password"
+                      value={currentPwd}
+                      onChange={e => setCurrentPwd(e.target.value)}
+                      placeholder="รหัสผ่านปัจจุบัน"
+                      className="input-field"
+                      style={{ fontSize: 14 }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, color: 'var(--text2)', display: 'block', marginBottom: 6, fontWeight: 500 }}>รหัสผ่านใหม่ (อย่างน้อย 6 ตัวอักษร)</label>
+                    <input
+                      type="password"
+                      value={newPwd}
+                      onChange={e => setNewPwd(e.target.value)}
+                      placeholder="รหัสผ่านใหม่"
+                      className="input-field"
+                      style={{ fontSize: 14 }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, color: 'var(--text2)', display: 'block', marginBottom: 6, fontWeight: 500 }}>ยืนยันรหัสผ่านใหม่</label>
+                    <input
+                      type="password"
+                      value={confirmNewPwd}
+                      onChange={e => setConfirmNewPwd(e.target.value)}
+                      placeholder="ยืนยันรหัสผ่านใหม่"
+                      className="input-field"
+                      style={{ fontSize: 14 }}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button
+                      onClick={() => {
+                        setShowPasswordForm(false);
+                        setCurrentPwd('');
+                        setNewPwd('');
+                        setConfirmNewPwd('');
+                        setPwdError('');
+                      }}
+                      className="btn btn-ghost"
+                      style={{ flex: 1, padding: '10px', fontSize: 13 }}
+                    >
+                      ยกเลิก
+                    </button>
+                    <button
+                      onClick={handleChangePassword}
+                      className="btn btn-primary"
+                      style={{ flex: 2, padding: '10px', fontSize: 13 }}
+                      disabled={changingPwd}
+                    >
+                      {changingPwd ? 'กำลังเปลี่ยน...' : 'เปลี่ยนรหัสผ่าน'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Preferences Card */}
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--surface-border)', borderRadius: 16, padding: 24, marginBottom: 24 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 20 }}>การตั้งค่าการใช้งาน</h3>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div>
+                <label style={{ fontSize: 12, color: 'var(--text2)', display: 'block', marginBottom: 6, fontWeight: 500 }}>ค่าเริ่มต้น Gram Stain</label>
+                <select
+                  value={defaultGram}
+                  onChange={e => setDefaultGram(e.target.value)}
+                  className="input-field"
+                  style={{ fontSize: 14, cursor: 'pointer' }}
+                >
+                  <option value="">-- เลือกค่าเริ่มต้น --</option>
+                  <option value="gpc_cluster">GPC in clusters (Staphylococcus)</option>
+                  <option value="gpc_chain">GPC in chains (Streptococcus)</option>
+                  <option value="gpc_diplo">GP Diplococci</option>
+                  <option value="gpb">GP Bacilli</option>
+                  <option value="gnb_oxi_neg">GN Rods + Oxidase −</option>
+                  <option value="gnb_oxi_pos_tcbs">GN Rods + Oxidase + + TCBS+</option>
+                  <option value="gnb_oxi_pos_nfb">GN Rods + Oxidase + + TSI K/N</option>
+                  <option value="gn_diplo">GN Diplococci/Coccobacilli</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--surface-border)' }}>
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: '#fff', marginBottom: 2 }}>บันทึกอัตโนมัติ (Auto-save)</div>
+                  <div style={{ fontSize: 12, color: 'var(--text2)' }}>บันทึกข้อมูล case โดยอัตโนมัติเมื่อกดวิเคราะห์</div>
+                </div>
+                <button
+                  onClick={() => setAutoSave(!autoSave)}
+                  style={{
+                    width: 48,
+                    height: 26,
+                    borderRadius: 13,
+                    background: autoSave ? 'linear-gradient(135deg, #10b981, #059669)' : 'var(--surface-border)',
+                    border: 'none',
+                    cursor: 'pointer',
+                    position: 'relative',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <div style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: '50%',
+                    background: '#fff',
+                    position: 'absolute',
+                    top: 2,
+                    left: autoSave ? 24 : 2,
+                    transition: 'all 0.2s',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                  }} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', gap: 12, marginTop: 24 }}>
+            <button
+              onClick={handleReset}
+              className="btn btn-ghost"
+              style={{ flex: 1, padding: '14px', fontSize: 14, fontWeight: 600 }}
+            >
+              รีเซ็ตค่าเริ่มต้น
+            </button>
+            <button
+              onClick={handleSave}
+              className="btn btn-primary"
+              style={{ flex: 2, padding: '14px', fontSize: 14, fontWeight: 600 }}
+              disabled={saving}
+            >
+              {saving ? 'กำลังบันทึก...' : '💾 บันทึกการตั้งค่า'}
+            </button>
+          </div>
         </div>
       );
     }

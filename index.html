@@ -1396,9 +1396,9 @@
         clinical: { habitat: 'GI tract normal flora', diseases: ['UTI (most common nosocomial)', 'Endocarditis', 'Bacteremia', 'Wound infection'], transmission: 'Endogenous; fecal-oral; hospital', factors: 'Cytolysin; Aggregation substance; intrinsic resistance' },
         colony: { BAP: 'Small, γ or α-hemolysis, grey-white' },
         gramStain: 'GPC pairs/short chains',
-        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: '6.5% NaCl', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: 'Hippurate', r: '+', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '+', n: '' }],
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: '6.5% NaCl', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: 'Hippurate', r: '+', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '+', n: '' }, { t: 'Sorbitol', r: '+', n: 'KEY: vs E. faecium (−)' }, { t: 'Arabinose', r: '−', n: 'KEY: vs E. faecium (+)' }],
         media: ['Blood agar', 'Bile Esculin agar'], condition: '37°C aerobic/anaerobic',
-        notes: 'Bile Esculin + 6.5% NaCl + = Enterococcus. VRE (vancomycin-resistant) เป็น major nosocomial concern'
+        notes: 'Bile Esculin + 6.5% NaCl + = Enterococcus. Sorbitol+ / Arabinose− = E. faecalis. VRE (vancomycin-resistant) เป็น major nosocomial concern'
       },
 
       // ENTEROBACTERALES
@@ -1582,6 +1582,8 @@
           { id: 'hippurate', label: 'Hippurate hydrolysis', options: ['+', '−'] },
           { id: 'bile_solubility', label: 'Bile Solubility', options: ['+', '−'] },
           { id: 'growth_45', label: 'Growth 45°C', options: ['+', '−'] },
+          { id: 'sorbitol_ent', label: 'Sorbitol (E. spp.)', options: ['+', '−'] },
+          { id: 'arabinose_ent', label: 'Arabinose (E. spp.)', options: ['+', '−'] },
         ]
       },
       enterobacterales: {
@@ -1795,9 +1797,9 @@
         clinical: { habitat: 'GI tract normal flora', diseases: ['UTI (nosocomial)', 'Bacteremia', 'Endocarditis'], transmission: 'Endogenous; healthcare settings', factors: 'High rate of VRE (Vancomycin-Resistant Enterococcus) compared to E. faecalis' },
         colony: { BAP: 'Small, γ or α-hemolysis, grey-white' },
         gramStain: 'GPC pairs/short chains',
-        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: '6.5% NaCl', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '+', n: '' }],
+        biochem: [{ t: 'Catalase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ/α', n: '' }, { t: 'Bacitracin', r: 'R', n: '' }, { t: 'PPR test', r: '−', n: '' }, { t: 'CAMP test', r: '−', n: '' }, { t: 'Optochin', r: 'R', n: '' }, { t: 'Bile Esculin', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: '6.5% NaCl', r: '+', n: 'KEY: vs Streptococcus (−)' }, { t: 'Hippurate', r: '−', n: '' }, { t: 'Bile solubility', r: '−', n: '' }, { t: 'Growth 45°C', r: '+', n: '' }, { t: 'Sorbitol', r: '−', n: 'KEY: vs E. faecalis (+)' }, { t: 'Arabinose', r: '+', n: 'KEY: vs E. faecalis (−)' }],
         media: ['Blood agar', 'Bile Esculin agar'], condition: '37°C aerobic/anaerobic',
-        notes: 'Bile Esculin + 6.5% NaCl + = Enterococcus; E. faecium มีอัตราการดื้อยา VRE ที่สูงมาก'
+        notes: 'Bile Esculin + 6.5% NaCl + = Enterococcus. Sorbitol− / Arabinose+ = E. faecium. มีอัตราการดื้อยา VRE ที่สูงมาก'
       },
 
       // GPB
@@ -2490,6 +2492,8 @@
       arabinose: ['arabinose'],
       adonitol: ['adonitol'],
       sorbitol: ['sorbitol'],
+      sorbitol_ent: ['sorbitol'],
+      arabinose_ent: ['arabinose'],
       hemolysis: ['hemolysis'],
       bacitracin: ['bacitracin'],
       ppr: ['ppr', 'ppr test', 'proteose peptone rice', 'ppr agar'],

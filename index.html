@@ -5560,6 +5560,52 @@
       { name: 'Methyl red', pH: '4.8–6.0', acid: 'Red', alkaline: 'Yellow', used: 'MR test (add after incubation)' }
     ];
 
+    const MEDIA_DATA = [
+      {
+        category: 'General Purpose / Enriched',
+        plates: [
+          { id: 'bap', name: 'Blood Agar (BAP)', thai: 'วุ้นเลือด', type: 'Enriched, non-selective', principle: 'General growth medium with 5-10% sheep blood; detects hemolysis patterns', components: 'TSA base + sheep blood; pH 7.3', colonyTypes: 'β-hemolysis (clear), α-hemolysis (green), γ-hemolysis (none)', keyUse: 'Primary isolation; hemolysis detection; most bacteria grow', qc: 'S. pyogenes (β-hemolysis), S. pneumoniae (α-hemolysis)' },
+          { id: 'chocolate', name: 'Chocolate Agar (CA)', thai: 'วุ้นช็อคโกแลต', type: 'Enriched', principle: 'Blood heated to 80°C releases X (hemin) and V (NAD) factors; supports fastidious organisms', components: 'Heated blood + GC base or TSA', colonyTypes: 'Grey, moist colonies of Haemophilus, Neisseria', keyUse: 'H. influenzae, N. gonorrhoeae, N. meningitidis isolation', qc: 'H. influenzae (requires X+V), Neisseria spp.' },
+          { id: 'nutrient', name: 'Nutrient Agar (NA)', thai: 'วุ้นสารอาหารทั่วไป', type: 'Basic non-selective', principle: 'Simple peptone-based medium for non-fastidious bacteria', components: 'Peptone, beef extract, NaCl, agar', colonyTypes: 'Standard morphology for robust bacteria', keyUse: 'Subculturing; maintenance; non-fastidious bacteria', qc: 'E. coli, S. aureus' },
+          { id: 'bhi', name: 'Brain Heart Infusion (BHI)', thai: 'สมอง-หัวใจวัวสกัด', type: 'Highly enriched', principle: 'Brain and heart infusion provides rich nutrients for fastidious pathogens', components: 'Calf brain/heart infusion, peptone, glucose', colonyTypes: 'Luxuriant growth of most bacteria', keyUse: 'Blood culture; fastidious organisms; VRE screening', qc: 'Various fastidious bacteria' }
+        ]
+      },
+      {
+        category: 'Selective for Gram-Negative / Differential',
+        plates: [
+          { id: 'macconkey', name: 'MacConkey Agar (MAC)', thai: 'วุ้นแมคคอนคีย์', type: 'Selective + Differential', principle: 'Crystal violet and bile salts inhibit Gram-positive; lactose + neutral red differentiates LF vs NLF', components: 'Peptone, lactose, bile salts, crystal violet, neutral red (pH 6.8-8.0)', colonyTypes: 'Pink/red = LF (E. coli, Klebsiella); Colorless/pale = NLF (Salmonella, Pseudomonas)', keyUse: 'Enteric bacteria isolation; differentiate lactose fermenters; inhibit GPC', qc: 'E. coli (pink), Salmonella (colorless), S. aureus (inhibited)' },
+          { id: 'emb', name: 'Eosin Methylene Blue (EMB)', thai: 'วุ้นอีโอซินเมทิลีนบลู', type: 'Selective + Differential', principle: 'Eosin Y + methylene blue inhibit GPC; lactose fermentation produces acid → dark colonies with metallic sheen', components: 'Peptone, lactose, eosin Y, methylene blue', colonyTypes: 'Metallic green sheen = vigorous LF (E. coli); Dark purple = LF; Pale pink = NLF', keyUse: 'Coliform detection; E. coli identification (metallic sheen)', qc: 'E. coli (metallic green sheen), P. aeruginosa (pale)' },
+          { id: 'xld', name: 'XLD Agar (Xylose Lysine Deoxycholate)', thai: 'วุ้นไซโลสไลซีนดีออกซี่โคลิก', type: 'Selective + Differential', principle: 'Deoxycholate inhibits GPC; xylose + lysine + indicators differentiate enteric pathogens; H2S indicator detects black colonies', components: 'Xylose, lactose, sucrose, lysine, sodium deoxycholate, phenol red, ferric ammonium citrate', colonyTypes: 'Yellow = xylose fermenter; Red = lysine decarboxylated; Black center = H2S (Salmonella); Red = Shigella (no H2S)', keyUse: 'Salmonella and Shigella isolation; stool culture', qc: 'Salmonella (black center, red), Shigella (red), E. coli (yellow)' },
+          { id: 'hektoen', name: 'Hektoen Enteric Agar (HE)', thai: 'วุ้นเฮคโทอิน', type: 'Selective + Differential', principle: 'Bile salts inhibit GPC; bromothymol blue + acid fuchsin indicators; detects H2S and lactose/sucrose fermentation', components: 'Peptone, lactose, sucrose, salicin, bile salts, bromothymol blue, acid fuchsin, ferric ammonium citrate', colonyTypes: 'Blue-green = NLF (Salmonella); Orange-yellow = LF; Black precipitate = H2S', keyUse: 'Salmonella and Shigella isolation; alternative to XLD', qc: 'Salmonella (blue-green, black), Shigella (green)' },
+          { id: 'ss', name: 'SS Agar (Salmonella-Shigella)', thai: 'วุ้นซัลโมเนลลา-ชิเกลลา', type: 'Highly selective', principle: 'High concentration bile salts + brilliant green strongly inhibit GPC and coliforms; selects for Salmonella/Shigella', components: 'Beef extract, peptone, lactose, bile salts, sodium citrate, brilliant green, ferric citrate', colonyTypes: 'Colorless/transparent with black center = Salmonella (H2S+); Colorless = Shigella; Pink = LF (coliforms inhibited)', keyUse: 'Salmonella and Shigella isolation (highly selective)', qc: 'Salmonella (colorless, black center), Shigella (colorless), E. coli (partially inhibited)' },
+          { id: 'tcbs', name: 'TCBS Agar (Thiosulfate Citrate Bile Salts Sucrose)', thai: 'วุ้นทีซีบีเอส', type: 'Highly selective + Differential', principle: 'High pH (8.6) + bile salts + citrate select for Vibrio; sucrose fermentation changes bromothymol blue indicator', components: 'Peptone, sucrose, thiosulfate, sodium citrate, bile salts, bromothymol blue (pH 8.6)', colonyTypes: 'Yellow = sucrose fermenter (V. cholerae); Green = non-fermenter (V. parahaemolyticus); Black = H2S (rare in Vibrio)', keyUse: 'Vibrio cholerae and V. parahaemolyticus isolation; stool from seafood consumption', qc: 'V. cholerae (yellow), V. parahaemolyticus (green)' },
+          { id: 'cetrimide', name: 'Cetrimide Agar', thai: 'วุ้นเซทริไมด์', type: 'Selective', principle: 'Cetrimide (cetyltrimethylammonium bromide) inhibits most bacteria except Pseudomonas aeruginosa', components: 'Peptone, cetrimide, glycerol, MgCl2', colonyTypes: 'Green colonies with pyocyanin pigment (P. aeruginosa)', keyUse: 'Pseudomonas aeruginosa isolation and confirmation', qc: 'P. aeruginosa (green, pigment), E. coli (inhibited)' }
+        ]
+      },
+      {
+        category: 'Selective for Specific Organisms',
+        plates: [
+          { id: 'msa', name: 'Mannitol Salt Agar (MSA)', thai: 'วุ้นแมนนิตอลเกลือ', type: 'Selective + Differential', principle: '7.5% NaCl inhibits most bacteria except Staphylococcus; mannitol fermentation + phenol red detects S. aureus (yellow)', components: 'Peptone, beef extract, mannitol, 7.5% NaCl, phenol red (pH 7.4)', colonyTypes: 'Yellow = mannitol fermenter (S. aureus); Pink/Red = non-fermenter (CoNS)', keyUse: 'S. aureus isolation from specimens with mixed flora; nasal screen', qc: 'S. aureus (yellow), S. epidermidis (pink)' },
+          { id: 'ppr', name: 'PPR Agar (Granada Medium)', thai: 'วุ้นพีพีอาร์ / กรานาดา', type: 'Differential', principle: 'Specific substrates allow Group B Streptococcus (S. agalactiae) to produce orange-red pigment', components: 'Starch, peptone, sodium pyruvate, maltose', colonyTypes: 'Orange-red pigment = S. agalactiae; No pigment = other streptococci', keyUse: 'Group B Streptococcus screening in pregnant women', qc: 'S. agalactiae (orange-red), other Strep (no pigment)' },
+          { id: 'bairdparker', name: 'Baird-Parker Agar', thai: 'วุ้นแบร์ด-พาร์คเกอร์', type: 'Selective + Differential', principle: 'Lithium chloride + tellurite inhibit most bacteria; egg yolk + tellurite detect lipase and phosphatase', components: 'Tryptone, beef extract, yeast extract, lithium chloride, glycine, sodium pyruvate, egg yolk, tellurite', colonyTypes: 'Black shiny colonies with halo = S. aureus; Black = CoNS; No black = inhibited', keyUse: 'S. aureus isolation from food, cosmetics, clinical specimens', qc: 'S. aureus (black, halo), CoNS (black, no halo)' },
+          { id: 'vrom', name: 'Voges-Proskauer Medium', thai: 'วุ้นวีพี', type: 'Differential', principle: 'Detects acetoin production from glucose fermentation; reagents added after incubation produce red color', components: 'Peptone, glucose, K2HPO4 (MR-VP broth base)', colonyTypes: 'N/A (broth test with added reagents)', keyUse: 'VP test for Enterobacteriaceae differentiation', qc: 'Klebsiella (red), E. coli (yellow)' },
+          { id: 'tinsdale', name: 'Tinsdale Agar', thai: 'วุ้นทินส์เดล', type: 'Selective + Differential', principle: 'Potassium tellurite + cysteine selects for Corynebacterium diphtheriae; cystinase activity produces black halo', components: 'Proteose peptone, beef extract, cystine, sodium thiosulfate, potassium tellurite', colonyTypes: 'Brown-black colonies with halo = C. diphtheriae; Black = other Corynebacterium', keyUse: 'Corynebacterium diphtheriae isolation', qc: 'C. diphtheriae (brown-black, halo)' },
+          { id: 'loffler', name: 'Löffler Medium', thai: 'วุ้นเลอฟเลอร์', type: 'Enriched', principle: 'Serum + egg + beef extract enriches growth of Corynebacterium and enhances metachromatic granules', components: 'Serum, egg, beef extract, dextrose, Loeffler coagulated slant', colonyTypes: 'White, opaque colonies; enhanced metachromatic granules on stain', keyUse: 'Corynebacterium diphtheriae culture; enhances granules for microscopy', qc: 'C. diphtheriae (growth, granules)' }
+        ]
+      },
+      {
+        category: 'Non-Fermentative / Special',
+        plates: [
+          { id: 'kinga', name: 'King A Agar (Fluorescein)', thai: 'วุ้นคิงเอ', type: 'Differential', principle: 'Low peptone + glycerol enhances fluorescein (pyoverdin) production by Pseudomonas fluorescens', components: 'Peptone, glycerol, K2HPO4, MgSO4', colonyTypes: 'Yellow-green fluorescent under UV = P. fluorescens', keyUse: 'Pseudomonas fluorescence detection; differentiate from P. aeruginosa', qc: 'P. fluorescens (fluorescent), P. aeruginosa (may fluoresce weakly)' },
+          { id: 'kingb', name: 'King B Agar (Pyocyanin)', thai: 'วุ้นคิงบี', type: 'Differential', principle: 'Peptone-based medium enhances pyocyanin (blue-green) and pyoverdin production by P. aeruginosa', components: 'Proteose peptone, K2HPO4, MgCl2, glycerol', colonyTypes: 'Blue-green pigment + yellow-green fluorescence = P. aeruginosa', keyUse: 'Pseudomonas aeruginosa pigment confirmation', qc: 'P. aeruginosa (blue-green, fluorescent)' },
+          { id: 'muellerhinton', name: 'Mueller-Hinton Agar (MHA)', thai: 'วุ้นมูลเลอร์-ฮินตัน', type: 'Standardized', principle: 'Standardized medium for disk diffusion susceptibility testing; low thymine/thymidine content', components: 'Beef infusion, casein hydrolysate, starch, agar', colonyTypes: 'Confluent growth for antibiotic susceptibility testing', keyUse: 'Kirby-Bauer disk diffusion; standardized MIC testing', qc: 'E. coli ATCC 25922, S. aureus ATCC 25923, P. aeruginosa ATCC 27853' },
+          { id: 'thayermartin', name: 'Thayer-Martin Agar (Modified)', thai: 'วุ้นเทเยอร์-มาร์ติน', type: 'Highly selective', principle: 'Antibiotics (vancomycin, colistin, nystatin, trimethoprim) inhibit normal flora; chocolate base supports Neisseria', components: 'Chocolate agar base + VCNT antibiotics (vancomycin, colistin, nystatin, TMP)', colonyTypes: 'Small, moist grey colonies = N. gonorrhoeae or N. meningitidis', keyUse: 'Neisseria gonorrhoeae isolation from specimens with mixed genital flora', qc: 'N. gonorrhoeae (growth), normal flora (inhibited)' },
+          { id: 'reganlowe', name: 'Regan-Lowe Medium', thai: 'วุ้นรีแกน-โลว์', type: 'Selective + Enriched', principle: 'Charcoal neutralizes fatty acids; cephalexin + amphotericin B select for Bordetella; blood enhances growth', components: 'Charcoal agar + 10% sheep blood + cephalexin + amphotericin', colonyTypes: 'Shiny, pearl-like colonies = B. pertussis', keyUse: 'Bordetella pertussis isolation from nasopharyngeal specimens', qc: 'B. pertussis (pearl-like colonies), normal flora (inhibited)' },
+          { id: 'bge', name: 'Bordet-Gengou (B-G) Medium', thai: 'วุ้นบอร์เดต-แกงกู', type: 'Enriched', principle: 'Potato + glycerol + blood supports Bordetella pertussis growth', components: 'Potato infusion, glycerol, peptone, agar + defibrinated blood', colonyTypes: 'Mercury-like droplets = B. pertussis', keyUse: 'Bordetella pertussis culture (traditional medium)', qc: 'B. pertussis (mercury-like)' }
+        ]
+      }
+    ];
+
     const REAGENT_STORAGE = [
       { reagent: '3% H2O2 (Catalase)', storage: 'Brown bottle, 4°C' },
       { reagent: 'Kovacs\' Indole (5% DMAB)', storage: 'Brown bottle, 4°C' },
@@ -5631,6 +5677,7 @@
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {[
                   { id: 'tests', label: '🧪 Biochemical Tests', count: 26 },
+                  { id: 'media', label: '🧫 Culture Media', count: 21 },
                   { id: 'indicators', label: '🎨 pH Indicators', count: 5 },
                   { id: 'storage', label: '📦 Reagent Storage', count: 8 }
                 ].map(tab => (
@@ -5869,6 +5916,112 @@
                               </div>
                             </div>
                           )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Culture Media Tab */}
+            {activeTab === 'media' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                {MEDIA_DATA.map((cat, idx) => (
+                  <div key={cat.category}>
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: 10, 
+                      marginBottom: 14,
+                      paddingLeft: 4
+                    }}>
+                      <span style={{ 
+                        width: 6, 
+                        height: 24, 
+                        borderRadius: 3,
+                        background: ['#22d3ee', '#a855f7', '#f59e0b', '#10b981'][idx % 4]
+                      }} />
+                      <h2 style={{ fontSize: 16, fontWeight: 700, color: ['#22d3ee', '#a855f7', '#f59e0b', '#10b981'][idx % 4] }}>{cat.category}</h2>
+                      <span style={{ 
+                        background: `${['#22d3ee', '#a855f7', '#f59e0b', '#10b981'][idx % 4]}15`,
+                        color: ['#22d3ee', '#a855f7', '#f59e0b', '#10b981'][idx % 4],
+                        border: `1px solid ${['#22d3ee', '#a855f7', '#f59e0b', '#10b981'][idx % 4]}30`,
+                        borderRadius: 10,
+                        padding: '2px 10px',
+                        fontSize: 12,
+                        fontWeight: 600
+                      }}>{cat.plates.length} plates</span>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12, minWidth: 0 }}>
+                      {cat.plates.map((plate) => (
+                        <div key={plate.id} style={{
+                          background: '#132040',
+                          border: '1px solid #1e3055',
+                          borderRadius: 12,
+                          overflow: 'hidden',
+                          transition: 'all 0.2s',
+                          minWidth: 0,
+                          width: '100%'
+                        }}>
+                          {/* Header */}
+                          <div style={{
+                            padding: '14px 18px',
+                            borderBottom: '1px solid #1e3055',
+                            background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)'
+                          }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                              <div style={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
+                                <div style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{plate.name}</div>
+                                {plate.thai && <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>{plate.thai}</div>}
+                                <div style={{ marginTop: 4 }}>
+                                  <span style={{ 
+                                    background: '#1e3055', 
+                                    color: '#94a3b8', 
+                                    borderRadius: 4, 
+                                    padding: '2px 8px', 
+                                    fontSize: 10 
+                                  }}>{plate.type}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Content */}
+                          <div style={{ padding: '14px 18px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                              {/* Principle */}
+                              <div>
+                                <div style={{ fontSize: 11, color: '#22d3ee', fontWeight: 600, marginBottom: 3 }}>🔬 Principle</div>
+                                <p style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.5 }}>{plate.principle}</p>
+                              </div>
+
+                              {/* Components */}
+                              <div style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)', borderRadius: 8, padding: '10px 12px' }}>
+                                <div style={{ fontSize: 11, color: '#a78bfa', fontWeight: 600 }}>🧪 Key Components</div>
+                                <p style={{ color: '#c4b5fd', fontSize: 11, marginTop: 3 }}>{plate.components}</p>
+                              </div>
+
+                              {/* Colony Types */}
+                              <div>
+                                <div style={{ fontSize: 11, color: '#f59e0b', fontWeight: 600, marginBottom: 3 }}>🦠 Colony Appearance</div>
+                                <p style={{ color: '#fcd34d', fontSize: 12, lineHeight: 1.5 }}>{plate.colonyTypes}</p>
+                              </div>
+
+                              {/* Key Use */}
+                              <div>
+                                <div style={{ fontSize: 11, color: '#10b981', fontWeight: 600, marginBottom: 3 }}>🎯 Primary Use</div>
+                                <p style={{ color: '#6ee7b7', fontSize: 12 }}>{plate.keyUse}</p>
+                              </div>
+
+                              {/* QC */}
+                              <div style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 8, padding: '8px 12px' }}>
+                                <div style={{ fontSize: 11, color: '#10b981', fontWeight: 700 }}>✓ QC Strains</div>
+                                <p style={{ color: '#6ee7b7', fontSize: 11, marginTop: 3 }}>{plate.qc}</p>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>

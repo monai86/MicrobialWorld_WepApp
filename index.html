@@ -4034,13 +4034,13 @@
                     <button onClick={() => setSel(null)} style={{ background: '#132040', border: '1px solid #1e3055', color: '#94a3b8', borderRadius: 6, padding: isMobile ? '6px 12px' : '4px 10px', fontSize: isMobile ? 13 : 12, cursor: 'pointer', fontWeight: isMobile ? 600 : 500 }}>{isMobile ? '← กลับ' : '✕'}</button>
                   </div>
                   <div style={{ display: 'flex', gap: 4, marginTop: 10, flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
-                    {['clinical', 'colony', 'biochem', 'notes'].map(t => (
+                    {['clinical', 'colony', 'biochem', 'resistance', 'notes'].map(t => (
                       <button key={t} onClick={() => setTab(t)} style={{
                         background: tab === t ? `${selGrp?.color}20` : 'transparent',
                         border: `1px solid ${tab === t ? selGrp?.color : '#1e3055'}`,
                         color: tab === t ? selGrp?.color : '#64748b',
-                        borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer', flex: isMobile ? '1 1 calc(50% - 4px)' : '0 0 auto'
-                      }}>{t === 'clinical' ? '🏥 Clinical' : t === 'colony' ? '🍽 Colony/Stain' : t === 'biochem' ? '⚗️ Biochemical' : '📝 Notes'}</button>
+                        borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer', flex: isMobile ? '1 1 calc(33% - 4px)' : '0 0 auto'
+                      }}>{t === 'clinical' ? '🏥 Clinical' : t === 'colony' ? '🍽 Colony' : t === 'biochem' ? '⚗️ Biochem' : t === 'resistance' ? '💊 Resistance' : '📝 Notes'}</button>
                     ))}
                   </div>
                 </div>
@@ -4109,6 +4109,70 @@
                     <InfoCard title="📝 Clinical Notes & Key Points" color={selGrp?.color}>
                       <p style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.8, marginTop: 8 }}>{selBug.notes}</p>
                     </InfoCard>
+                  )}
+                  {tab === 'resistance' && (
+                    <div className="fade-in">
+                      {/* Check if organism has specific resistance data */}
+                      {(() => {
+                        const resPatterns = [
+                          { org: ['Staphylococcus aureus'], type: 'MRSA', name: 'Methicillin-resistant S. aureus', mech: 'mecA gene → PBP2a', test: 'Cefoxitin disk ≤21mm', treat: 'Vancomycin, Linezolid, Daptomycin', color: '#ef4444' },
+                          { org: ['Enterococcus faecalis', 'Enterococcus faecium'], type: 'VRE', name: 'Vancomycin-resistant Enterococci', mech: 'vanA/vanB genes', test: 'Vancomycin MIC ≥32 µg/mL', treat: 'Linezolid, Daptomycin', color: '#f97316' },
+                          { org: ['Escherichia coli', 'Klebsiella pneumoniae', 'Proteus mirabilis'], type: 'ESBL', name: 'ESBL-producer', mech: 'CTX-M, SHV, TEM β-lactamases', test: 'Cefotaxime+Clavulanate synergy', treat: 'Carbapenems, avoid cephalosporins', color: '#eab308' },
+                          { org: ['Klebsiella pneumoniae', 'Escherichia coli', 'Enterobacter', 'Serratia'], type: 'CRE', name: 'Carbapenem-resistant', mech: 'KPC, NDM, OXA-48', test: 'Carbapenem MIC ≥4 µg/mL', treat: 'Polymyxins, Tigecycline, Ceftazidime-avibactam', color: '#ef4444' },
+                          { org: ['Acinetobacter baumannii'], type: 'CRAB', name: 'Carbapenem-resistant A. baumannii', mech: 'OXA-23, OXA-24/40', test: 'Imipenem/Meropenem MIC ≥8', treat: 'Colistin, Sulbactam, Tigecycline', color: '#ef4444' },
+                          { org: ['Pseudomonas aeruginosa'], type: 'CRPsA', name: 'Carbapenem-resistant P. aeruginosa', mech: 'AmpC + porin loss', test: 'Carbapenem MIC ≥8', treat: 'Ceftazidime-avibactam, Polymyxins', color: '#f97316' },
+                        ];
+                        const matched = resPatterns.filter(p => p.org.some(o => selBug.name.toLowerCase().includes(o.toLowerCase())));
+                        
+                        if (matched.length === 0) {
+                          return (
+                            <InfoCard title="💊 Antibiotic Resistance" color="#64748b">
+                              <div style={{ color: '#94a3b8', fontSize: 12, lineHeight: 1.7, marginTop: 8 }}>
+                                <p>No specific resistance pattern data for <strong>{selBug.name}</strong>.</p>
+                                <p style={{ marginTop: 10 }}>Common resistance patterns for this organism group:</p>
+                                <ul style={{ margin: '8px 0', paddingLeft: 16 }}>
+                                  {selBug.group === 'gpc_cluster' && <li>Watch for MRSA in S. aureus; check cefoxitin disk test</li>}
+                                  {selBug.group === 'gpc_chain' && <li>Penicillin resistance in S. pneumoniae; macrolide resistance</li>}
+                                  {selBug.group === 'enterobacterales' && <li>ESBL and CRE increasingly common; carbapenem stewardship</li>}
+                                  {selBug.group === 'nfb' && <li>CRAB (Acinetobacter) and CRPsA are critical WHO priority pathogens</li>}
+                                </ul>
+                              </div>
+                            </InfoCard>
+                          );
+                        }
+                        
+                        return matched.map((m, i) => (
+                          <div key={m.type}>
+                            {i > 0 && <div style={{ height: 10 }} />}
+                            <InfoCard title={`💊 ${m.type}: ${m.name}`} color={m.color}>
+                              <div style={{ fontSize: 12, lineHeight: 1.7, marginTop: 8 }}>
+                                <div style={{ marginBottom: 8 }}>
+                                  <span style={{ color: '#64748b', fontWeight: 600 }}>Mechanism: </span>
+                                  <span style={{ color: '#cbd5e1' }}>{m.mech}</span>
+                                </div>
+                                <div style={{ marginBottom: 8 }}>
+                                  <span style={{ color: '#64748b', fontWeight: 600 }}>Detection: </span>
+                                  <span style={{ color: '#cbd5e1' }}>{m.test}</span>
+                                </div>
+                                <div>
+                                  <span style={{ color: '#64748b', fontWeight: 600 }}>Treatment: </span>
+                                  <span style={{ color: '#22d3ee' }}>{m.treat}</span>
+                                </div>
+                              </div>
+                            </InfoCard>
+                          </div>
+                        ));
+                      })()}
+                      <div style={{ height: 10 }} />
+                      <InfoCard title="🧪 General Susceptibility Testing" color="#64748b">
+                        <div style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.6, marginTop: 8 }}>
+                          <p><strong>Disk Diffusion (Kirby-Bauer):</strong> Zone diameters interpreted per CLSI breakpoints</p>
+                          <p style={{ marginTop: 6 }}><strong>MIC Testing:</strong> Broth microdilution gold standard; E-test alternative</p>
+                          <p style={{ marginTop: 6 }}><strong>Automated Systems:</strong> VITEK, Phoenix, MicroScan</p>
+                          <p style={{ marginTop: 6 }}><strong>Molecular:</strong> PCR for resistance genes (mecA, vanA, blaCTX-M, blaKPC, blaNDM)</p>
+                        </div>
+                      </InfoCard>
+                    </div>
                   )}
                 </div>
               </div>

@@ -21,13 +21,18 @@
       padding: 0;
       box-sizing: border-box
     }
-    html {
+    html, body {
       overflow-x: hidden;
-      max-width: 100vw;
+      max-width: 100%;
+      width: 100%;
     }
     #root {
       overflow-x: hidden;
-      max-width: 100vw;
+      max-width: 100%;
+      width: 100%;
+    }
+    img, video, iframe, table {
+      max-width: 100%;
     }
 
     :root {
@@ -5641,14 +5646,16 @@
                       }}>{category.tests.length} tests</span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12, minWidth: 0 }}>
                       {category.tests.map((test) => (
                         <div key={test.id} style={{
                           background: '#132040',
                           border: `1px solid ${category.color}25`,
                           borderRadius: 12,
                           overflow: 'hidden',
-                          transition: 'all 0.2s'
+                          transition: 'all 0.2s',
+                          minWidth: 0,
+                          width: '100%'
                         }}>
                           {/* Header */}
                           <div 
@@ -5661,10 +5668,10 @@
                               alignItems: 'flex-start'
                             }}
                           >
-                            <div>
-                              <div style={{ fontSize: 13, color: category.color, fontWeight: 600, marginBottom: 3 }}>{test.id}</div>
-                              <div style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0' }}>{test.name}</div>
-                              <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{test.thai}</div>
+                            <div style={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
+                              <div style={{ fontSize: 12, color: category.color, fontWeight: 600, marginBottom: 3, wordBreak: 'break-word' }}>{test.id}</div>
+                              <div style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{test.name}</div>
+                              <div style={{ fontSize: 12, color: '#64748b', marginTop: 2, wordBreak: 'break-word' }}>{test.thai}</div>
                             </div>
                             <span style={{
                               color: category.color,

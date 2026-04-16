@@ -458,6 +458,180 @@
     ]
   },
 
+  "antibiotic_resistance_patterns": {
+    "title": "Antibiotic Resistance Patterns (Clinical Microbiology)",
+    "description": "Key antibiotic resistance mechanisms and detection methods for clinically important resistant organisms",
+
+    "resistance_types": [
+      {
+        "abbreviation": "MRSA",
+        "full_name": "Methicillin-resistant Staphylococcus aureus",
+        "mechanism": "mecA gene encoding PBP2a (altered penicillin-binding protein with reduced affinity for β-lactams)",
+        "organism": "Staphylococcus aureus",
+        "detection_methods": [
+          { "method": "Cefoxitin disk (30 µg)", "interpretation": "Zone ≤21 mm = MRSA (sensitive indicator)" },
+          { "method": "Oxacillin MIC", "interpretation": "≥4 µg/mL = resistant" },
+          { "method": "PBP2a latex agglutination", "interpretation": "Direct detection of PBP2a protein" },
+          { "method": "mecA gene PCR", "interpretation": "Molecular confirmation" }
+        ],
+        "resistance_profile": {
+          "resistant_to": "All β-lactams (penicillins, cephalosporins, carbapenems), including oxacillin, cefoxitin, nafcillin",
+          "often_resistant": "Erythromycin, clindamycin, fluoroquinolones, tetracyclines",
+          "susceptible": "Vancomycin, linezolid, daptomycin, tigecycline, ceftaroline (5th gen cephalosporin), dalbavancin, oritavancin, telavancin"
+        },
+        "clinical_significance": "Major nosocomial pathogen; community-acquired MRSA (CA-MRSA) increasingly common; associated with higher mortality",
+        "treatment_options": "Vancomycin (1st line), linezolid, daptomycin (not for pneumonia), tigecycline; VISA/VRSA rare",
+        "infection_control": "Contact precautions required"
+      },
+      {
+        "abbreviation": "VRE",
+        "full_name": "Vancomycin-resistant Enterococci",
+        "mechanism": "van genes (vanA, vanB, vanC, vanD, vanE, vanG) encoding altered peptidoglycan precursors (D-Ala-D-Lac instead of D-Ala-D-Ala)",
+        "organisms": ["Enterococcus faecalis (vanA, vanB)", "Enterococcus faecium (most common, vanA, vanB)"],
+        "detection_methods": [
+          { "method": "Vancomycin MIC (broth microdilution)", "interpretation": "≥32 µg/mL for vanA/B; vanC intrinsic low-level" },
+          { "method": "Brain Heart Infusion agar (BHI) screen", "interpretation": "Growth with 6 µg/mL vancomycin = screen positive" },
+          { "method": "E-test or MALDI-TOF", "interpretation": "Confirmatory testing" },
+          { "method": "van gene PCR", "interpretation": "Differentiate vanA (high-level) vs vanB (variable) vs vanC (E. casseliflavus/gallinarum intrinsic)" }
+        ],
+        "types": {
+          "vanA": { "resistance": "High-level (MIC ≥64 µg/mL)", "transferable": "Yes (Tn1546 transposon)", "teicoplanin": "Resistant" },
+          "vanB": { "resistance": "Variable (MIC 4-64 µg/mL)", "transferable": "Yes", "teicoplanin": "Susceptible" },
+          "vanC": { "resistance": "Intrinsic low-level (E. casseliflavus/gallinarum)", "transferable": "No (chromosomal)", "teicoplanin": "Susceptible" }
+        },
+        "resistance_profile": {
+          "resistant_to": "Vancomycin (by definition), all cephalosporins, aminoglycosides (high-level), often ampicillin (E. faecium)",
+          "susceptible": "Linezolid, daptomycin, tigecycline; quinupristin-dalfopristin (E. faecium only, not E. faecalis); streptogramins"
+        },
+        "clinical_significance": "Leading cause of nosocomial infections; E. faecium more resistant than E. faecalis; associated with prolonged hospitalization",
+        "treatment_options": "Linezolid, daptomycin, tigecycline (not for bacteremia alone); combination therapy often needed; ampicillin if susceptible",
+        "infection_control": "Contact precautions; strict environmental cleaning"
+      },
+      {
+        "abbreviation": "ESBL",
+        "full_name": "Extended-spectrum β-lactamase",
+        "mechanism": "Plasmid-mediated β-lactamases (CTX-M, SHV, TEM types) that hydrolyze extended-spectrum cephalosporins and aztreonam; inhibited by clavulanic acid",
+        "organisms": ["Escherichia coli (most common)", "Klebsiella pneumoniae", "Proteus mirabilis", "Enterobacter spp."],
+        "detection_methods": [
+          { "method": "Combined disk test (CLSI)", "interpretation": "Cefotaxime/clavulanate or ceftazidime/clavulanate zone ≥5 mm larger than drug alone = ESBL" },
+          { "method": "E-test ESBL strips", "interpretation": "MIC ratio with/without clavulanate" },
+          { "method": "Vitek/Phoenix automated systems", "interpretation": "Automated detection algorithms" },
+          { "method": "Molecular PCR (CTX-M, SHV, TEM)", "interpretation": "CTX-M-15 most common globally" }
+        ],
+        "resistance_profile": {
+          "resistant_to": "All penicillins, all cephalosporins (including 3rd/4th gen: cefotaxime, ceftriaxone, ceftazidime, cefepime), aztreonam",
+          "susceptible": "Carbapenems (ertapenem, imipenem, meropenem), amikacin (often), tigecycline, fosfomycin (E. coli only), nitrofurantoin (uncomplicated UTI)",
+          "note": "Co-resistance to fluoroquinolones, aminoglycosides, trimethoprim-sulfamethoxazole common"
+        },
+        "clinical_significance": "Most common cause of community and nosocomial UTIs; associated with treatment failure with cephalosporins; clavulanic acid synergy confirms ESBL",
+        "treatment_options": "Carbapenems (drug of choice for serious infections); nitrofurantoin/fosfomycin for uncomplicated UTI; amikacin; avoid all cephalosporins even if in vitro 'susceptible'",
+        "important_note": "ESBL producers should be reported as resistant to ALL penicillins, cephalosporins, and aztreonam regardless of in vitro susceptibility results"
+      },
+      {
+        "abbreviation": "CRE",
+        "full_name": "Carbapenem-resistant Enterobacteriaceae",
+        "mechanism": "KPC (Klebsiella pneumoniae carbapenemase), NDM (New Delhi metallo-β-lactamase), VIM, IMP, OXA-48 carbapenemases; or porin loss + AmpC/ESBL",
+        "organisms": ["Klebsiella pneumoniae (KPC, NDM)", "E. coli (NDM, OXA-48)", "Enterobacter spp.", "Serratia marcescens"],
+        "detection_methods": [
+          { "method": "Carbapenem MIC", "interpretation": "≥4 µg/mL (ertapenem) or ≥1 µg/mL (imipenem, meropenem) = resistant" },
+          { "method": "Modified Hodge Test (MHT)", "interpretation": "Phenotypic screen for carbapenemase production" },
+          { "method": "Carba NP test", "interpretation": "Colorimetric test for carbapenemase activity" },
+          { "method": "mCIM/eCIM (modified Carbapenem Inactivation Method)", "interpretation": "Differentiates metallo-β-lactamases from serine carbapenemases" },
+          { "method": "Molecular PCR (blaKPC, blaNDM, blaVIM, blaIMP, blaOXA-48)", "interpretation": "Genotypic confirmation and typing" }
+        ],
+        "types": {
+          "KPC": { "class": "Serine carbapenemase (class A)", "inhibited_by": "Avibactam, relebactam, meropenem-vaborbactam", "geographic": "Global, especially USA, Israel, China" },
+          "NDM": { "class": "Metallo-β-lactamase (class B)", "inhibited_by": "Aztreonam (only β-lactam active; but combine with avibactam for some inhibitors)", "geographic": "Indian subcontinent, Middle East, Balkans" },
+          "VIM/IMP": { "class": "Metallo-β-lactamase (class B)", "inhibited_by": "Limited options; aztreonam", "geographic": "Europe, Asia" },
+          "OXA-48": { "class": "Oxacillinase (class D)", "inhibited_by": "Temocillin resistance, often susceptible to carbapenems at low level", "geographic": "Mediterranean, Middle East, India" }
+        },
+        "resistance_profile": {
+          "resistant_to": "All β-lactams including carbapenems (ertapenem, imipenem, meropenem, doripenem); often pan-resistant",
+          "susceptible": "Polymyxins (colistin, polymyxin B), tigecycline, fosfomycin (some), aminoglycosides (amikacin sometimes), ceftazidime-avibactam (KPC), meropenem-vaborbactam (KPC), imipenem-cilastatin-relebactam"
+        },
+        "clinical_significance": "Critical priority pathogen (WHO); associated with high mortality (>40%); limited treatment options; outbreak potential",
+        "treatment_options": "Combination therapy often required; polymyxins + tigecycline + carbapenem (if low MIC); ceftazidime-avibactam for KPC; aztreonam + avibactam for MBL; consult infectious disease",
+        "infection_control": "Strict contact precautions; enhanced environmental cleaning; active surveillance; cohorting patients"
+      },
+      {
+        "abbreviation": "CRAB",
+        "full_name": "Carbapenem-resistant Acinetobacter baumannii",
+        "mechanism": "OXA-type carbapenemases (OXA-23, OXA-24/40, OXA-58, OXA-143), metallo-β-lactamases (NDM, VIM, IMP); porin loss; efflux pumps",
+        "organism": "Acinetobacter baumannii-calcoaceticus complex",
+        "detection_methods": [
+          { "method": "Carbapenem MIC", "interpretation": "≥8 µg/mL (imipenem or meropenem) = resistant" },
+          { "method": "Modified Hodge Test", "interpretation": "Phenotypic screen" },
+          { "method": "Carba NP test", "interpretation": "Colorimetric" },
+          { "method": "MALDI-TOF", "interpretation": "Species identification" },
+          { "method": "Molecular PCR (OXA genes)", "interpretation": "Most common: blaOXA-23, blaOXA-24/40" }
+        ],
+        "resistance_profile": {
+          "resistant_to": "Carbapenems, cephalosporins, most β-lactams; often multi-drug resistant (MDR) or pan-drug resistant (PDR)",
+          "susceptible": "Colistin (polymyxin E), polymyxin B, tigecycline (variable), sulbactam (unusual activity against A. baumannii), minocycline; rarely: ampicillin-sulbactam (sulbactam component)"
+        },
+        "clinical_significance": "Critical priority pathogen (WHO); major ICU pathogen; ventilator-associated pneumonia, bloodstream infections, wounds; survives on surfaces for months",
+        "treatment_options": "Colistin + sulbactam or tigecycline (combination preferred); minocycline if susceptible; high-dose ampicillin-sulbactam; nebulized colistin for VAP; eradication difficult",
+        "infection_control": "Extremely strict contact precautions; environmental decontamination crucial; hand hygiene; surveillance cultures"
+      },
+      {
+        "abbreviation": "CRPsA",
+        "full_name": "Carbapenem-resistant Pseudomonas aeruginosa",
+        "mechanism": "AmpC overexpression + porin loss (oprD), efflux pumps (MexAB-OprM), occasionally carbapenemases (KPC, VIM, IMP, NDM, GES)",
+        "organism": "Pseudomonas aeruginosa",
+        "detection_methods": [
+          { "method": "Carbapenem MIC", "interpretation": "≥8 µg/mL (imipenem or meropenem) = resistant" },
+          { "method": "Carba NP test", "interpretation": "If carbapenemase-mediated" },
+          { "method": "mCIM/eCIM", "interpretation": "Differentiate serine vs metallo" }
+        ],
+        "resistance_profile": {
+          "resistant_to": "Carbapenems, many antipseudomonal agents; often MDR",
+          "susceptible": "Ceftazidime-avibactam (if not metallo-β-lactamase), ceftolozane-tazobactam (sometimes), polymyxins, aminoglycosides (amikacin sometimes), fosfomycin IV (investigational)"
+        },
+        "clinical_significance": "Critical priority pathogen (WHO); common in ICU, cystic fibrosis; biofilm formation; intrinsically resistant to many agents",
+        "treatment_options": "Combination therapy; ceftazidime-avibactam; polymyxins + other agents; prolonged infusion β-lactams; inhaled antibiotics for CF"
+      },
+      {
+        "abbreviation": "VISA/VRSA",
+        "full_name": "Vancomycin-intermediate/resistant Staphylococcus aureus",
+        "mechanism": "VISA: thickened cell wall; VRSA: vanA gene transfer from Enterococcus (D-Ala-D-Lac)",
+        "organism": "Staphylococcus aureus",
+        "detection_methods": [
+          { "method": "Vancomycin MIC", "interpretation": "VISA: 4-8 µg/mL; VRSA: ≥16 µg/mL" },
+          { "method": "Macro E-test (teicoplanin)", "interpretation": "Teicoplanin MIC ≥8 µg/mL suggests VISA" },
+          { "method": "Population analysis profile (PAP-AUC)", "interpretation": "Gold standard for hVISA/VISA" },
+          { "method": "Brain heart infusion vancomycin screen agar", "interpretation": "Screening method" }
+        ],
+        "resistance_profile": {
+          "resistant_to": "Vancomycin (intermediate or high-level)",
+          "susceptible": "Daptomycin, linezolid, ceftaroline, telavancin, oritavancin"
+        },
+        "clinical_significance": "Rare but serious; associated with vancomycin treatment failure; hVISA (heterogeneous) may be missed by routine testing",
+        "treatment_options": "Daptomycin, linezolid, ceftaroline, combination therapy"
+      }
+    ],
+
+    "screening_methods_summary": {
+      "disk_diffusion": [
+        { "antibiotic": "Cefoxitin (30 µg)", "use": "MRSA screen", "zone": "≤21 mm = resistant" },
+        { "antibiotic": "Cefpodoxime (10 µg)", "use": "ESBL screen", "zone": "≤22 mm = suspect ESBL" },
+        { "antibiotic": "Meropenem (10 µg)", "use": "CRE screen", "zone": "<19 mm = suspect" }
+      ],
+      "chromogenic_media": [
+        { "medium": "MRSA ID (bioMérieux)", "use": "S. aureus detection", "colony_color": "Mauve/pink" },
+        { "medium": "Brilliance VRE (Oxoid)", "use": "VRE detection", "colony_color": "Pink (vanA), blue (vanB)" },
+        { "medium": "CHROMagar ESBL", "use": "ESBL detection", "colony_color": "Various colors" },
+        { "medium": "CHROMagar KPC", "use": "KPC detection", "colony_color": "Pink/mauve" }
+      ]
+    },
+
+    "treatment_algorithms": {
+      "mrsa_bacteremia": "Vancomycin (trough 15-20 µg/mL) ± daptomycin; consider combination; infectious disease consult; source control",
+      "vre_infection": "Linezolid (bacteremia okay), daptomycin (higher doses for E. faecium), tigecycline (not monotherapy for bacteremia)",
+      "esbl_infection": "Carbapenem (serious infections); avoid cephalosporins; nitrofurantoin/fosfomycin for UTI",
+      "cre_infection": "Combination therapy; polymyxin + tigecycline + aminoglycoside/carbapenem; new agents (ceftazidime-avibactam for KPC)"
+    }
+  },
+
   "symbol_legend": {
     "+":   "Positive (>80% of strains positive)",
     "-":   "Negative (>80% of strains negative)",

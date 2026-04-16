@@ -251,6 +251,8 @@
       color: #fff;
     }
     .nav-bar .brand .emoji { font-size: 22px; }
+    .nav-label-short { display: none; }
+    .nav-label-full { display: inline; }
     .nav-tab {
       position: relative;
       padding: 16px 16px;
@@ -654,6 +656,54 @@
         margin-top: 4px;
         width: 100%;
       }
+
+      /* Nav label switching */
+      .nav-label-full { display: none !important; }
+      .nav-label-short { display: inline !important; }
+      .nav-username { display: none !important; }
+      .nav-signout { font-size: 11px; padding: 5px 10px; }
+
+      /* Workflow test cards mobile */
+      .wf-test-card {
+        padding: 12px 14px;
+      }
+      .wf-opt-btn {
+        padding: 7px 10px;
+        font-size: 11px;
+      }
+      .wf-test-label {
+        font-size: 12px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+      }
+
+      /* Page content padding mobile */
+      .page-content-pad {
+        padding: 16px !important;
+      }
+
+      /* Test Suite Reference grid mobile */
+      .suite-test-row {
+        grid-template-columns: 40px 1fr !important;
+      }
+      .suite-test-options {
+        grid-column: 1 / -1;
+        padding-left: 48px;
+      }
+      .suite-header-row {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .nav-tab {
+        padding: 12px 2px;
+        font-size: 11px;
+      }
+      .wf-opt-btn {
+        padding: 6px 8px;
+        font-size: 10px;
+      }
     }
   </style>
 </head>
@@ -702,12 +752,12 @@
     // NAV CONFIG
     // ══════════════════════════════════════
     const PAGES = [
-      { id: 'specimen', label: '🧫 ตัวอย่างตรวจ', sub: 'เลือก Plate' },
-      { id: 'workflow', label: '🔬 วินิจฉัย', sub: 'Diagnostic Flow' },
-      { id: 'cases', label: '💾 Case ที่บันทึก', sub: 'Saved Cases' },
-      { id: 'library', label: '📚 คลังเชื้อ', sub: 'Bacteria Library' },
-      { id: 'tests', label: '⚗️ การทดสอบ', sub: 'Biochemical Tests' },
-      { id: 'suites', label: '📊 Test Suites', sub: 'Test Importance by Group' },
+      { id: 'specimen', label: '🧫 ตัวอย่างตรวจ', short: '🧫 ตัวอย่าง', sub: 'เลือก Plate' },
+      { id: 'workflow', label: '🔬 วินิจฉัย', short: '🔬 วินิจฉัย', sub: 'Diagnostic Flow' },
+      { id: 'cases', label: '💾 Case ที่บันทึก', short: '💾 Cases', sub: 'Saved Cases' },
+      { id: 'library', label: '📚 คลังเชื้อ', short: '📚 คลัง', sub: 'Bacteria Library' },
+      { id: 'tests', label: '⚗️ การทดสอบ', short: '⚗️ Tests', sub: 'Biochemical Tests' },
+      { id: 'suites', label: '📊 Test Suites', short: '📊 Suites', sub: 'Test Importance by Group' },
     ];
 
     // ══════════════════════════════════════
@@ -1219,19 +1269,21 @@
             {PAGES.map(p => (
               <button key={p.id} onClick={() => setPage(p.id)}
                 className={`nav-tab ${page === p.id ? 'active-tab' : ''}`}>
-                {p.label}
+                <span className="nav-label-full">{p.label}</span>
+                <span className="nav-label-short">{p.short || p.label}</span>
               </button>
             ))}
             <button key="settings" onClick={() => setPage('settings')}
               className={`nav-tab ${page === 'settings' ? 'active-tab' : ''}`}>
-              ⚙️ ตั้งค่า
+              <span className="nav-label-full">⚙️ ตั้งค่า</span>
+              <span className="nav-label-short">⚙️</span>
             </button>
           </nav>
           <div className="nav-user">
             {user ? (
               <>
                 <div className="nav-avatar">{initials}</div>
-                <span style={{ fontSize: 13, fontWeight: 500, color: '#e2e8f0', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.displayName || 'Doctor'}</span>
+                <span className="nav-username" style={{ fontSize: 13, fontWeight: 500, color: '#e2e8f0', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.displayName || 'Doctor'}</span>
                 <button onClick={logout} className="nav-signout">ออกจากระบบ</button>
               </>
             ) : (
@@ -4443,32 +4495,33 @@
       
       return (
         <div style={{ height: 'calc(100vh - 56px)', overflowY: 'auto', background: 'var(--bg)' }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 40px' }}>
+          <div className="page-content-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px' }}>
             {/* Header */}
             <div style={{ 
               background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
               border: '1px solid #1e3055',
               borderRadius: 16,
-              padding: '28px 32px',
-              marginBottom: 24
+              padding: '20px 20px',
+              marginBottom: 20
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <div style={{ 
-                  width: 60, 
-                  height: 60, 
-                  borderRadius: 16,
+                  width: 48, 
+                  height: 48, 
+                  borderRadius: 14,
                   background: 'linear-gradient(135deg, #6366f120, #8b5cf620)',
                   border: '2px solid #6366f740',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 30
+                  fontSize: 24,
+                  flexShrink: 0
                 }}>
                   🧪
                 </div>
                 <div>
-                  <h1 style={{ fontSize: 26, fontWeight: 800, color: '#f1f5f9', marginBottom: 6 }}>Test Suite Reference</h1>
-                  <p style={{ color: '#64748b', fontSize: 14 }}>รายการ Biochemical Tests ที่ใช้ในแต่ละกลุ่มเชื้อ</p>
+                  <h1 style={{ fontSize: 22, fontWeight: 800, color: '#f1f5f9', marginBottom: 4 }}>Test Suite Reference</h1>
+                  <p style={{ color: '#64748b', fontSize: 13 }}>รายการ Biochemical Tests ที่ใช้ในแต่ละกลุ่มเชื้อ</p>
                 </div>
               </div>
 
@@ -4535,7 +4588,7 @@
             {/* Tests List */}
             {suite && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <div style={{
+                <div className="suite-header-row" style={{
                   background: '#132040',
                   border: '1px solid #1e3055',
                   borderRadius: 12,
@@ -4555,15 +4608,15 @@
                 </div>
 
                 {suite.tests.map((test, idx) => (
-                  <div key={test.id} style={{
+                  <div key={test.id} className="suite-test-row" style={{
                     background: '#132040',
                     border: '1px solid #1e3055',
                     borderRadius: 12,
                     padding: '14px 20px',
                     display: 'grid',
                     gridTemplateColumns: '60px 1fr 200px',
-                    gap: 16,
-                    alignItems: 'center'
+                    gap: 12,
+                    alignItems: 'start'
                   }}>
                     <span style={{ 
                       fontSize: 14, 
@@ -4592,7 +4645,7 @@
                         }}>เพิ่มเติม</span>
                       )}
                     </span>
-                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    <div className="suite-test-options" style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                       {test.options.map(opt => (
                         <span key={opt} style={{
                           fontSize: 11,

@@ -21,18 +21,13 @@
       padding: 0;
       box-sizing: border-box
     }
-    html, body {
+    html {
       overflow-x: hidden;
-      max-width: 100%;
-      width: 100%;
+      max-width: 100vw;
     }
     #root {
       overflow-x: hidden;
-      max-width: 100%;
-      width: 100%;
-    }
-    img, video, iframe, table {
-      max-width: 100%;
+      max-width: 100vw;
     }
 
     :root {
@@ -914,7 +909,7 @@
           else if (msg.includes('weak-password')) msg = 'รหัสผ่านอ่อนเกินไป (บังคับ 6 ตัวอักษรขึ้นไป)';
           else if (msg.includes('invalid-email')) msg = 'รูปแบบอีเมลและโดเมนไม่ถูกต้อง';
           else if (msg.includes('operation-not-allowed')) msg = 'บอทถูกระงับ! ล็อกอินผ่านอีเมลยังไม่ถูกเปิดใช้งาน (เข้าไปเปิด Service Authentication ใน Firebase ก่อนครับ)';
-          else if (msg.includes('user-not-found') || msg.includes('wrong-password') || msg.includes('invalid-credential')) msg = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+          else if (msg.includes('user-not-found') || msg.includes('wrong-password') || msg.includes('invalid-credential') || msg.includes('invalid-login-credentials')) msg = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
           else if (msg.includes('api-key-not-valid')) msg = 'API Key ของ Firebase ที่ใส่ในโค้ดขัดข้อง หรือ Google กำลังประมวลผลระบบอยู่ (หากเพิ่งสร้างโปรเจกต์ให้รอประมาณ 5 นาที แล้วรีเฟรช)';
           
           setAuthErr(msg);

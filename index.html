@@ -21,6 +21,14 @@
       padding: 0;
       box-sizing: border-box
     }
+    html {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+    #root {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
 
     :root {
       --bg: #030712;
@@ -5525,32 +5533,33 @@
 
       return (
         <div style={{ height: 'calc(100vh - 56px)', overflowY: 'auto', background: 'var(--bg)' }}>
-          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '32px 40px' }}>
+          <div className="page-content-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px' }}>
             {/* Header */}
             <div style={{ 
               background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
               border: '1px solid #1e3055',
               borderRadius: 16,
-              padding: '28px 32px',
-              marginBottom: 24
+              padding: '20px 20px',
+              marginBottom: 20
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 20 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <div style={{ 
-                  width: 60, 
-                  height: 60, 
-                  borderRadius: 16,
+                  width: 48, 
+                  height: 48, 
+                  borderRadius: 14,
                   background: 'linear-gradient(135deg, #a855f720, #ec489920)',
                   border: '2px solid #a855f740',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 30
+                  fontSize: 24,
+                  flexShrink: 0
                 }}>
                   ⚗️
                 </div>
                 <div>
-                  <h1 style={{ fontSize: 26, fontWeight: 800, color: '#f1f5f9', marginBottom: 6 }}>Biochemical Tests Reference</h1>
-                  <p style={{ color: '#64748b', fontSize: 14 }}>คู่มืออ้างอิงการทดสอบทางชีวเคมี (MTMI 202 - Mahidol University)</p>
+                  <h1 style={{ fontSize: 'clamp(16px, 4vw, 26px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 4 }}>Biochemical Tests Reference</h1>
+                  <p style={{ color: '#64748b', fontSize: 'clamp(11px, 3vw, 14px)' }}>คู่มืออ้างอิงการทดสอบทางชีวเคมี (MTMI 202 - Mahidol University)</p>
                 </div>
               </div>
 
@@ -5632,7 +5641,7 @@
                       }}>{category.tests.length} tests</span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(520px, 1fr))', gap: 12 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12 }}>
                       {category.tests.map((test) => (
                         <div key={test.id} style={{
                           background: '#132040',

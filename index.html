@@ -1717,6 +1717,17 @@
         notes: 'CoNS; β-hemolysis บนวุ้น. Trehalose+ แยกจาก S. epidermidis (−). มักดื้อยาหลายชนิด (multiresistant CoNS)'
       },
 
+      {
+        id: 'micrococcus', group: 'gpc_cluster', name: 'Micrococcus spp.', thai: 'ไมโครค็อกคัส', gram: '+', morph: 'Cocci in clusters/tetrads',
+        importance: 'low', tags: ['Catalase+', 'Oxidase+', 'Glucose NF', 'Contaminant', 'Skin flora'],
+        clinical: { habitat: 'Skin normal flora; environment; dust', diseases: ['Usually non-pathogenic', 'Rare: endocarditis (prosthetic valve)', 'Rare: catheter-related infection in immunocompromised'], transmission: 'Contamination; environment', factors: 'Usually avirulent; skin contaminant' },
+        colony: { BAP: 'Small 0.5-1mm, smooth, convex, white/cream; usually no hemolysis', MAC: 'No growth (Gram-positive inhibited)' },
+        gramStain: 'GPC in clusters, tetrads, or irregular packets; larger than Staphylococcus (1.0-1.5µm)',
+        biochem: [{ t: 'Catalase', r: '+', n: 'Strong positive' }, { t: 'Oxidase', r: '+', n: 'KEY: Modified oxidase positive (Staphylococcus is −)' }, { t: 'Glucose O/F', r: 'O/−', n: 'KEY: Oxidative (or NF) vs Staphylococcus (+/+)' }, { t: 'Coagulase', r: '−', n: '' }, { t: 'Hemolysis', r: 'γ', n: 'Usually no hemolysis' }, { t: 'Novobiocin', r: 'S', n: 'Sensitive' }, { t: 'Bacitracin', r: 'S', n: 'Sensitive (like Group A Strep)' }, { t: '6.5% NaCl', r: 'V', n: 'Variable' }, { t: 'Furazolidone', r: 'R', n: 'KEY: 100µg disk resistant (Staphylococcus is S)' }],
+        media: ['Blood agar'], condition: '35–37°C aerobic',
+        notes: 'KEY differentiators from Staphylococcus: Oxidase+, Glucose O/F oxidative (not fermentative), Furazolidone R. Usually skin contaminant, rarely pathogenic. Colony smaller and more uniform than Staphylococcus.'
+      },
+
       // GPC CHAIN
       {
         id: 's_pyogenes', group: 'gpc_chain', name: 'Streptococcus pyogenes', thai: 'สเตรปโตค็อกคัส ไพโอจีนส์', gram: '+', morph: 'Cocci in chains',

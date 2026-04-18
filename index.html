@@ -395,8 +395,8 @@
       text-shadow: 0 0 24px rgba(167,139,250,0.35);
     }
     .nav-bar .brand .emoji { font-size: 22px; -webkit-text-fill-color: initial; }
-    .nav-label-short { display: none; }
-    .nav-label-full { display: inline; }
+    .nav-label-short { display: none !important; }
+    .nav-label-full { display: inline-flex !important; }
     .nav-tab {
       position: relative;
       padding: 5px 12px;
@@ -1508,11 +1508,11 @@
             {PAGES.map(p => (
               <button key={p.id} onClick={() => setPage(p.id)}
                 className={`nav-tab ${page === p.id ? 'active-tab' : ''}`}>
-                <span className="nav-label-full" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span className="nav-label-full" style={{ alignItems: 'center', gap: 6 }}>
                   <NavIcon type={p.icon} />
                   {p.label}
                 </span>
-                <span className="nav-label-short" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span className="nav-label-short" style={{ alignItems: 'center', gap: 4 }}>
                   <NavIcon type={p.icon} />
                   {p.short}
                 </span>
@@ -1520,11 +1520,11 @@
             ))}
             <button key="settings" onClick={() => setPage('settings')}
               className={`nav-tab ${page === 'settings' ? 'active-tab' : ''}`}>
-              <span className="nav-label-full" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span className="nav-label-full" style={{ alignItems: 'center', gap: 6 }}>
                 <NavIcon type="gear" />
                 ตั้งค่า
               </span>
-              <span className="nav-label-short" style={{ display: 'flex', alignItems: 'center' }}>
+              <span className="nav-label-short" style={{ alignItems: 'center' }}>
                 <NavIcon type="gear" />
               </span>
             </button>

@@ -383,8 +383,7 @@
     .nav-bar .brand {
       display: flex;
       align-items: center;
-      gap: 0;
-      padding: 0;
+      gap: 8px;
       margin-right: 16px;
       font-weight: 800;
       font-size: 16px;
@@ -395,6 +394,7 @@
       background-clip: text;
       text-shadow: 0 0 24px rgba(167,139,250,0.35);
     }
+    .nav-bar .brand .emoji { font-size: 22px; -webkit-text-fill-color: initial; }
     .nav-label-short { display: none; }
     .nav-label-full { display: inline; }
     .nav-tab {
@@ -1453,48 +1453,11 @@
       return (
         <header className="nav-bar">
           <div className="brand">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 28" role="img" aria-label="BOK BAC Logo">
-              <title>BOK BAC</title>
-              <defs>
-                <linearGradient id="bokbac-gHex" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#a78bfa"/>
-                  <stop offset="100%" stop-color="#C9A84C"/>
-                </linearGradient>
-                <linearGradient id="bokbac-gHex2" x1="100%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#C9A84C"/>
-                  <stop offset="100%" stop-color="#a78bfa"/>
-                </linearGradient>
-                <linearGradient id="bokbac-gWord" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#c4b5fd"/>
-                  <stop offset="55%" stop-color="#a78bfa"/>
-                  <stop offset="100%" stop-color="#C9A84C"/>
-                </linearGradient>
-              </defs>
-              <g transform="translate(14, 14)">
-                <polygon points="0,-12 10.4,-6 10.4,6 0,12 -10.4,6 -10.4,-6" fill="none" stroke="url(#bokbac-gHex)" stroke-width="1.2"/>
-                <polygon points="0,-8 6.9,-4 6.9,4 0,8 -6.9,4 -6.9,-4" fill="none" stroke="url(#bokbac-gHex2)" stroke-width="0.7" opacity="0.45"/>
-                <circle cx="0" cy="0" r="2.2" fill="#a78bfa"/>
-                <circle cx="0" cy="-5" r="1.3" fill="#a78bfa" opacity="0.8"/>
-                <circle cx="4.3" cy="-2.5" r="1.3" fill="#C9A84C" opacity="0.8"/>
-                <circle cx="4.3" cy="2.5" r="1.1" fill="#C9A84C" opacity="0.7"/>
-                <circle cx="0" cy="5" r="1.1" fill="#a78bfa" opacity="0.65"/>
-                <circle cx="-4.3" cy="2.5" r="1.1" fill="#a78bfa" opacity="0.65"/>
-                <circle cx="-4.3" cy="-2.5" r="1.3" fill="#C9A84C" opacity="0.75"/>
-                <line x1="0" y1="-2.2" x2="0" y2="-3.7" stroke="#a78bfa" stroke-width="0.6" opacity="0.35"/>
-                <line x1="1.9" y1="-1.1" x2="3" y2="-1.9" stroke="#C9A84C" stroke-width="0.6" opacity="0.35"/>
-                <line x1="1.9" y1="1.1" x2="3" y2="1.9" stroke="#C9A84C" stroke-width="0.6" opacity="0.35"/>
-                <line x1="0" y1="2.2" x2="0" y2="3.7" stroke="#a78bfa" stroke-width="0.6" opacity="0.35"/>
-                <line x1="-1.9" y1="1.1" x2="-3" y2="1.9" stroke="#a78bfa" stroke-width="0.6" opacity="0.35"/>
-                <line x1="-1.9" y1="-1.1" x2="-3" y2="-1.9" stroke="#C9A84C" stroke-width="0.6" opacity="0.35"/>
-                <circle cx="0" cy="-10" r="1" fill="#C9A84C" opacity="0.4"/>
-                <circle cx="8.7" cy="-5" r="1" fill="#a78bfa" opacity="0.35"/>
-                <circle cx="8.7" cy="5" r="1" fill="#C9A84C" opacity="0.3"/>
-                <circle cx="0" cy="10" r="1" fill="#a78bfa" opacity="0.3"/>
-                <circle cx="-8.7" cy="5" r="0.9" fill="#C9A84C" opacity="0.28"/>
-                <circle cx="-8.7" cy="-5" r="0.9" fill="#a78bfa" opacity="0.28"/>
-              </g>
-              <text x="30" y="19" font-family="'Cormorant Garamond', Georgia, serif" font-size="17" font-weight="700" fill="url(#bokbac-gWord)" letter-spacing="2">BOK BAC</text>
-            </svg>
+            <span className="emoji">🦠</span>
+            <div>
+              <div>BOK BAC</div>
+              <div style={{ fontSize: 8, color: '#a78bfa', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600, marginTop: -1, WebkitTextFillColor: 'initial' }}>DIAGNOSTIC ENGINE</div>
+            </div>
           </div>
           <nav style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             {PAGES.map(p => (

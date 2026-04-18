@@ -375,8 +375,8 @@
       border-image: linear-gradient(90deg, #7c3aed, #C9A84C, #06b6d4) 1;
       border-bottom: 1px solid rgba(201,168,76,0.15);
       box-shadow: 0 1px 0 rgba(201,168,76,0.08), 0 4px 24px rgba(0,0,0,0.4);
-      padding: 0 20px;
-      height: 56px;
+      padding: 0 16px;
+      height: 48px;
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -384,8 +384,8 @@
     .nav-bar .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-right: 28px;
+      gap: 8px;
+      margin-right: 16px;
       font-weight: 800;
       font-size: 16px;
       letter-spacing: -0.5px;
@@ -400,8 +400,8 @@
     .nav-label-full { display: inline; }
     .nav-tab {
       position: relative;
-      padding: 6px 14px;
-      font-size: 13px;
+      padding: 4px 10px;
+      font-size: 12px;
       font-weight: 500;
       color: #94a3b8;
       background: none;
@@ -4505,7 +4505,7 @@
       };
 
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 56px)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 48px)' }}>
           {/* Progress Stepper - Simple 3 Steps */}
           <div className="progress-bar" style={{ flexShrink: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, maxWidth: 800, margin: '0 auto' }}>
@@ -4814,21 +4814,21 @@
       const suite = SUITES[selectedGroup];
       
       return (
-        <div style={{ height: 'calc(100vh - 56px)', overflowY: 'auto', background: 'transparent' }}>
-          <div className="page-content-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px' }}>
+        <div style={{ height: 'calc(100vh - 48px)', overflowY: 'auto', background: 'transparent' }}>
+          <div className="page-content-pad" style={{ maxWidth: 960, margin: '0 auto', padding: '24px 20px' }}>
             {/* Header */}
             <div className="card" style={{ marginBottom: 20 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <div style={{ 
-                  width: 48, 
-                  height: 48, 
-                  borderRadius: 14,
+                  width: 44, 
+                  height: 44, 
+                  borderRadius: 12,
                   background: 'linear-gradient(135deg, #6366f120, #8b5cf620)',
                   border: '2px solid #6366f740',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 24,
+                  fontSize: 22,
                   flexShrink: 0
                 }}>
                   🧪
@@ -4869,22 +4869,25 @@
             {/* Selected Group Info */}
             {suite && (
               <div style={{ marginBottom: 24 }}>
-                <div className="card" style={{ padding: '20px' }}>
-                  <div style={{
-                    height: 50,
-                    borderRadius: 12,
-                    background: groupOptions.find(g => g.id === selectedGroup)?.color,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 24
-                  }}>
-                    {groupOptions.find(g => g.id === selectedGroup)?.icon}
-                  </div>
-                  <div>
-                    <h2 style={{ fontSize: 18, fontWeight: 700, color: '#e2e8f0', marginBottom: 4 }}>{suite.name}</h2>
-                    <p style={{ color: '#94a3b8', fontSize: 13 }}>{suite.trigger}</p>
-                    <p style={{ color: '#64748b', fontSize: 12, marginTop: 6 }}>จำนวน {suite.tests.length} tests</p>
+                <div className="card" style={{ padding: '16px 20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 10,
+                      background: groupOptions.find(g => g.id === selectedGroup)?.color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 20
+                    }}>
+                      {groupOptions.find(g => g.id === selectedGroup)?.icon}
+                    </div>
+                    <div>
+                      <h2 style={{ fontSize: 16, fontWeight: 700, color: '#e2e8f0', marginBottom: 2 }}>{suite.name}</h2>
+                      <p style={{ color: '#94a3b8', fontSize: 12 }}>{suite.trigger}</p>
+                      <p style={{ color: '#64748b', fontSize: 11, marginTop: 2 }}>{suite.tests.length} tests</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -5875,27 +5878,27 @@
       };
 
       return (
-        <div style={{ height: 'calc(100vh - 56px)', overflowY: 'auto', background: 'transparent' }}>
-          <div className="page-content-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px' }}>
+        <div style={{ height: 'calc(100vh - 48px)', overflowY: 'auto', background: 'transparent' }}>
+          <div className="page-content-pad" style={{ maxWidth: 960, margin: '0 auto', padding: '24px 20px' }}>
             {/* Header */}
             <div className="card" style={{ marginBottom: 20 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
                 <div style={{ 
-                  width: 48, 
-                  height: 48, 
-                  borderRadius: 14,
+                  width: 44, 
+                  height: 44, 
+                  borderRadius: 12,
                   background: 'linear-gradient(135deg, #a855f720, #ec489920)',
                   border: '2px solid #a855f740',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 24,
+                  fontSize: 22,
                   flexShrink: 0
                 }}>
                   ⚗️
                 </div>
                 <div>
-                  <h1 style={{ fontSize: 'clamp(16px, 4vw, 26px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 4, fontFamily: "'Inter','Prompt',sans-serif" }}>Biochemical Tests Reference</h1>
+                  <h1 style={{ fontSize: 'clamp(16px, 4vw, 24px)', fontWeight: 800, color: '#f1f5f9', marginBottom: 4, fontFamily: "'Inter','Prompt',sans-serif" }}>Biochemical Tests Reference</h1>
                   <p style={{ color: '#64748b', fontSize: 'clamp(11px, 3vw, 14px)' }}>คู่มืออ้างอิงการทดสอบทางชีวเคมี (MTMI 202 - Mahidol University)</p>
                 </div>
               </div>
@@ -5993,7 +5996,7 @@
                       }}>{category.tests.length}</span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12, minWidth: 0 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))', gap: 10, minWidth: 0 }}>
                       {category.tests.map((test) => (
                         <div key={test.id} className="card" style={{
                           background: 'var(--glass-bg)',
@@ -6197,7 +6200,7 @@
                       }}>{cat.plates.length} plates</span>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12, minWidth: 0 }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(400px, 100%), 1fr))', gap: 10, minWidth: 0 }}>
                       {cat.plates.map((plate) => (
                         <div key={plate.id} className="card" style={{
                           background: 'var(--glass-bg)',

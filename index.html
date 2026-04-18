@@ -914,12 +914,12 @@
     // NAV CONFIG
     // ══════════════════════════════════════
     const PAGES = [
-      { id: 'specimen', label: '🧫 ตัวอย่างตรวจ', short: '🧫 ตัวอย่าง', sub: 'เลือก Plate' },
-      { id: 'workflow', label: '🔬 วินิจฉัย', short: '🔬 วินิจฉัย', sub: 'Diagnostic Flow' },
-      { id: 'cases', label: '💾 Case ที่บันทึก', short: '💾 Cases', sub: 'Saved Cases' },
-      { id: 'library', label: '📚 คลังเชื้อ', short: '📚 คลัง', sub: 'Bacteria Library' },
-      { id: 'tests', label: '⚗️ การทดสอบ', short: '⚗️ Tests', sub: 'Biochemical Tests' },
-      { id: 'suites', label: '📊 Test Suites', short: '📊 Suites', sub: 'Test Importance by Group' },
+      { id: 'specimen', label: 'ตัวอย่างตรวจ', short: 'ตัวอย่าง', sub: 'เลือก Plate', icon: 'petri' },
+      { id: 'workflow', label: 'วินิจฉัย', short: 'วินิจฉัย', sub: 'Diagnostic Flow', icon: 'scope' },
+      { id: 'cases', label: 'Case ที่บันทึก', short: 'Cases', sub: 'Saved Cases', icon: 'folder' },
+      { id: 'library', label: 'คลังเชื้อ', short: 'คลัง', sub: 'Bacteria Library', icon: 'book' },
+      { id: 'tests', label: 'การทดสอบ', short: 'Tests', sub: 'Biochemical Tests', icon: 'flask' },
+      { id: 'suites', label: 'Test Suites', short: 'Suites', sub: 'Test Importance by Group', icon: 'chart' },
     ];
 
     // ══════════════════════════════════════
@@ -1122,7 +1122,24 @@
           
           <div className="card fade-in" style={{ width: '100%', maxWidth: 420, padding: '48px 40px', zIndex: 10, background: 'rgba(17, 24, 39, 0.6)', backdropFilter: 'blur(32px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 0 0 1px rgba(0,0,0,0.5), 0 30px 60px -12px rgba(0,0,0,0.9)' }}>
             <div style={{ textAlign: 'center', marginBottom: 32 }}>
-              <div style={{ fontSize: 44, marginBottom: 16 }}>🦠</div>
+              <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}>
+                <svg width="52" height="52" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="loginHex" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#a78bfa"/>
+                      <stop offset="100%" stop-color="#C9A84C"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M14 2L24.4 8V20L14 26L3.6 20V8L14 2Z" stroke="url(#loginHex)" stroke-width="1.5" fill="none"/>
+                  <circle cx="14" cy="14" r="3" fill="#a78bfa"/>
+                  <circle cx="14" cy="8" r="1.5" fill="#C9A84C" opacity="0.8"/>
+                  <circle cx="19.2" cy="11" r="1.5" fill="#C9A84C" opacity="0.8"/>
+                  <circle cx="19.2" cy="17" r="1.5" fill="#a78bfa" opacity="0.6"/>
+                  <circle cx="14" cy="20" r="1.5" fill="#a78bfa" opacity="0.6"/>
+                  <circle cx="8.8" cy="17" r="1.5" fill="#C9A84C" opacity="0.6"/>
+                  <circle cx="8.8" cy="11" r="1.5" fill="#C9A84C" opacity="0.7"/>
+                </svg>
+              </div>
               <h1 style={{ fontSize: 24, fontWeight: 700, color: '#fff', letterSpacing: '-0.5px' }}>
                 BOK BAC
               </h1>
@@ -1448,12 +1465,40 @@
       );
     }
 
+    const NavIcon = ({ type, size = 14 }) => {
+      const icons = {
+        petri: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/></svg>,
+        scope: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>,
+        folder: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 4h6l2 2h8v14H4z"/></svg>,
+        book: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M4 4v16h16V4H4z"/><path d="M8 4v16M12 8h4M12 12h4"/></svg>,
+        flask: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M9 3h6M12 3v9l5 9H7l5-9V3z"/></svg>,
+        chart: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M3 3v18h18"/><path d="M7 16l4-6 4 3 5-9"/></svg>,
+        gear: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M17.95 17.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M17.95 6.05l2.83-2.83"/></svg>,
+      };
+      return icons[type] || null;
+    };
+
     function Header({ page, setPage, user, logout, exitGuest }) {
       const initials = user?.displayName ? user.displayName.charAt(0).toUpperCase() : '?';
       return (
         <header className="nav-bar">
           <div className="brand">
-            <span className="emoji">🦠</span>
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="hexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#a78bfa"/>
+                  <stop offset="100%" stop-color="#C9A84C"/>
+                </linearGradient>
+              </defs>
+              <path d="M14 2L24.4 8V20L14 26L3.6 20V8L14 2Z" stroke="url(#hexGrad)" stroke-width="1.5" fill="none"/>
+              <circle cx="14" cy="14" r="3" fill="#a78bfa"/>
+              <circle cx="14" cy="8" r="1.5" fill="#C9A84C" opacity="0.8"/>
+              <circle cx="19.2" cy="11" r="1.5" fill="#C9A84C" opacity="0.8"/>
+              <circle cx="19.2" cy="17" r="1.5" fill="#a78bfa" opacity="0.6"/>
+              <circle cx="14" cy="20" r="1.5" fill="#a78bfa" opacity="0.6"/>
+              <circle cx="8.8" cy="17" r="1.5" fill="#C9A84C" opacity="0.6"/>
+              <circle cx="8.8" cy="11" r="1.5" fill="#C9A84C" opacity="0.7"/>
+            </svg>
             <div>
               <div>BOK BAC</div>
               <div style={{ fontSize: 8, color: '#a78bfa', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600, marginTop: -1, WebkitTextFillColor: 'initial' }}>DIAGNOSTIC ENGINE</div>
@@ -1463,14 +1508,25 @@
             {PAGES.map(p => (
               <button key={p.id} onClick={() => setPage(p.id)}
                 className={`nav-tab ${page === p.id ? 'active-tab' : ''}`}>
-                <span className="nav-label-full">{p.label}</span>
-                <span className="nav-label-short">{p.short || p.label}</span>
+                <span className="nav-label-full" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <NavIcon type={p.icon} />
+                  {p.label}
+                </span>
+                <span className="nav-label-short" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <NavIcon type={p.icon} />
+                  {p.short}
+                </span>
               </button>
             ))}
             <button key="settings" onClick={() => setPage('settings')}
               className={`nav-tab ${page === 'settings' ? 'active-tab' : ''}`}>
-              <span className="nav-label-full">⚙️ ตั้งค่า</span>
-              <span className="nav-label-short">⚙️</span>
+              <span className="nav-label-full" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <NavIcon type="gear" />
+                ตั้งค่า
+              </span>
+              <span className="nav-label-short" style={{ display: 'flex', alignItems: 'center' }}>
+                <NavIcon type="gear" />
+              </span>
             </button>
           </nav>
           <div className="nav-user">

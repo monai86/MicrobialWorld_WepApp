@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Prompt:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600;700;800&family=Prompt:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <style>
     * {
@@ -32,32 +32,70 @@
 
     :root {
       --bg: #030712;
-      --bg2: #111827;
-      --surface: #111827;
-      --surface-border: #1f2937;
-      --surface2: #1f2937;
+      --bg2: #0f0a1e;
+      --surface: rgba(255,255,255,0.04);
+      --surface-border: rgba(255,255,255,0.10);
+      --surface2: rgba(255,255,255,0.06);
       --text: #f9fafb;
       --text2: #9ca3af;
       --text3: #6b7280;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --accent-glow: rgba(59, 130, 246, 0.4);
+      --accent: #a78bfa;
+      --accent-hover: #c4b5fd;
+      --accent-glow: rgba(167, 139, 250, 0.35);
+      --gold: #C9A84C;
+      --gold-glow: rgba(201, 168, 76, 0.3);
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.10);
+      --glass-blur: blur(24px);
       --cyan: #06b6d4;
       --green: #10b981;
       --red: #ef4444;
       --radius: 12px;
       --radius-lg: 16px;
       --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
     body {
-      background: var(--bg);
+      background: radial-gradient(ellipse at 20% 20%, #0f0a1e 0%, #030712 50%, #030712 100%);
       color: var(--text);
       font-family: 'Inter', 'Prompt', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -100px;
+      left: -100px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(40px);
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(40px);
+    }
+
+    h1, h2 {
+      font-family: 'Cormorant Garamond', 'Inter', sans-serif;
+      letter-spacing: 0.04em;
     }
 
     button {
@@ -97,20 +135,48 @@
     .input-field:focus {
       border-color: var(--accent);
       background: rgba(255, 255, 255, 0.06);
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      box-shadow: 0 0 0 3px rgba(167,139,250,0.3);
+    }
+
+    *:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(167,139,250,0.3);
+      border-color: var(--accent);
     }
 
     .card {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.10);
       border-radius: var(--radius-lg);
       padding: 24px;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+      transform: skewX(-20deg);
+      transition: none;
+      pointer-events: none;
     }
 
     .card:hover {
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12);
+      border-color: rgba(167,139,250,0.2);
+    }
+
+    .card:hover::after {
+      animation: shimmerSweep 0.6s ease forwards;
     }
 
     /* Modals */
@@ -169,23 +235,24 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #C9A84C 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
       color: #ffffff;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 20px rgba(167,139,250,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 30px rgba(167,139,250,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
     }
     
     .btn-primary:active:not(:disabled) {
       transform: translateY(1px);
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 2px 8px rgba(167,139,250,0.3);
     }
 
-    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; filter: grayscale(50%); }
+    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; filter: grayscale(50%); animation: none; }
 
     .btn-ghost {
       background: rgba(255, 255, 255, 0.05);
@@ -219,6 +286,26 @@
       33% { transform:translateY(-100px) translateX(50px) rotate(120deg); }
       66% { transform:translateY(50px) translateX(-50px) rotate(240deg); }
       100% { transform:translateY(0) translateX(0) rotate(360deg); }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shimmerSweep {
+      0% { left: -100%; }
+      100% { left: 150%; }
+    }
+
+    .tab-content-anim {
+      animation: fadeSlideUp 0.5s cubic-bezier(0.23,1,0.32,1) forwards;
     }
 
     /* Results */
@@ -275,18 +362,15 @@
     }
     .nav-tab:hover { color: #e2e8f0; }
     .nav-tab.active-tab {
-      color: #fff;
+      color: #c4b5fd;
       font-weight: 600;
+      background: rgba(167,139,250,0.15);
+      border: 1px solid rgba(167,139,250,0.35);
+      border-radius: 100px;
     }
+
     .nav-tab.active-tab::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 12px;
-      right: 12px;
-      height: 2px;
-      background: linear-gradient(90deg, #3b82f6, #06b6d4);
-      border-radius: 2px 2px 0 0;
+      display: none;
     }
     .nav-user {
       margin-left: auto;
@@ -298,14 +382,14 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      background: linear-gradient(135deg, #7c3aed, #C9A84C);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 13px;
       font-weight: 700;
       color: #fff;
-      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.4);
     }
     .nav-signout {
       background: rgba(239, 68, 68, 0.1);
@@ -348,12 +432,12 @@
       transition: all 0.2s ease;
     }
     .wf-test-card:hover {
-      border-color: rgba(99, 102, 241, 0.2);
-      background: rgba(15, 23, 42, 0.8);
+      border-color: rgba(167, 139, 250, 0.25);
+      background: rgba(167, 139, 250, 0.04);
     }
     .wf-test-card.answered {
-      border-color: rgba(99, 102, 241, 0.3);
-      background: rgba(99, 102, 241, 0.04);
+      border-color: rgba(167, 139, 250, 0.35);
+      background: rgba(167, 139, 250, 0.06);
     }
     .wf-test-label {
       font-size: 13px;
@@ -365,8 +449,8 @@
       gap: 8px;
     }
     .wf-test-label .idx {
-      background: rgba(99, 102, 241, 0.2);
-      color: #818cf8;
+      background: rgba(167, 139, 250, 0.2);
+      color: #c4b5fd;
       font-size: 10px;
       font-weight: 700;
       width: 22px;
@@ -411,16 +495,16 @@
       font-weight: 500;
     }
     .wf-opt-btn:hover {
-      background: rgba(99, 102, 241, 0.1);
-      border-color: rgba(99, 102, 241, 0.3);
-      color: #c7d2fe;
+      background: rgba(167, 139, 250, 0.12);
+      border-color: rgba(167, 139, 250, 0.4);
+      color: #e9d5ff;
     }
     .wf-opt-btn.selected {
-      background: rgba(99, 102, 241, 0.18);
-      border-color: #6366f1;
-      color: #a5b4fc;
+      background: rgba(167, 139, 250, 0.2);
+      border-color: #a78bfa;
+      color: #c4b5fd;
       font-weight: 600;
-      box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+      box-shadow: 0 0 12px rgba(167, 139, 250, 0.2);
     }
     .wf-opt-btn.skip {
       background: rgba(255, 255, 255, 0.02);
@@ -454,9 +538,9 @@
       transition: all 0.3s;
     }
     .step-indicator.done {
-      background: linear-gradient(135deg, #6366f1, #818cf8);
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
       color: #fff;
-      box-shadow: 0 0 16px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 0 16px rgba(167, 139, 250, 0.4);
     }
     .step-indicator.pending {
       background: rgba(30, 41, 59, 0.8);
@@ -479,13 +563,15 @@
       gap: 8px;
     }
     .btn-action.primary {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 60%, #C9A84C 100%);
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
       color: #fff;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+      box-shadow: 0 4px 14px rgba(167, 139, 250, 0.4);
     }
     .btn-action.primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5);
+      box-shadow: 0 8px 28px rgba(167, 139, 250, 0.55);
     }
     .btn-action.secondary {
       background: rgba(255, 255, 255, 0.04);
@@ -519,9 +605,9 @@
       transform: translateY(-2px);
     }
     .result-card.top {
-      background: rgba(99, 102, 241, 0.06);
-      border-color: rgba(99, 102, 241, 0.2);
-      box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+      background: rgba(167, 139, 250, 0.06);
+      border-color: rgba(167, 139, 250, 0.25);
+      box-shadow: 0 8px 32px rgba(167, 139, 250, 0.15);
     }
 
     /* Fade animation */
@@ -538,10 +624,10 @@
     }
 
     /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #7c3aed, #C9A84C); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #a78bfa, #e0b96a); }
 
     /* Gram select cards */
     .gram-card {
@@ -1358,8 +1444,10 @@
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           {/* Header Hero */}
           <div style={{ 
-            background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
-            border: '1px solid #1e3055',
+            background: 'rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.10)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
             borderRadius: 16,
             padding: '28px 32px',
             marginBottom: 24,
@@ -1512,8 +1600,10 @@
           {/* Workflow Timeline */}
           <div style={{ marginTop: 24 }}>
             <div style={{ 
-              background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
-              border: '1px solid #1e3055',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               borderRadius: 16,
               padding: '24px 28px'
             }}>
@@ -1619,8 +1709,10 @@
     function SpecimenCard({ icon, title, subtitle, color, gradient, children, fullWidth }) {
       return (
         <div style={{ 
-          background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
-          border: '1px solid #1e3055',
+          background: 'rgba(255,255,255,0.04)',
+          border: '1px solid rgba(255,255,255,0.10)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
           borderRadius: 16,
           padding: '20px 22px',
           gridColumn: fullWidth ? '1 / -1' : undefined
@@ -1650,7 +1742,7 @@
 
     function InfoCard({ title, color, children }) {
       return (
-        <div style={{ background: '#132040', border: `1px solid ${color}22`, borderRadius: 12, padding: 14, borderLeft: `3px solid ${color}` }}>
+        <div style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: `1px solid ${color}22`, borderRadius: 12, padding: 14, borderLeft: `3px solid ${color}` }}>
           <div style={{ fontSize: 11, fontWeight: 700, color, letterSpacing: .5 }}>{title}</div>
           {children}
         </div>
@@ -3681,7 +3773,7 @@
           <h2 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 6, letterSpacing: '-0.5px' }}>⚗️ Step 2 — {suite.name}</h2>
           
           {/* Test Importance Summary */}
-          <div style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 16, marginBottom: 20 }}>
+          <div style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 12, padding: 16, marginBottom: 20 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0' }}>📊 Test Importance Score</span>
               <span style={{ fontSize: 11, color: '#94a3b8' }}>แสดง test ที่ discriminates ได้ดีที่สุด</span>
@@ -3703,14 +3795,14 @@
                     alignItems: 'center', 
                     gap: 10,
                     padding: '8px 12px',
-                    background: '#0d1526',
+                    background: 'rgba(255,255,255,0.03)',
                     borderRadius: 8,
                     border: `1px solid ${color}40`
                   }}>
                     <span style={{ fontSize: 11, color: '#64748b', minWidth: 20 }}>#{i+1}</span>
                     <span style={{ flex: 1, fontSize: 12, color: '#e2e8f0' }}>{item.test.label}</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div style={{ width: 60, height: 4, background: '#1e3055', borderRadius: 2 }}>
+                      <div style={{ width: 60, height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2 }}>
                         <div style={{ width: `${importance}%`, height: '100%', background: color, borderRadius: 2 }} />
                       </div>
                       <span style={{ fontSize: 11, color, fontWeight: 600, minWidth: 50 }}>{label} ({importance})</span>
@@ -3720,7 +3812,7 @@
               })}
               
               {topTests.filter(t => t.answered).length > 0 && (
-                <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #1e3055' }}>
+                <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                   <span style={{ fontSize: 11, color: '#22c55e' }}>✓ กรอกแล้ว: {topTests.filter(t => t.answered).length} test</span>
                 </div>
               )}
@@ -3793,9 +3885,9 @@
                   fontSize: 12, 
                   color: '#94a3b8',
                   padding: '8px 12px',
-                  background: '#0d1526',
+                  background: 'rgba(255,255,255,0.04)',
                   borderRadius: 8,
-                  border: '1px solid #1e3055'
+                  border: '1px solid rgba(255,255,255,0.10)'
                 }}>
                   แสดง test อื่นๆ ({remainingTests.length} test)
                 </summary>
@@ -3971,15 +4063,15 @@
       return (
         <div style={{ display: 'flex', flexDirection: 'column', height: isMobile ? 'auto' : 'calc(100vh - 56px)', minHeight: isMobile ? 'calc(100vh - 120px)' : undefined }}>
           {/* Toolbar */}
-          <div style={{ background: '#0d1526', borderBottom: '1px solid #1e3055', padding: '10px 16px', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', flexShrink: 0 }}>
+          <div style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '10px 16px', display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', flexShrink: 0 }}>
             <div style={{ position: 'relative', flex: '0 0 200px' }}>
               <span style={{ position: 'absolute', left: 8, top: '50%', transform: 'translateY(-50%)', color: '#64748b', fontSize: 13 }}>🔍</span>
-              <input value={q} onChange={e => setQ(e.target.value)} placeholder="ค้นหาเชื้อ..." style={{ width: '100%', background: '#132040', border: '1px solid #1e3055', borderRadius: 8, padding: '7px 10px 7px 28px', color: '#e2e8f0', fontSize: 12 }} />
+              <input value={q} onChange={e => setQ(e.target.value)} placeholder="ค้นหาเชื้อ..." style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 8, padding: '7px 10px 7px 28px', color: '#e2e8f0', fontSize: 12 }} />
             </div>
             {GROUPS.map(g => (
               <button key={g.id} onClick={() => setGrp(g.id)} style={{
                 background: grp === g.id ? `${g.color}20` : 'transparent',
-                border: `1px solid ${grp === g.id ? g.color : '#1e3055'}`,
+                border: `1px solid ${grp === g.id ? g.color : 'rgba(255,255,255,0.12)'}`,
                 color: grp === g.id ? g.color : '#64748b',
                 borderRadius: 20, padding: '4px 11px', fontSize: 11, fontWeight: 600, cursor: 'pointer', transition: 'all .15s'
               }}>{g.emoji} {g.label}</button>
@@ -3989,13 +4081,13 @@
           {/* Body */}
           <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', flex: 1, overflow: isMobile ? 'visible' : 'hidden', minHeight: 0 }}>
             {/* List */}
-            <div style={{ width: isMobile ? '100%' : (sel ? '35%' : '100%'), maxHeight: isMobile && selBug ? '40vh' : 'none', overflowY: 'auto', padding: '8px 12px', transition: 'width .2s', borderRight: !isMobile && sel ? '1px solid #1e3055' : 'none', borderBottom: isMobile && selBug ? '1px solid #1e3055' : 'none' }}>
+            <div style={{ width: isMobile ? '100%' : (sel ? '35%' : '100%'), maxHeight: isMobile && selBug ? '40vh' : 'none', overflowY: 'auto', padding: '8px 12px', transition: 'width .2s', borderRight: !isMobile && sel ? '1px solid rgba(255,255,255,0.08)' : 'none', borderBottom: isMobile && selBug ? '1px solid rgba(255,255,255,0.08)' : 'none' }}>
               {filtered.map(b => {
                 const g = GROUPS.find(x => x.id === b.group);
                 const isSel = sel === b.id;
                 return (
                   <div key={b.id} onClick={() => { setSel(b.id); setTab('clinical'); }} style={{
-                    background: isSel ? `${g?.color}12` : '#132040', border: `1px solid ${isSel ? g?.color : '#1e3055'}`,
+                    background: isSel ? `${g?.color}12` : 'rgba(255,255,255,0.03)', border: `1px solid ${isSel ? g?.color : 'rgba(255,255,255,0.08)'}`,
                     borderRadius: 10, padding: 11, marginBottom: 7, cursor: 'pointer', transition: 'all .15s'
                   }} className="fade-in">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -4009,8 +4101,8 @@
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>
-                      <span style={{ background: '#0d1526', border: '1px solid #1e3055', borderRadius: 4, padding: '1px 6px', fontSize: 9, color: '#94a3b8' }}>Gram {b.gram}</span>
-                      <span style={{ background: '#0d1526', border: '1px solid #1e3055', borderRadius: 4, padding: '1px 6px', fontSize: 9, color: '#94a3b8' }}>{b.morph}</span>
+                      <span style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 4, padding: '1px 6px', fontSize: 9, color: '#94a3b8' }}>Gram {b.gram}</span>
+                      <span style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 4, padding: '1px 6px', fontSize: 9, color: '#94a3b8' }}>{b.morph}</span>
                       {b.tags?.slice(0, 3).map(t => <span key={t} style={{ background: `${g?.color}10`, color: g?.color, borderRadius: 4, padding: '1px 6px', fontSize: 9 }}>{t}</span>)}
                     </div>
                   </div>
@@ -4023,32 +4115,32 @@
                 position: 'fixed',
                 inset: 0,
                 zIndex: 2000,
-                background: '#080e1a',
+                background: 'rgba(10,5,20,0.95)',
                 overflowY: 'auto',
                 animation: 'mobileSheetIn .22s ease-out'
               } : {
                 flex: 1,
                 overflowY: 'auto',
-                background: '#080e1a',
+                background: 'rgba(10,5,20,0.7)',
                 minWidth: 0
               }} className="fade-in">
-                <div style={{ background: `linear-gradient(135deg,${selGrp?.color}15,#0d1526)`, borderBottom: '1px solid #1e3055', padding: isMobile ? '10px 12px' : '14px 18px', position: isMobile ? 'static' : 'sticky', top: 0, zIndex: 10 }}>
+                <div style={{ background: `linear-gradient(135deg,${selGrp?.color}15,rgba(10,5,20,0.8))`, backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: isMobile ? '10px 12px' : '14px 18px', position: isMobile ? 'static' : 'sticky', top: 0, zIndex: 10 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div>
                       <div style={{ fontSize: isMobile ? 14 : 16, fontWeight: 800, fontStyle: 'italic', color: selGrp?.color }}>{selBug.name}</div>
                       {selBug.thai && <div style={{ fontSize: isMobile ? 10 : 11, color: '#94a3b8', marginTop: 2 }}>{selBug.thai}</div>}
                       <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
-                        <span style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 10, padding: '2px 8px', fontSize: 10, color: '#94a3b8' }}>Gram {selBug.gram} · {selBug.morph}</span>
+                        <span style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 10, padding: '2px 8px', fontSize: 10, color: '#94a3b8' }}>Gram {selBug.gram} · {selBug.morph}</span>
                         {selBug.importance && <span style={{ background: `${IMP_COLOR[selBug.importance]}15`, color: IMP_COLOR[selBug.importance], borderRadius: 10, padding: '2px 8px', fontSize: 10 }}>● {IMP_LABEL[selBug.importance]}</span>}
                       </div>
                     </div>
-                    <button onClick={() => setSel(null)} style={{ background: '#132040', border: '1px solid #1e3055', color: '#94a3b8', borderRadius: 6, padding: isMobile ? '6px 12px' : '4px 10px', fontSize: isMobile ? 13 : 12, cursor: 'pointer', fontWeight: isMobile ? 600 : 500 }}>{isMobile ? '← กลับ' : '✕'}</button>
+                    <button onClick={() => setSel(null)} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#94a3b8', borderRadius: 6, padding: isMobile ? '6px 12px' : '4px 10px', fontSize: isMobile ? 13 : 12, cursor: 'pointer', fontWeight: isMobile ? 600 : 500 }}>{isMobile ? '← กลับ' : '✕'}</button>
                   </div>
                   <div style={{ display: 'flex', gap: 4, marginTop: 10, flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
                     {['clinical', 'colony', 'biochem', 'resistance', 'notes'].map(t => (
                       <button key={t} onClick={() => setTab(t)} style={{
                         background: tab === t ? `${selGrp?.color}20` : 'transparent',
-                        border: `1px solid ${tab === t ? selGrp?.color : '#1e3055'}`,
+                        border: `1px solid ${tab === t ? selGrp?.color : 'rgba(255,255,255,0.10)'}`,
                         color: tab === t ? selGrp?.color : '#64748b',
                         borderRadius: 6, padding: '4px 10px', fontSize: 10, cursor: 'pointer', flex: isMobile ? '1 1 calc(33% - 4px)' : '0 0 auto'
                       }}>{t === 'clinical' ? '🏥 Clinical' : t === 'colony' ? '🍽 Colony' : t === 'biochem' ? '⚗️ Biochem' : t === 'resistance' ? '💊 Resistance' : '📝 Notes'}</button>
@@ -4086,7 +4178,7 @@
                       <div style={{ height: 10 }} />
                       <InfoCard title="🌡️ Media & Condition" color={selGrp?.color}>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
-                          {selBug.media?.map(m => <span key={m} style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 6, padding: '3px 10px', fontSize: 11, color: '#cbd5e1' }}>{m}</span>)}
+                          {selBug.media?.map(m => <span key={m} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 6, padding: '3px 10px', fontSize: 11, color: '#cbd5e1' }}>{m}</span>)}
                         </div>
                         <p style={{ color: '#94a3b8', fontSize: 12, marginTop: 8 }}>{selBug.condition}</p>
                       </InfoCard>
@@ -4097,12 +4189,12 @@
                       <InfoCard title="⚗️ Key Biochemical Tests" color={selGrp?.color}>
                         <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
                         <table style={{ width: '100%', minWidth: isMobile ? 520 : '100%', borderCollapse: 'collapse', fontSize: 11, marginTop: 8 }}>
-                          <thead><tr style={{ borderBottom: '1px solid #1e3055' }}>
+                          <thead><tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                             {['Test', 'Result', 'Note'].map(h => <th key={h} style={{ textAlign: 'left', padding: '6px 8px', color: '#64748b', fontWeight: 500 }}>{h}</th>)}
                           </tr></thead>
                           <tbody>
                             {canonicalBiochem.map((row, i) => (
-                              <tr key={i} style={{ borderBottom: '1px solid #0d152622', background: i % 2 === 0 ? '#0d1526' : 'transparent' }}>
+                              <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', background: i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
                                 <td style={{ padding: '5px 8px', color: '#cbd5e1', fontWeight: 500 }}>{row.t}</td>
                                 <td style={{ padding: '5px 8px' }}>
                                   <span style={{ fontWeight: 700, fontSize: 12, color: row.r.startsWith('+') ? '#4ade80' : row.r.startsWith('−') || row.r.startsWith('-') ? '#f87171' : row.r === 'S' ? '#22d3ee' : row.r === 'R' ? '#f97316' : '#fbbf24' }}>{row.r}</span>
@@ -4581,8 +4673,10 @@
           <div className="page-content-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px' }}>
             {/* Header */}
             <div style={{ 
-              background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
-              border: '1px solid #1e3055',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               borderRadius: 16,
               padding: '20px 20px',
               marginBottom: 20
@@ -4616,7 +4710,7 @@
                     onClick={() => setSelectedGroup(grp.id)}
                     style={{
                       background: selectedGroup === grp.id ? `${grp.color}30` : 'transparent',
-                      border: `1px solid ${selectedGroup === grp.id ? grp.color : '#1e3055'}`,
+                      border: `1px solid ${selectedGroup === grp.id ? grp.color : 'rgba(255,255,255,0.10)'}`,
                       color: selectedGroup === grp.id ? grp.color : '#64748b',
                       borderRadius: 12,
                       padding: '10px 16px',
@@ -4639,8 +4733,10 @@
             {suite && (
               <div style={{ marginBottom: 24 }}>
                 <div style={{
-                  background: '#132040',
-                  border: '1px solid #1e3055',
+                  background: 'rgba(255,255,255,0.04)',
+                  backdropFilter: 'blur(16px)',
+                  WebkitBackdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(255,255,255,0.10)',
                   borderRadius: 12,
                   padding: 20,
                   display: 'flex',
@@ -4672,8 +4768,8 @@
             {suite && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div className="suite-header-row" style={{
-                  background: '#132040',
-                  border: '1px solid #1e3055',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.10)',
                   borderRadius: 12,
                   padding: '16px 20px',
                   display: 'grid',
@@ -4692,8 +4788,8 @@
 
                 {suite.tests.map((test, idx) => (
                   <div key={test.id} className="suite-test-row" style={{
-                    background: '#132040',
-                    border: '1px solid #1e3055',
+                    background: 'rgba(255,255,255,0.03)',
+                    border: '1px solid rgba(255,255,255,0.08)',
                     borderRadius: 12,
                     padding: '14px 20px',
                     display: 'grid',
@@ -4722,7 +4818,7 @@
                           fontSize: 10, 
                           color: '#94a3b8', 
                           marginLeft: 8,
-                          background: '#1e3055',
+                          background: 'rgba(255,255,255,0.08)',
                           padding: '2px 6px',
                           borderRadius: 4
                         }}>เพิ่มเติม</span>
@@ -4733,10 +4829,10 @@
                         <span key={opt} style={{
                           fontSize: 11,
                           color: '#64748b',
-                          background: '#0d1526',
+                          background: 'rgba(255,255,255,0.04)',
                           padding: '3px 8px',
                           borderRadius: 4,
-                          border: '1px solid #1e3055'
+                          border: '1px solid rgba(255,255,255,0.10)'
                         }}>{opt}</span>
                       ))}
                     </div>
@@ -5657,8 +5753,10 @@
           <div className="page-content-pad" style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 20px' }}>
             {/* Header */}
             <div style={{ 
-              background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)',
-              border: '1px solid #1e3055',
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
               borderRadius: 16,
               padding: '20px 20px',
               marginBottom: 20
@@ -5697,7 +5795,7 @@
                     onClick={() => setActiveTab(tab.id)}
                     style={{
                       background: activeTab === tab.id ? '#a855f730' : 'transparent',
-                      border: `1px solid ${activeTab === tab.id ? '#a855f7' : '#1e3055'}`,
+                      border: `1px solid ${activeTab === tab.id ? '#a855f7' : 'rgba(255,255,255,0.10)'}`,
                       color: activeTab === tab.id ? '#a855f7' : '#64748b',
                       borderRadius: 20,
                       padding: '6px 14px',
@@ -5722,8 +5820,8 @@
                   placeholder="ค้นหา: ชื่อ test, หลักการ, เชื้อ, test number (เช่น 1_2_TSI)..."
                   style={{
                     width: '100%',
-                    background: '#132040',
-                    border: '1px solid #1e3055',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.12)',
                     borderRadius: 12,
                     padding: '12px 16px 12px 44px',
                     color: '#e2e8f0',
@@ -5766,8 +5864,10 @@
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12, minWidth: 0 }}>
                       {category.tests.map((test) => (
                         <div key={test.id} style={{
-                          background: '#132040',
-                          border: `1px solid ${category.color}25`,
+                          background: 'rgba(255,255,255,0.04)',
+                          backdropFilter: 'blur(16px)',
+                          WebkitBackdropFilter: 'blur(16px)',
+                          border: `1px solid ${category.color}30`,
                           borderRadius: 12,
                           overflow: 'hidden',
                           transition: 'all 0.2s',
@@ -5968,8 +6068,10 @@
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12, minWidth: 0 }}>
                       {cat.plates.map((plate) => (
                         <div key={plate.id} style={{
-                          background: '#132040',
-                          border: '1px solid #1e3055',
+                          background: 'rgba(255,255,255,0.04)',
+                          backdropFilter: 'blur(16px)',
+                          WebkitBackdropFilter: 'blur(16px)',
+                          border: '1px solid rgba(255,255,255,0.10)',
                           borderRadius: 12,
                           overflow: 'hidden',
                           transition: 'all 0.2s',
@@ -5979,8 +6081,8 @@
                           {/* Header */}
                           <div style={{
                             padding: '14px 18px',
-                            borderBottom: '1px solid #1e3055',
-                            background: 'linear-gradient(135deg, #132040 0%, #0d1526 100%)'
+                            borderBottom: '1px solid rgba(255,255,255,0.08)',
+                            background: 'rgba(255,255,255,0.03)'
                           }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                               <div style={{ minWidth: 0, flex: 1, overflow: 'hidden' }}>
@@ -5988,7 +6090,7 @@
                                 {plate.thai && <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>{plate.thai}</div>}
                                 <div style={{ marginTop: 4 }}>
                                   <span style={{ 
-                                    background: '#1e3055', 
+                                    background: 'rgba(255,255,255,0.08)', 
                                     color: '#94a3b8', 
                                     borderRadius: 4, 
                                     padding: '2px 8px', 
@@ -6045,7 +6147,7 @@
             {activeTab === 'indicators' && (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 12 }}>
                 {PH_INDICATORS_DATA.map((ind, i) => (
-                  <div key={i} style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 16 }}>
+                  <div key={i} style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 12, padding: 16 }}>
                     <div style={{ fontSize: 15, fontWeight: 700, color: '#f59e0b', marginBottom: 8 }}>{ind.name}</div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -6060,7 +6162,7 @@
                         <span style={{ color: '#64748b', fontSize: 12 }}>Alkaline:</span>
                         <span style={{ color: '#93c5fd', fontSize: 12 }}>{ind.alkaline}</span>
                       </div>
-                      <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid #1e3055' }}>
+                      <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                         <span style={{ color: '#64748b', fontSize: 11 }}>Used for: </span>
                         <span style={{ color: '#94a3b8', fontSize: 11 }}>{ind.used}</span>
                       </div>
@@ -6074,7 +6176,7 @@
             {activeTab === 'storage' && (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 12 }}>
                 {REAGENT_STORAGE.map((item, i) => (
-                  <div key={i} style={{ background: '#132040', border: '1px solid #1e3055', borderRadius: 12, padding: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div key={i} style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 12, padding: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ fontSize: 24 }}>🧪</div>
                     <div>
                       <div style={{ fontSize: 14, fontWeight: 600, color: '#e2e8f0' }}>{item.reagent}</div>

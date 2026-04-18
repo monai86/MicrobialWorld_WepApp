@@ -98,8 +98,7 @@
     }
 
     h1, h2 {
-      font-family: 'Cormorant Garamond', 'Inter', sans-serif;
-      letter-spacing: 0.04em;
+      letter-spacing: -0.3px;
     }
 
     button {
@@ -365,17 +364,18 @@
     .nav-label-full { display: inline; }
     .nav-tab {
       position: relative;
-      padding: 16px 16px;
+      padding: 6px 14px;
       font-size: 13px;
       font-weight: 500;
       color: #94a3b8;
       background: none;
-      border: none;
+      border: 1px solid transparent;
       cursor: pointer;
-      transition: color 0.2s;
+      transition: all 0.2s;
       white-space: nowrap;
+      border-radius: 100px;
     }
-    .nav-tab:hover { color: #e2e8f0; }
+    .nav-tab:hover { color: #e2e8f0; background: rgba(255,255,255,0.05); }
     .nav-tab.active-tab {
       color: #c4b5fd;
       font-weight: 600;
@@ -1495,7 +1495,7 @@
               {spec.emoji}
             </div>
             <div style={{ flex: 1 }}>
-              <h1 style={{ fontSize: 28, fontWeight: 800, color: '#f1f5f9', marginBottom: 6, fontFamily: "'Cormorant Garamond', serif", letterSpacing: '0.04em', textShadow: '0 2px 20px rgba(167,139,250,0.3)' }}>{spec.label}</h1>
+              <h1 style={{ fontSize: 26, fontWeight: 800, color: '#f1f5f9', marginBottom: 6, letterSpacing: '-0.3px', textShadow: '0 2px 20px rgba(167,139,250,0.3)' }}>{spec.label}</h1>
               <p style={{ color: '#64748b', fontSize: 14 }}>ขั้นตอนการนำสิ่งส่งตรวจไปเพาะเชื้อและแยกเชื้อ</p>
             </div>
           </div>
@@ -1776,7 +1776,7 @@
               }}>{icon}</span>
             </div>
             <div>
-              <div style={{ fontSize: 17, fontWeight: 600, fontFamily: "'Cormorant Garamond', serif", letterSpacing: '0.04em', background: 'linear-gradient(135deg, #c4b5fd, #e2e8f0)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{title}</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: '#e2e8f0', letterSpacing: '0.01em' }}>{title}</div>
               <div style={{ fontSize: 11, color: '#64748b' }}>{subtitle}</div>
             </div>
           </div>

@@ -186,6 +186,10 @@
       animation: shimmerSweep 0.6s ease forwards;
     }
 
+    .card--visible::after {
+      animation: shimmerSweep 0.6s ease forwards;
+    }
+
     /* Modals */
     .modal-overlay {
       position: fixed;
@@ -1293,6 +1297,24 @@
           setLoadingAuth(false);
         }
       }, []);
+
+      // IntersectionObserver for card shimmer on touch devices
+      useEffect(() => {
+        if (!('IntersectionObserver' in window)) return;
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
+              entry.target.classList.add('card--visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.card').forEach(card => observer.observe(card));
+
+        return () => observer.disconnect();
+      }, [page]);
 
       const saveSettings = async (newSettings) => {
         setSettings(newSettings);

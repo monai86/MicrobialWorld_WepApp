@@ -925,58 +925,68 @@
     // ══════════════════════════════════════
     // SPECIMEN → MEDIA DATA
     // ══════════════════════════════════════
+    const SPECIMENIcon = ({ type, size = 16 }) => {
+      const icons = {
+        blood: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 2C12 2 6 8 6 13C6 16.5 8.5 20 12 20C15.5 20 18 16.5 18 13C18 8 12 2 12 2Z"/><path d="M12 10v6"/></svg>,
+        csf: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 6h16v12H4z"/><path d="M8 6v12M12 10h4M12 14h4"/></svg>,
+        sputum: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 4c-4 0-7 3-7 7v6c0 2 1.5 4 4 4h6c2.5 0 4-2 4-4v-6c0-4-3-7-7-7z"/><path d="M10 15h4"/></svg>,
+        stool: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="12" r="8"/><path d="M8 12h8M12 8v8"/></svg>,
+        urine: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 4h12v4H6z"/><path d="M8 8v10c0 2 1.5 4 4 4s4-2 4-4V8"/></svg>,
+        swab: <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="12" cy="7" r="4"/><path d="M12 11v8M10 19h4"/></svg>,
+      };
+      return icons[type] || null;
+    };
+
     const SPECIMEN_GUIDE = [
-      {
-        id: 'blood', label: 'เลือด (Blood)', emoji: '🩸',
+      { id: 'blood', label: 'เลือด (Blood)', icon: 'blood',
         plates: ['Blood agar (BAP)', 'MacConkey (MCA)', 'Chocolate agar (CA)'],
         condition: '37°C, 5% CO₂ สำหรับ CA; ขวด blood culture anaerobic',
-        notes: 'Blood culture bottle → subculture เมื่อได้สัญญาณ alarm',
-        organisms: 'Staphylococcus, Streptococcus, Klebsiella, E. coli, Pseudomonas'
+        notes: 'Blood culture bottle → subculture เมื่อได้สัญญาณ alarm'
       },
       {
-        id: 'urine', label: 'ปัสสาวะ (Urine)', emoji: '💛',
-        plates: ['Blood agar (BAP)', 'MacConkey (MCA)', 'CLED agar'],
-        condition: '37°C, 18–24h, aerobic',
-        notes: '≥10⁵ CFU/mL = significant; semi-quantitative streak method'
-      },
-      {
-        id: 'csf', label: 'น้ำไขสันหลัง (CSF)', emoji: '🧠',
+        id: 'csf', label: 'น้ำไขสันหลัง (CSF)', icon: 'csf', 
         plates: ['Blood agar (BAP)', 'Chocolate agar (CA)', 'MacConkey (MCA)'],
         condition: '37°C, 5% CO₂, ประมวลผล ทันที',
         notes: 'Gram stain ก่อน: GN diplococci = N. meningitidis, GP diplococci = S. pneumoniae'
       },
       {
-        id: 'sputum', label: 'เสมหะ (Sputum)', emoji: '🫁',
+        id: 'sputum', label: 'เสมหะ (Sputum)', icon: 'sputum',
         plates: ['Blood agar (BAP)', 'MacConkey (MCA)', 'Chocolate agar (CA)'],
         condition: '37°C, 5% CO₂ สำหรับ CA, 18–48h',
         notes: 'Gram stain: >25 PMN/LPF + <10 epithelial/LPF = acceptable'
       },
       {
-        id: 'stool', label: 'อุจจาระ (Stool)', emoji: '💩',
+        id: 'stool', label: 'อุจจาระ (Stool)', icon: 'stool',
         plates: ['MacConkey (MCA)', 'SS agar', 'XLD agar', 'TCBS agar (ถ้าสงสัย Vibrio)'],
         condition: '37°C, 18–24h',
         notes: 'NLF + H₂S บน SS = Salmonella; NLF ไม่มี H₂S = Shigella; TCBS ถ้ามีประวัติกินอาหารทะเล'
       },
       {
-        id: 'wound', label: 'บาดแผล (Wound)', emoji: '🩹',
+        id: 'urine', label: 'ปัสสาวะ (Urine)', icon: 'urine',
+        plates: ['Blood agar (BAP)', 'MacConkey (MCA)', 'CLED agar'],
+        condition: '37°C, 18–24h',
+        notes: '>10⁵ CFU/mL = significant; semi-quantitative streak method'
+      },
+      {
+        id: 'wound', label: 'บาดแผล (Wound)', icon: 'swab',
         plates: ['Blood agar (BAP)', 'MacConkey (MCA)', 'MSA (สงสัย Staph)'],
         condition: '37°C aerobic ± anaerobic (ขึ้นกับความลึก)',
         notes: 'Gram stain ชี้แนะการทดสอบต่อไป'
       },
       {
-        id: 'genital', label: 'สิ่งส่งตรวจจากอวัยวะเพศ', emoji: '🔬',
+        id: 'genital', label: 'สิ่งส่งตรวจจากอวัยวะเพศ', icon: 'swab',
         plates: ['Thayer-Martin (TMA)', 'Blood agar (BAP)', 'Chocolate agar (CA)'],
         condition: '37°C, 5% CO₂ จำเป็น, 24–48h',
         notes: 'GN diplococci intracellular → oxidase test → N. gonorrhoeae'
       },
       {
-        id: 'throat', label: 'Throat Swab', emoji: '👅',
+        id: 'throat', label: 'Throat Swab', icon: 'swab',
         plates: ['Blood agar (BAP)', 'Blood agar + Bacitracin disc'],
         condition: '37°C, 5% CO₂, 18–24h',
         notes: 'β-hemolysis + Bacitracin S → GAS (S. pyogenes)'
       },
       {
-        id: 'ear', label: 'Ear Swab', emoji: '👂',
+        id: 'ear', label: 'Ear Swab', icon: 'swab',
         plates: ['Blood agar (BAP)', 'MacConkey (MCA)', 'Chocolate agar (CA)'],
         condition: '37°C, 18–24h',
         notes: 'P. aeruginosa (otitis externa), S. pneumoniae (otitis media)'
@@ -1570,7 +1580,7 @@
                 borderRadius: '12px', padding: '10px 14px', fontSize: 14, fontWeight: sel === s.id ? 600 : 400,
                 cursor: 'pointer', transition: 'all 0.25s cubic-bezier(0.23,1,0.32,1)', display: 'flex', alignItems: 'center', gap: 12,
               }}>
-                <span style={{ fontSize: 16 }}>{s.emoji}</span>{s.label}
+                <span style={{ display: 'inline-flex' }}><SPECIMENIcon type={s.icon} size={16} /></span>{s.label}
               </button>
             ))}
             </div>

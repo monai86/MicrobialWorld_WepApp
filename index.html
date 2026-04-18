@@ -97,10 +97,8 @@
       filter: blur(40px);
     }
 
-    h1, h2 {
-      font-family: 'Inter', 'Prompt', sans-serif !important;
-      letter-spacing: -0.3px;
-    }
+    h1 { font-family: 'Cormorant Garamond', 'Inter', serif; letter-spacing: -0.3px; }
+    h2 { font-family: 'Inter', 'Prompt', sans-serif; letter-spacing: -0.3px; }
 
     button {
       cursor: pointer;
@@ -309,9 +307,36 @@
     }
 
     @keyframes glowPulse {
-      0%, 100% { box-shadow: 0 0 12px rgba(167,139,250,0.2); }
-      50% { box-shadow: 0 0 24px rgba(167,139,250,0.5), 0 0 48px rgba(167,139,250,0.15); }
+      0%, 100% { 
+        box-shadow: 0 0 0 1px rgba(167,139,250,0.35), 0 0 12px rgba(167,139,250,0.2); 
+      }
+      50% { 
+        box-shadow: 0 0 0 1px rgba(167,139,250,0.5), 0 0 24px rgba(167,139,250,0.4), 
+                    0 0 48px rgba(167,139,250,0.15); 
+      }
     }
+
+    @keyframes cardEntrance {
+      from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.98); 
+        filter: blur(4px);
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+        filter: blur(0);
+      }
+    }
+
+    .stagger-1 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.05s both; }
+    .stagger-2 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.10s both; }
+    .stagger-3 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.15s both; }
+    .stagger-4 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.20s both; }
+    .stagger-5 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.25s both; }
+    .stagger-6 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.30s both; }
+    .stagger-7 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.35s both; }
+    .stagger-8 { animation: cardEntrance 0.5s cubic-bezier(0.23,1,0.32,1) 0.40s both; }
 
     .tab-content-anim {
       animation: fadeSlideUp 0.5s cubic-bezier(0.23,1,0.32,1) forwards;
@@ -1422,16 +1447,17 @@
               Specimen
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            {SPECIMEN_GUIDE.map(s => (
-              <button key={s.id} onClick={() => setSel(s.id)} style={{
+            {SPECIMEN_GUIDE.map((s, idx) => (
+              <button key={s.id} onClick={() => setSel(s.id)} className={`stagger-${Math.min(idx + 1, 8)}`} style={{
                 width: '100%', textAlign: 'left',
                 background: sel === s.id ? 'linear-gradient(135deg, rgba(124,58,237,0.2), rgba(201,168,76,0.1))' : 'transparent',
                 border: sel === s.id ? '1px solid rgba(167,139,250,0.3)' : '1px solid transparent',
-                boxShadow: sel === s.id ? '0 4px 16px rgba(124,58,237,0.2), inset 0 1px 0 rgba(255,255,255,0.1)' : 'none',
+                boxShadow: sel === s.id ? 'inset 3px 0 0 #a78bfa, 0 4px 20px rgba(124,58,237,0.25)' : 'none',
+                transform: sel === s.id ? 'translateX(3px)' : 'translateX(0)',
                 animation: sel === s.id ? 'glowPulse 3s ease-in-out infinite' : 'none',
                 color: sel === s.id ? '#c4b5fd' : 'var(--text2)',
                 borderRadius: '12px', padding: '10px 14px', fontSize: 14, fontWeight: sel === s.id ? 600 : 400,
-                cursor: 'pointer', transition: 'all .2s', display: 'flex', alignItems: 'center', gap: 12,
+                cursor: 'pointer', transition: 'all 0.25s cubic-bezier(0.23,1,0.32,1)', display: 'flex', alignItems: 'center', gap: 12,
               }}>
                 <span style={{ fontSize: 16 }}>{s.emoji}</span>{s.label}
               </button>
@@ -1480,24 +1506,37 @@
             boxShadow: '0 20px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.2), 0 0 0 1px rgba(167,139,250,0.1)'
           }}>
             <div style={{ 
-              width: 72, 
-              height: 72, 
-              borderRadius: 16,
-              background: 'linear-gradient(135deg, rgba(124,58,237,0.3), rgba(201,168,76,0.2))',
+              borderRadius: 18,
+              background: 'linear-gradient(135deg, rgba(124,58,237,0.25), rgba(201,168,76,0.15))',
               border: '1px solid rgba(255,255,255,0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 32,
+              fontSize: 36,
               flexShrink: 0,
-              padding: 16,
-              boxShadow: '0 8px 24px rgba(124,58,237,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
+              padding: 18,
+              boxShadow: '0 8px 32px rgba(124,58,237,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
             }}>
               {spec.emoji}
             </div>
             <div style={{ flex: 1 }}>
-              <h1 style={{ fontSize: 26, fontWeight: 800, color: '#f1f5f9', marginBottom: 6, letterSpacing: '-0.3px', textShadow: '0 2px 20px rgba(167,139,250,0.3)', fontFamily: "'Inter','Prompt',sans-serif" }}>{spec.label}</h1>
-              <p style={{ color: '#64748b', fontSize: 14 }}>ขั้นตอนการนำสิ่งส่งตรวจไปเพาะเชื้อและแยกเชื้อ</p>
+              <h1 style={{ 
+                fontSize: 28, 
+                fontWeight: 700, 
+                letterSpacing: '-0.5px',
+                background: 'linear-gradient(135deg, #ffffff 20%, #c4b5fd 60%, #C9A84C 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                marginBottom: 6
+              }}>{spec.label.split(' (')[0]}</h1>
+              <div style={{ 
+                fontSize: 12, 
+                color: 'rgba(255,255,255,0.3)', 
+                letterSpacing: '0.14em', 
+                textTransform: 'uppercase', 
+                fontWeight: 500 
+              }}>{spec.label.match(/\(([^)]+)\)/)?.[1] || 'Specimen'}</div>
             </div>
           </div>
 
@@ -1510,6 +1549,7 @@
               subtitle="Culture Media"
               color="#6366f1"
               gradient="from-indigo-500/20 to-purple-500/20"
+              className="stagger-1"
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {spec.plates.map((p, i) => (
@@ -1563,6 +1603,7 @@
               subtitle="Incubation Condition"
               color="#22d3ee"
               gradient="from-cyan-500/20 to-blue-500/20"
+              className="stagger-2"
             >
               <div style={{ 
                 background: 'rgba(34,211,238,0.08)', 
@@ -1586,6 +1627,7 @@
               color="#4ade80"
               gradient="from-emerald-500/20 to-teal-500/20"
               fullWidth={!spec.organisms}
+              className="stagger-3"
             >
               <div style={{ 
                 background: 'rgba(74,222,128,0.08)', 
@@ -1605,6 +1647,7 @@
                 subtitle="Common Pathogens"
                 color="#c084fc"
                 gradient="from-purple-500/20 to-pink-500/20"
+                className="stagger-4"
               >
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {organismList.map((org) => (
@@ -1748,9 +1791,9 @@
       );
     }
 
-    function SpecimenCard({ icon, title, subtitle, color, gradient, children, fullWidth }) {
+    function SpecimenCard({ icon, title, subtitle, color, gradient, children, fullWidth, className }) {
       return (
-        <div style={{ 
+        <div className={className} style={{ 
           background: 'rgba(255,255,255,0.04)',
           border: '1px solid rgba(255,255,255,0.10)',
           backdropFilter: 'blur(16px)',
@@ -5900,29 +5943,43 @@
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 {filteredData.map((category) => (
                   <div key={category.category}>
-                    <div style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      gap: 10, 
-                      marginBottom: 14,
-                      paddingLeft: 4
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 12,
+                      marginBottom: 20,
+                      padding: '12px 16px',
+                      background: 'rgba(255,255,255,0.02)',
+                      border: '1px solid rgba(255,255,255,0.06)',
+                      borderRadius: 12,
+                      borderLeft: `3px solid ${category.color}`
                     }}>
-                      <span style={{ 
-                        width: 6, 
-                        height: 24, 
-                        borderRadius: 3,
-                        background: category.color
-                      }} />
-                      <h2 style={{ fontSize: 16, fontWeight: 700, color: category.color }}>{category.category}</h2>
-                      <span style={{ 
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <h2 style={{
+                          fontSize: 15,
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
+                          textTransform: 'uppercase',
+                          color: category.color,
+                          marginBottom: 1
+                        }}>{category.category}</h2>
+                        <div style={{
+                          fontSize: 11,
+                          color: 'rgba(255,255,255,0.3)',
+                          letterSpacing: '0.08em'
+                        }}>{category.tests.length} {category.tests.length === 1 ? 'test' : 'tests'}</div>
+                      </div>
+                      <span style={{
                         background: `${category.color}15`,
                         color: category.color,
                         border: `1px solid ${category.color}30`,
                         borderRadius: 10,
                         padding: '2px 10px',
                         fontSize: 12,
-                        fontWeight: 600
-                      }}>{category.tests.length} tests</span>
+                        fontWeight: 600,
+                        marginLeft: 'auto',
+                        flexShrink: 0
+                      }}>{category.tests.length}</span>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(520px, 100%), 1fr))', gap: 12, minWidth: 0 }}>

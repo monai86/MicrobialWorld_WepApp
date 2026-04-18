@@ -317,11 +317,10 @@
 
     @keyframes glowPulse {
       0%, 100% { 
-        box-shadow: 0 0 0 1px rgba(167,139,250,0.35), 0 0 12px rgba(167,139,250,0.2); 
+        box-shadow: 0 0 0 1px rgba(167,139,250,0.35), 0 0 6px rgba(167,139,250,0.2); 
       }
       50% { 
-        box-shadow: 0 0 0 1px rgba(167,139,250,0.5), 0 0 24px rgba(167,139,250,0.4), 
-                    0 0 48px rgba(167,139,250,0.15); 
+        box-shadow: 0 0 0 1px rgba(167,139,250,0.5), 0 0 10px rgba(167,139,250,0.35); 
       }
     }
 
@@ -400,7 +399,7 @@
     .nav-label-full { display: inline; }
     .nav-tab {
       position: relative;
-      padding: 6px 14px;
+      padding: 5px 12px;
       font-size: 12px;
       font-weight: 500;
       color: #94a3b8;
@@ -410,7 +409,7 @@
       transition: all 0.2s;
       white-space: nowrap;
       border-radius: 100px;
-      margin: 0 2px;
+      margin: 2px;
     }
     .nav-tab:hover { color: #e2e8f0; background: rgba(255,255,255,0.05); }
     .nav-tab.active-tab {
@@ -420,6 +419,7 @@
       border: 1px solid rgba(167,139,250,0.35);
       border-radius: 100px;
       animation: glowPulse 3s ease-in-out infinite;
+      padding: 4px 12px;
     }
 
     .nav-tab.active-tab::after {

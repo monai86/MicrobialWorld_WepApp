@@ -1277,6 +1277,20 @@
       const [alertState, setAlertState] = useState({ isOpen: false, title: '', text: '' });
 
       useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('card--visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.card').forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+      }, []);
+
+      useEffect(() => {
         if (isFirebaseActive) {
           const unsubscribe = auth.onAuthStateChanged(usr => {
             setUser(usr);

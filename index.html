@@ -400,7 +400,7 @@
     .nav-label-full { display: inline; }
     .nav-tab {
       position: relative;
-      padding: 4px 10px;
+      padding: 5px 12px;
       font-size: 12px;
       font-weight: 500;
       color: #94a3b8;
@@ -410,6 +410,7 @@
       transition: all 0.2s;
       white-space: nowrap;
       border-radius: 100px;
+      margin: 0 2px;
     }
     .nav-tab:hover { color: #e2e8f0; background: rgba(255,255,255,0.05); }
     .nav-tab.active-tab {
@@ -1444,7 +1445,7 @@
               <div style={{ fontSize: 8, color: '#a78bfa', letterSpacing: 2, textTransform: 'uppercase', fontWeight: 600, marginTop: -1, WebkitTextFillColor: 'initial' }}>DIAGNOSTIC ENGINE</div>
             </div>
           </div>
-          <nav style={{ display: 'flex' }}>
+          <nav style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             {PAGES.map(p => (
               <button key={p.id} onClick={() => setPage(p.id)}
                 className={`nav-tab ${page === p.id ? 'active-tab' : ''}`}>

@@ -3789,16 +3789,32 @@
           }
         });
 
-        // Confident ID bonus: all key tests matched and no hard exclusion
-        const bugKeyTestedAll = !hardExcluded &&
-          keyTestsForBug.length > 0 &&
-          keyTestedCount >= Math.min(keyTestsForBug.length, answerEntries.length) &&
-          keyMismatchCount === 0 &&
-          keyMatchCount >= Math.min(2, keyTestsForBug.length);
+        // --- Coverage scaling ---
+        // rawPct from answered tests only; scale down when very few tests answered
+        // so 1 matching test cannot produce 99%
+        const nAnswered = answerEntries.length;
+        const SUITE_SIZE = (SUITES[group]?.tests?.length) || 8;
 
+        // Base score ratio (0–100)
         let rawPct = total > 0 ? (score / total) * 100 : 0;
-        if (bugKeyTestedAll) rawPct = Math.max(rawPct, 85);
-        if (hardExcluded) rawPct = Math.min(rawPct, 5); // hard cap at 5% if excluded
+
+        // Confidence factor: grows from ~0.25 (1 test) to ~1.0 (≥8 tests)
+        // Uses logarithmic curve so first tests count for something but can't max out
+        const coverageFactor = Math.min(1, 0.25 + 0.75 * (Math.log2(nAnswered + 1) / Math.log2(SUITE_SIZE + 1)));
+
+        // Clamp rawPct to [0,100] first, then apply coverage factor
+        rawPct = Math.max(0, rawPct) * coverageFactor;
+
+        // Confident ID bonus: require ≥3 answers AND all key tests matched with no mismatch
+        const bugKeyTestedAll = !hardExcluded &&
+          nAnswered >= 3 &&
+          keyTestsForBug.length > 0 &&
+          keyTestedCount >= Math.min(keyTestsForBug.length, nAnswered) &&
+          keyMismatchCount === 0 &&
+          keyMatchCount >= Math.min(3, keyTestsForBug.length);
+
+        if (bugKeyTestedAll) rawPct = Math.max(rawPct, 70 * coverageFactor);
+        if (hardExcluded) rawPct = Math.min(rawPct, 5);
 
         const pct = Math.min(99, Math.max(0, Math.round(rawPct)));
         return { ...bug, pct, _keyMatch: keyMatchCount, _keyMismatch: keyMismatchCount, _excluded: hardExcluded };
